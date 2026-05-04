@@ -26,3 +26,7 @@ dist-ssr
 # Fichiers personnels — ne pas partager
 notes.txt
 notes.md
+
+# Variables d'environnement — ne jamais partager
+.env
+.env.local
