@@ -1,0 +1,15 @@
+export const initialProjects = [
+  { id: 1, name: "Portfolio personnel", status: "En cours", color: "#378ADD", progress: 72 },
+  { id: 2, name: "App e-commerce", status: "En cours", color: "#BA7517", progress: 35 },
+  { id: 3, name: "Dashboard analytics", status: "Terminé", color: "#639922", progress: 100 },
+  { id: 4, name: "Refonte UI", status: "En attente", color: "#888780", progress: 10 },
+]
+
+export const initialTasks = [
+  { id: 1, name: "Créer les composants de base", projectId: 1, priority: "haute", done: false, dueDate: "2026-05-10" },
+  { id: 2, name: "Intégrer la page Contact", projectId: 1, priority: "moyenne", done: false, dueDate: "2026-05-15" },
+  { id: 3, name: "Configurer Stripe", projectId: 2, priority: "haute", done: false, dueDate: "2026-05-08" },
+  { id: 4, name: "Maquette mobile", projectId: 2, priority: "basse", done: true, dueDate: "2026-04-30" },
+  { id: 5, name: "Tests unitaires", projectId: 3, priority: "moyenne", done: true, dueDate: "2026-04-25" },
+  { id: 6, name: "Brief client", projectId: 4, priority: "basse", done: false, dueDate: "2026-05-20" },
+]
