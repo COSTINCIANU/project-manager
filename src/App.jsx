@@ -1,3 +1,13 @@
+// Importation de Firebase et Firestore
+import { db } from "./firebase"
+import {
+  collection,
+  getDocs,
+  setDoc,
+  deleteDoc,
+  doc,
+} from "firebase/firestore"
+
 // Importation des hooks useState et useEffect de React
 import { useState, useEffect } from "react"
 
@@ -14,6 +24,8 @@ import PageProjets from "./components/PageProjets"
 import Graphique from "./components/Graphique"
 import ModalEditTask from "./components/ModalEditTask"
 import PageStats from "./components/PageStats"
+import PageKanban from "./components/PageKanban" 
+import ExportPDF from "./components/ExportPDF"
 
 
 
@@ -21,53 +33,102 @@ import PageStats from "./components/PageStats"
 
 function App() {
 
-   // =====================
-  // ÉTATS DE L'APPLICATION
-  // =====================
+    // =====================
+    // ÉTATS DE L'APPLICATION
+    // =====================
 
-  // On récupère les tâches depuis localStorage si elles existent
-  // Sinon on utilise les données initiales
-  const [tasks, setTasks] = useState(() => {
-    const saved = localStorage.getItem("tasks")
-    return saved ? JSON.parse(saved) : initialTasks
-  })
+    // Liste des tâches — initialisée vide, chargée depuis Firebase
+    const [tasks, setTasks] = useState([])
 
-  // Filtre actif pour la priorité (toutes / haute / moyenne / basse)
-  const [filterPriority, setFilterPriority] = useState("toutes")
+    // Liste des projets — initialisée vide, chargée depuis Firebase
+    const [projects, setProjects] = useState([])
 
-  // Filtre actif pour le projet (tous / id du projet)
-  const [filterProject, setFilterProject] = useState("tous")
+    // État de chargement — true pendant le chargement des données
+    const [loading, setLoading] = useState(true)
 
-  // Page actuellement affichée dans la sidebar
-  const [activePage, setActivePage] = useState("dashboard")
+    // Filtre actif pour la priorité (toutes / haute / moyenne / basse)
+    const [filterPriority, setFilterPriority] = useState("toutes")
 
-  // Liste des projets — récupérée depuis localStorage si elle existe
-  const [projects, setProjects] = useState(() => {
-    const saved = localStorage.getItem("projects")
-    return saved ? JSON.parse(saved) : initialProjects
-  })
+    // Filtre actif pour le projet (tous / id du projet)
+    const [filterProject, setFilterProject] = useState("tous")
 
-  // État du mode sombre — false = clair, true = sombre
-  const [darkMode, setDarkMode] = useState(false)
+    // Page actuellement affichée dans la sidebar
+    const [activePage, setActivePage] = useState("dashboard")
 
-  // Tâche en cours de modification — null si aucune modal ouverte
-  const [taskToEdit, setTaskToEdit] = useState(null)
+    // État du mode sombre — false = clair, true = sombre
+    const [darkMode, setDarkMode] = useState(false)
 
+    // Tâche en cours de modification — null si aucune modal ouverte
+    const [taskToEdit, setTaskToEdit] = useState(null)
 
   // =====================
   // SAUVEGARDE AUTOMATIQUE
   // =====================
 
-  // Chaque fois que la liste des tâches change, on la sauvegarde dans localStorage
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks))
-  }, [tasks])
- 
-  // Sauvegarde automatique des projets dans localStorage
-  useEffect(() => {
-    localStorage.setItem("projects", JSON.stringify(projects))
-  }, [projects])
+  // =====================
+  // CHARGEMENT DEPUIS FIREBASE
+  // =====================
 
+  // On charge les données depuis Firebase au démarrage
+  useEffect(() => {
+    async function loadData() {
+      try {
+        // Chargement des tâches
+        const tasksSnap = await getDocs(collection(db, "tasks"))
+        const tasksData = tasksSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+
+        // Chargement des projets
+        const projectsSnap = await getDocs(collection(db, "projects"))
+        const projectsData = projectsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+
+        // Si Firebase est vide on charge les données initiales
+        if (tasksData.length === 0) {
+          for (const task of initialTasks) {
+            await setDoc(doc(db, "tasks", String(task.id)), task)
+          }
+          setTasks(initialTasks)
+        } else {
+          setTasks(tasksData)
+        }
+
+        if (projectsData.length === 0) {
+          for (const project of initialProjects) {
+            await setDoc(doc(db, "projects", String(project.id)), project)
+          }
+          setProjects(initialProjects)
+        } else {
+          setProjects(projectsData)
+        }
+
+      } catch (error) {
+        console.error("Erreur Firebase :", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadData()
+  }, [])
+
+  // Sauvegarde une tâche dans Firebase
+  async function saveTask(task) {
+    await setDoc(doc(db, "tasks", String(task.id)), task)
+  }
+
+  // Supprime une tâche dans Firebase
+  async function deleteTask(id) {
+    await deleteDoc(doc(db, "tasks", String(id)))
+  }
+
+  // Sauvegarde un projet dans Firebase
+  async function saveProject(project) {
+    await setDoc(doc(db, "projects", String(project.id)), project)
+  }
+
+  // Supprime un projet dans Firebase
+  async function deleteProject(id) {
+    await deleteDoc(doc(db, "projects", String(id)))
+  }
 
   // =====================
   // FILTRAGE DES TÂCHES
@@ -101,50 +162,65 @@ function App() {
   // =====================
 
   // Fonction pour cocher / décocher une tâche
-  function handleToggle(id) {
-    setTasks(tasks.map(t => t.id === id ? { ...t, done: !t.done } : t))
+  async function handleToggle(id) {
+    const task = tasks.find(t => t.id === id)
+    const updated = { ...task, done: !task.done }
+    setTasks(tasks.map(t => t.id === id ? updated : t))
+    await saveTask(updated)
   }
 
   // Fonction pour ajouter une nouvelle tâche
-  function handleAdd({ name, priority }) {
+  async function handleAdd({ name, priority }) {
     const newTask = {
       id: Date.now(),
       name,
       projectId: filterProject !== "tous" ? parseInt(filterProject) : 1,
       priority,
       done: false,
+      inProgress: false,
+      dueDate: "",
     }
     setTasks([...tasks, newTask])
+    await saveTask(newTask)
   }
 
-  // Fonction pour retrouver le nom d'un projet à partir de son id
+  // Fonction pour retrouver le nom d'un projet
   function getProjectName(projectId) {
-    const project = initialProjects.find(p => p.id === projectId)
+    const project = projects.find(p => p.id === projectId)
     return project ? project.name : "Inconnu"
   }
 
-
-  // Fonction pour ajouter un nouveau projet
-  function handleAddProject(project) {
+  // Fonction pour ajouter un projet
+  async function handleAddProject(project) {
     setProjects([...projects, project])
+    await saveProject(project)
   }
 
-  // Fonction pour supprimer une tâche par son id
-  function handleDelete(id) {
+  // Fonction pour supprimer une tâche
+  async function handleDelete(id) {
     setTasks(tasks.filter(t => t.id !== id))
+    await deleteTask(id)
   }
 
-  // Fonction pour modifier une tâche existante
-  function handleEdit(updatedTask) {
+  // Fonction pour modifier une tâche
+  async function handleEdit(updatedTask) {
     setTasks(tasks.map(t => t.id === updatedTask.id ? updatedTask : t))
+    await saveTask(updatedTask)
   }
 
-  // Fonction pour supprimer un projet par son id
-  function handleDeleteProject(id) {
+  // Fonction pour supprimer un projet
+  async function handleDeleteProject(id) {
     setProjects(projects.filter(p => p.id !== id))
+    await deleteProject(id)
   }
 
-
+  // Fonction pour déplacer une tâche dans le Kanban
+  async function handleTaskMove(taskId, newStatus) {
+    const task = tasks.find(t => t.id === taskId)
+    const updated = { ...task, ...newStatus }
+    setTasks(tasks.map(t => t.id === taskId ? updated : t))
+    await saveTask(updated)
+  }
   // =====================
   // STYLE RÉUTILISABLE
   // =====================
@@ -172,6 +248,23 @@ function App() {
       fontFamily: "sans-serif",
       transition: "background 0.3s",
     }}>
+
+    {/* Écran de chargement pendant la connexion à Firebase */}
+      {loading && (
+        <div style={{
+          position: "fixed",
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: "#f5f5f5",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "16px",
+          color: "#888",
+          zIndex: 9999,
+        }}>
+          Chargement des données...
+        </div>
+      )}
 
       {/* ---- MODAL MODIFICATION TÂCHE ---- */}
       {taskToEdit && (
@@ -320,9 +413,24 @@ function App() {
           </div>
         )}
 
+        {/* ---- PAGE KANBAN ---- */}
+        {activePage === "kanban" && (
+          <PageKanban
+            tasks={tasks}
+            projects={projects}
+            onTaskMove={handleTaskMove}
+          />
+        )}
+
+        
         {/* ---- PAGE STATISTIQUES ---- */}
         {activePage === "stats" && (
           <PageStats tasks={tasks} projects={projects} />
+        )}
+
+        {/* ---- PAGE RAPPORT PDF ---- */}
+        {activePage === "rapport" && (
+          <ExportPDF tasks={tasks} projects={projects} />
         )}
 
       </div>

@@ -1,11 +1,13 @@
 function Sidebar({ activePage, onNavigate, darkMode, onToggleDark }) {
 
- // Liste des éléments du menu de navigation
- const menuItems = [
+  // Liste des éléments du menu de navigation
+   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: "▦" },
     { id: "projets", label: "Projets", icon: "◈" },
     { id: "taches", label: "Tâches", icon: "✓" },
+    { id: "kanban", label: "Kanban", icon: "▤" },
     { id: "stats", label: "Statistiques", icon: "▲" },
+    { id: "rapport", label: "Rapport PDF", icon: "📄" },
   ]
 
   return (
