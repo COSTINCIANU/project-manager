@@ -236,5 +236,34 @@ Récapitulatif complet de tout ce qu'on a accompli :
 ✅ GitHub — projet en ligne
 
 
+
+
+
+
+****************Connexion  compte du test *********************
+
 Tu as une application React vraiment complète et professionnelle ! 💪
 Il reste à faire un git push pour mettre à jour GitHub avec toutes les nouvelles fonctionnalités. Tu veux qu'on le fasse ? 😊
+
+
+Afficher plus
+ 🎉 Parfait Tout fonctionne !
+Le formulaire de connexion s'affiche correctement ! 😊
+Les erreurs 401 sont normales — c'est parce que le useEffect se lance avant que tu sois connecté. Une fois connecté le token sera envoyé automatiquement !
+
+Maintenant teste l'inscription :
+
+1. Clique sur "Inscription"
+2. Entre ton email : costin@test.com
+3. Entre un mot de passe : password123
+4. Clique "S'inscrire"
+
+Dis-moi ce que tu vois ! 😊
+
+
+**************** fin Connexion compte du test*********************
+
+cd E:\Projets\project-manager
+git add .
+git commit -m "Ajout authentification JWT + page Login/Register"
+git push origin master

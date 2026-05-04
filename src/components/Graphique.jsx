@@ -8,23 +8,22 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
-} from "recharts"
+} from "recharts";
 
 function Graphique({ projects }) {
-
   // =====================
   // PRÉPARATION DES DONNÉES
   // =====================
 
-  // On formate les données pour Recharts
-  // Chaque projet devient un objet avec un nom court et sa progression
-  const data = projects.map(p => ({
-    // On coupe le nom à 10 caractères pour ne pas surcharger l'axe X
-    name: p.name.length > 10 ? p.name.substring(0, 10) + "..." : p.name,
-    progression: p.progress,
-    couleur: p.color,
-  }))
-
+  /// On formate les données pour Recharts
+  // On vérifie que projects est bien un tableau avant de faire le map
+  const data = Array.isArray(projects)
+    ? projects.map((p) => ({
+        name: p.name.length > 10 ? p.name.substring(0, 10) + "..." : p.name,
+        progression: p.progress,
+        couleur: p.color,
+      }))
+    : [];
   // =====================
   // COMPOSANT TOOLTIP PERSONNALISÉ
   // =====================
@@ -33,19 +32,23 @@ function Graphique({ projects }) {
   function CustomTooltip({ active, payload, label }) {
     if (active && payload && payload.length) {
       return (
-        <div style={{
-          background: "#fff",
-          border: "1px solid #eee",
-          borderRadius: "8px",
-          padding: "10px 14px",
-          fontSize: "13px",
-        }}>
+        <div
+          style={{
+            background: "#fff",
+            border: "1px solid #eee",
+            borderRadius: "8px",
+            padding: "10px 14px",
+            fontSize: "13px",
+          }}
+        >
           <div style={{ fontWeight: "500", marginBottom: "4px" }}>{label}</div>
-          <div style={{ color: "#666" }}>Progression : <strong>{payload[0].value}%</strong></div>
+          <div style={{ color: "#666" }}>
+            Progression : <strong>{payload[0].value}%</strong>
+          </div>
         </div>
-      )
+      );
     }
-    return null
+    return null;
   }
 
   // =====================
@@ -53,25 +56,31 @@ function Graphique({ projects }) {
   // =====================
 
   return (
-    <div style={{
-      background: "#fff",
-      border: "1px solid #eee",
-      borderRadius: "12px",
-      padding: "1.25rem",
-      marginTop: "14px",
-    }}>
-
+    <div
+      style={{
+        background: "#fff",
+        border: "1px solid #eee",
+        borderRadius: "12px",
+        padding: "1.25rem",
+        marginTop: "14px",
+      }}
+    >
       {/* Titre du graphique */}
-      <div style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1.5rem" }}>
+      <div
+        style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1.5rem" }}
+      >
         Progression des projets
       </div>
 
       {/* Graphique en barres — ResponsiveContainer s'adapte à la largeur */}
       <ResponsiveContainer width="100%" height={220}>
         <BarChart data={data} barSize={36}>
-
           {/* Grille de fond discrète */}
-          <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke="#f0f0f0"
+            vertical={false}
+          />
 
           {/* Axe horizontal — noms des projets */}
           <XAxis
@@ -87,7 +96,7 @@ function Graphique({ projects }) {
             tick={{ fontSize: 12, fill: "#999" }}
             axisLine={false}
             tickLine={false}
-            tickFormatter={v => `${v}%`}
+            tickFormatter={(v) => `${v}%`}
           />
 
           {/* Tooltip au survol */}
@@ -97,18 +106,22 @@ function Graphique({ projects }) {
           <Bar
             dataKey="progression"
             radius={[6, 6, 0, 0]}
-            label={{ position: "top", fontSize: 11, fill: "#aaa", formatter: v => `${v}%` }}
+            label={{
+              position: "top",
+              fontSize: 11,
+              fill: "#aaa",
+              formatter: (v) => `${v}%`,
+            }}
           >
             {/* On colorie chaque barre individuellement avec la couleur du projet */}
             {data.map((entry, index) => (
               <Cell key={index} fill={entry.couleur} />
             ))}
           </Bar>
-
         </BarChart>
       </ResponsiveContainer>
     </div>
-  )
+  );
 }
 
-export default Graphique
+export default Graphique;

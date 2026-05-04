@@ -1,13 +1,28 @@
 // URL de base de l'API Symfony
 const API_URL = "https://127.0.0.1:8000/api";
 
+// Fonction pour récupérer le token JWT depuis localStorage
+function getToken() {
+  return localStorage.getItem("jwt_token");
+}
+
+// Headers avec token JWT
+function authHeaders() {
+  return {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${getToken()}`,
+  };
+}
+
 // =====================
 // FONCTIONS PROJETS
 // =====================
 
 // Récupérer tous les projets
 export async function getProjets() {
-  const res = await fetch(`${API_URL}/projects`);
+  const res = await fetch(`${API_URL}/projects`, {
+    headers: authHeaders(),
+  });
   return res.json();
 }
 
@@ -15,7 +30,7 @@ export async function getProjets() {
 export async function createProjet(project) {
   const res = await fetch(`${API_URL}/projects`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeaders(),
     body: JSON.stringify(project),
   });
   return res.json();
@@ -25,7 +40,7 @@ export async function createProjet(project) {
 export async function updateProjet(id, project) {
   const res = await fetch(`${API_URL}/projects/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeaders(),
     body: JSON.stringify(project),
   });
   return res.json();
@@ -35,6 +50,7 @@ export async function updateProjet(id, project) {
 export async function deleteProjet(id) {
   await fetch(`${API_URL}/projects/${id}`, {
     method: "DELETE",
+    headers: authHeaders(),
   });
 }
 
@@ -44,7 +60,9 @@ export async function deleteProjet(id) {
 
 // Récupérer toutes les tâches
 export async function getTaches() {
-  const res = await fetch(`${API_URL}/tasks`);
+  const res = await fetch(`${API_URL}/tasks`, {
+    headers: authHeaders(),
+  });
   return res.json();
 }
 
@@ -52,7 +70,7 @@ export async function getTaches() {
 export async function createTache(task) {
   const res = await fetch(`${API_URL}/tasks`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeaders(),
     body: JSON.stringify(task),
   });
   return res.json();
@@ -62,7 +80,7 @@ export async function createTache(task) {
 export async function updateTache(id, task) {
   const res = await fetch(`${API_URL}/tasks/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeaders(),
     body: JSON.stringify(task),
   });
   return res.json();
@@ -72,5 +90,6 @@ export async function updateTache(id, task) {
 export async function deleteTache(id) {
   await fetch(`${API_URL}/tasks/${id}`, {
     method: "DELETE",
+    headers: authHeaders(),
   });
 }
