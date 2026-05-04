@@ -89,7 +89,7 @@ http://localhost:5173
 
 ## 👨‍💻 Auteur
 
-**Costin Cianu**
+**Gheorghina Costincianu **
 - GitHub : [@COSTINCIANU](https://github.com/COSTINCIANU)
 
 ## 📄 Licence
