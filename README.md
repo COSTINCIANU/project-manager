@@ -28,6 +28,7 @@ Project Manager est une application web permettant de gérer des projets et des 
 
 ## 📁 Structure du projet
 
+```
 src/
 ├── components/
 │   ├── Sidebar.jsx        # Navigation latérale
@@ -38,12 +39,15 @@ src/
 │   ├── ModalEditTask.jsx  # Modal de modification de tâche
 │   ├── Graphique.jsx      # Graphique de progression
 │   ├── PageProjets.jsx    # Page des projets
-│   └── PageStats.jsx      # Page des statistiques
+│   ├── PageStats.jsx      # Page des statistiques
+│   ├── PageKanban.jsx     # Page Kanban drag & drop
+│   └── ExportPDF.jsx      # Export rapport PDF
 ├── data/
 │   └── initialData.js     # Données initiales
+├── firebase.js            # Configuration Firebase
 ├── App.jsx                # Composant principal
-└── main.jsx               # Point d'entrée 
-
+└── main.jsx               # Point d'entrée
+```
 
 ## ⚙️ Installation et lancement
 
