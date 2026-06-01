@@ -233,3 +233,20 @@ export async function deleteCommentaire(id) {
 export async function getUtilisateurs() {
   return callAPI("GET", "/users");
 }
+
+// =====================================================
+// INVITATIONS — Gestion des invitations par email
+// Permet d'inviter des utilisateurs à rejoindre
+// un projet
+// =====================================================
+
+// Envoie une invitation par email
+// invitation = { email, projectId }
+export async function envoyerInvitation(invitation) {
+  return callAPI("POST", "/invitations", invitation);
+}
+
+// Récupère toutes les invitations d'un projet
+export async function getInvitations(projectId) {
+  return callAPI("GET", `/invitations/project/${projectId}`);
+}

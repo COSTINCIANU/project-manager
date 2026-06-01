@@ -33,6 +33,7 @@ import PageVueListe from "./components/PageVueListe";
 import PageVueCalendrier from "./components/PageVueCalendrier";
 import PageVueGantt from "./components/PageVueGantt";
 import { getUtilisateurs } from "./api";
+import PageInvitations from "./components/PageInvitations";
 
 function App() {
   // =====================
@@ -634,6 +635,11 @@ function App() {
                 projects={projects}
                 onTaskMove={handleTaskMove}
               />
+            )}
+
+            {/* ---- PAGE INVITATIONS ---- */}
+            {activePage === "invitations" && (
+              <PageInvitations projects={projects} />
             )}
 
             {/* ---- PAGE VUE LISTE ---- */}

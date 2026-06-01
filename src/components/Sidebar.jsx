@@ -12,6 +12,7 @@ function Sidebar({
     { id: "projets", label: "Projets", icon: "◈" },
     { id: "taches", label: "Tâches", icon: "✓" },
     { id: "kanban", label: "Kanban", icon: "▤" },
+    { id: "invitations", label: "Invitations", icon: "✉️" },
     { id: "liste", label: "Vue Liste", icon: "☰" },
     { id: "calendrier", label: "Calendrier", icon: "📅" },
     { id: "gantt", label: "Vue Gantt", icon: "📊" },
