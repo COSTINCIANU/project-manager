@@ -649,4 +649,66 @@ cd E:\Projets\project-manager
 git add .
 git commit -m "Phase 4 — Vue Gantt ajoutée"
 git push origin master
-npm run build
+npm run build  
+
+
+
+🎉 Parfait ! La Phase 4 est complètement terminée et déployée !
+
+✅ Récapitulatif Phase 4
+✅ Vue Liste      — tableau avec tri et filtres
+✅ Vue Calendrier — calendrier avec points colorés  
+✅ Vue Gantt      — planning visuel avec barres
+✅ Déployé en production !
+
+🎯 Prochaine étape — Phase 5
+✅ Phase 1 — Déploiement
+✅ Phase 2 — Auth JWT
+✅ Phase 3 — Tâches riches
+✅ Phase 4 — Vues multiples
+⏳ Phase 5 — Equipe & Communication  ← ON CONTINUE
+⏳ Phase 6 — Avancé
+⏳ Phase 7 — IA & SaaS
+Phase 5 — Equipe & Communication :
+
+Invitations par email
+Assignation de tâches à des membres
+Commentaires sur les tâches
+Notifications email
+
+Tu veux continuer maintenant ? 😊  
+
+
+Parfait ! 😊 Avant de commencer la Phase 5, réfléchissons à l'architecture comme tu m'as demandé — pour que tout s'emboîte bien avec les phases suivantes.
+
+🏗️ Architecture Phase 5
+La Phase 5 touche à plusieurs entités importantes :
+User (déjà fait ✅)
+│
+├── ProjectMember  ← NOUVEAU
+│   ├── user_id
+│   ├── project_id
+│   └── role (admin/member)
+│
+├── Task
+│   └── assigned_to (déjà fait ✅)
+│
+├── TaskComment (déjà fait ✅)
+│   ├── content
+│   ├── user_id
+│   └── task_id
+│
+└── Notification  ← NOUVEAU
+    ├── user_id
+    ├── message
+    ├── type
+    ├── read
+    └── created_at
+
+🚀 On commence par quoi ?
+La logique c'est :
+1. Commentaires sur tâches  ← Plus simple, déjà l'entité
+2. Assignation de tâches    ← Déjà le champ assignedTo
+3. Invitations par email    ← Plus complexe
+4. Notifications            ← Dépend des autres
+On commence par les commentaires — c'est la feature la plus visible et la plus utile ! 😊

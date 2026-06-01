@@ -198,3 +198,38 @@ export async function updateSousTache(id, sousTache) {
 export async function deleteSousTache(id) {
   return callAPI("DELETE", `/tasks/subtasks/${id}`);
 }
+
+// =====================================================
+// COMMENTAIRES — CRUD complet
+// Correspond aux routes /api/tasks/{id}/comments
+// Les commentaires appartiennent toujours à une tâche
+// =====================================================
+
+// Récupère tous les commentaires d'une tâche
+// taskId = id de la tâche parente
+export async function getCommentaires(taskId) {
+  return callAPI("GET", `/tasks/${taskId}/comments`);
+}
+
+// Ajoute un commentaire sur une tâche
+// taskId = id de la tâche parente
+// commentaire = { content: "texte du commentaire" }
+export async function createCommentaire(taskId, commentaire) {
+  return callAPI("POST", `/tasks/${taskId}/comments`, commentaire);
+}
+
+// Supprime un commentaire par son id
+export async function deleteCommentaire(id) {
+  return callAPI("DELETE", `/tasks/comments/${id}`);
+}
+
+// =====================================================
+// UTILISATEURS
+// Récupère la liste des utilisateurs pour l'assignation
+// des tâches
+// =====================================================
+
+// Récupère tous les utilisateurs
+export async function getUtilisateurs() {
+  return callAPI("GET", "/users");
+}

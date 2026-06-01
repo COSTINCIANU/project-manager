@@ -4,8 +4,16 @@
 // nom, description, priorité, projet, date d'échéance,
 // temps estimé, tags, et sous-tâches
 // =====================================================
-import { useState } from "react";
-import { createSousTache, updateSousTache, deleteSousTache } from "../api";
+import { useState, useEffect } from "react";
+import {
+  createSousTache,
+  updateSousTache,
+  deleteSousTache,
+  getCommentaires,
+  createCommentaire,
+  deleteCommentaire,
+  getUtilisateurs,
+} from "../api";
 
 function ModalEditTask({ task, projects, onSave, onClose }) {
   // =====================
@@ -41,6 +49,48 @@ function ModalEditTask({ task, projects, onSave, onClose }) {
 
   // Champ pour saisir une nouvelle sous-tâche
   const [newSubTask, setNewSubTask] = useState("");
+
+  // =====================
+  // ÉTATS COMMENTAIRES
+  // =====================
+
+  // Liste des commentaires de la tâche
+  const [comments, setComments] = useState([]);
+
+  // Nouveau commentaire en cours de saisie
+  const [newComment, setNewComment] = useState("");
+
+  // Chargement des commentaires
+  const [loadingComments, setLoadingComments] = useState(true);
+
+  // =====================
+  // ÉTATS ASSIGNATION
+  // =====================
+
+  // Liste des utilisateurs disponibles pour l'assignation
+  const [users, setUsers] = useState([]);
+
+  // Utilisateur assigné à la tâche
+  const [assignedTo, setAssignedTo] = useState(task.assignedTo || "");
+
+  // =====================
+  // CHARGEMENT DES COMMENTAIRES
+  // =====================
+
+  // Charge les commentaires et utilisateurs au chargement de la modal
+  useEffect(() => {
+    async function loadData() {
+      // Charge les commentaires
+      const commentsData = await getCommentaires(task.id);
+      if (commentsData) setComments(commentsData);
+      setLoadingComments(false);
+
+      // Charge les utilisateurs pour l'assignation
+      const usersData = await getUtilisateurs();
+      if (usersData) setUsers(usersData);
+    }
+    loadData();
+  }, [task.id]);
 
   // =====================
   // GESTION DES TAGS
@@ -91,6 +141,26 @@ function ModalEditTask({ task, projects, onSave, onClose }) {
   }
 
   // =====================
+  // GESTION DES COMMENTAIRES
+  // =====================
+
+  // Ajoute un nouveau commentaire
+  async function handleAddComment() {
+    if (!newComment.trim()) return;
+    const saved = await createCommentaire(task.id, {
+      content: newComment.trim(),
+    });
+    if (saved) setComments([...comments, saved]);
+    setNewComment("");
+  }
+
+  // Supprime un commentaire
+  async function handleDeleteComment(id) {
+    await deleteCommentaire(id);
+    setComments(comments.filter((c) => c.id !== id));
+  }
+
+  // =====================
   // SAUVEGARDE
   // =====================
 
@@ -107,6 +177,7 @@ function ModalEditTask({ task, projects, onSave, onClose }) {
       dueDate,
       estimatedTime: estimatedTime ? parseInt(estimatedTime) : null,
       tags,
+      assignedTo: assignedTo ? parseInt(assignedTo) : null,
     });
 
     onClose();
@@ -259,6 +330,21 @@ function ModalEditTask({ task, projects, onSave, onClose }) {
           min="0"
           style={inputStyle}
         />
+
+        {/* ---- ASSIGNATION ---- */}
+        <div style={labelStyle}>Assigner à</div>
+        <select
+          value={assignedTo}
+          onChange={(e) => setAssignedTo(e.target.value)}
+          style={inputStyle}
+        >
+          <option value="">— Non assigné —</option>
+          {users.map((user) => (
+            <option key={user.id} value={user.id}>
+              {user.email}
+            </option>
+          ))}
+        </select>
 
         {/* ---- TAGS ---- */}
         <div style={labelStyle}>Tags</div>
@@ -433,6 +519,98 @@ function ModalEditTask({ task, projects, onSave, onClose }) {
             }}
           >
             Sauvegarder
+          </button>
+        </div>
+
+        {/* ---- COMMENTAIRES ---- */}
+        <div style={labelStyle}>Commentaires</div>
+
+        {/* Liste des commentaires */}
+        {loadingComments ? (
+          <div style={{ fontSize: "12px", color: "#aaa", marginBottom: "8px" }}>
+            Chargement...
+          </div>
+        ) : comments.length === 0 ? (
+          <div style={{ fontSize: "12px", color: "#aaa", marginBottom: "8px" }}>
+            Aucun commentaire pour l'instant
+          </div>
+        ) : (
+          comments.map((comment) => (
+            <div
+              key={comment.id}
+              style={{
+                background: "#f9f9f9",
+                borderRadius: "8px",
+                padding: "8px 10px",
+                marginBottom: "6px",
+                fontSize: "12px",
+              }}
+            >
+              {/* En-tête du commentaire */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "4px",
+                }}
+              >
+                <span style={{ fontWeight: "500", color: "#555" }}>
+                  {comment.userEmail}
+                </span>
+                <div
+                  style={{ display: "flex", gap: "8px", alignItems: "center" }}
+                >
+                  <span style={{ color: "#aaa", fontSize: "11px" }}>
+                    {new Date(comment.createdAt).toLocaleDateString("fr-FR")}
+                  </span>
+                  {/* Bouton supprimer */}
+                  <span
+                    onClick={() => handleDeleteComment(comment.id)}
+                    style={{
+                      cursor: "pointer",
+                      color: "#ddd",
+                      fontSize: "14px",
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.color = "#e74c3c")
+                    }
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "#ddd")}
+                  >
+                    ×
+                  </span>
+                </div>
+              </div>
+              {/* Contenu du commentaire */}
+              <div style={{ color: "#333", lineHeight: "1.4" }}>
+                {comment.content}
+              </div>
+            </div>
+          ))
+        )}
+
+        {/* Champ pour ajouter un commentaire */}
+        <div style={{ display: "flex", gap: "6px", marginBottom: "16px" }}>
+          <input
+            type="text"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
+            placeholder="Ajouter un commentaire..."
+            style={{ ...inputStyle, marginBottom: 0, flex: 1 }}
+          />
+          <button
+            onClick={handleAddComment}
+            style={{
+              padding: "8px 14px",
+              background: "#f0f0f0",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontSize: "13px",
+            }}
+          >
+            Envoyer
           </button>
         </div>
       </div>
