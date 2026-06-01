@@ -626,7 +626,7 @@ function App() {
               />
             )}
 
-            {/* ---- PAGE VUE LOADING ---- */}
+            {/* ---- PAGE VUE LISTE ---- */}
             {activePage === "liste" && (
               <PageVueListe
                 tasks={tasks}
@@ -637,18 +637,6 @@ function App() {
                 loading={loading}
               />
             )}
-
-            {/* ---- PAGE VUE LISTE ---- */}
-            {activePage === "liste" && (
-              <PageVueListe
-                tasks={tasks}
-                projects={projects}
-                onToggle={handleToggle}
-                onDelete={handleDelete}
-                onEdit={setTaskToEdit}
-              />
-            )}
-
             {/* ---- PAGE VUE CALENDRIER ---- */}
             {activePage === "calendrier" && (
               <PageVueCalendrier
