@@ -192,19 +192,24 @@ function App() {
   }
 
   // Fonction pour ajouter une nouvelle tâche
-  async function handleAdd({ name, priority }) {
+  // Après création on recharge toutes les tâches depuis MySQL
+  async function handleAdd({ name, priority, dueDate, description }) {
     const newTask = {
       name,
       projectId: filterProject !== "tous" ? parseInt(filterProject) : 1,
       priority,
       done: false,
       inProgress: false,
-      dueDate: "",
+      dueDate: dueDate || null,
+      description: description || null,
+      tags: [],
+      subTasks: [],
     };
     // On sauvegarde dans MySQL via Symfony
     const saved = await createTache(newTask);
-    // On ajoute la tâche retournée par MySQL avec son vrai id
-    setTasks([...tasks, saved]);
+    // On recharge toutes les tâches pour avoir les données fraîches
+    const freshTasks = await getTaches();
+    if (freshTasks) setTasks(freshTasks);
   }
 
   // Fonction pour retrouver le nom d'un projet
