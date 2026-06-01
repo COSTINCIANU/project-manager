@@ -5,7 +5,14 @@
 // =====================================================
 import { useState } from "react";
 
-function PageVueListe({ tasks, projects, onToggle, onDelete, onEdit }) {
+function PageVueListe({
+  tasks,
+  projects,
+  onToggle,
+  onDelete,
+  onEdit,
+  loading,
+}) {
   // =====================
   // ÉTATS
   // =====================
@@ -87,6 +94,25 @@ function PageVueListe({ tasks, projects, onToggle, onDelete, onEdit }) {
   // =====================
   // FILTRAGE ET TRI
   // =====================
+
+  // Affiche un message de chargement pendant le chargement des données
+  if (loading) {
+    return (
+      <div
+        style={{
+          background: "#fff",
+          border: "1px solid #eee",
+          borderRadius: "12px",
+          padding: "3rem",
+          textAlign: "center",
+          color: "#aaa",
+          fontSize: "14px",
+        }}
+      >
+        Chargement des tâches...
+      </div>
+    );
+  }
 
   // Filtre par recherche
   const filteredAndSorted = Array.isArray(tasks)

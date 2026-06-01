@@ -13,6 +13,7 @@ function Sidebar({
     { id: "taches", label: "Tâches", icon: "✓" },
     { id: "kanban", label: "Kanban", icon: "▤" },
     { id: "liste", label: "Vue Liste", icon: "☰" },
+    { id: "calendrier", label: "Calendrier", icon: "📅" },
     { id: "stats", label: "Statistiques", icon: "▲" },
     { id: "rapport", label: "Rapport PDF", icon: "📄" },
   ];

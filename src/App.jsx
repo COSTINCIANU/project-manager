@@ -30,6 +30,7 @@ import PageStats from "./components/PageStats";
 import PageKanban from "./components/PageKanban";
 import ExportPDF from "./components/ExportPDF";
 import PageVueListe from "./components/PageVueListe";
+import PageVueCalendrier from "./components/PageVueCalendrier";
 
 function App() {
   // =====================
@@ -624,6 +625,18 @@ function App() {
               />
             )}
 
+            {/* ---- PAGE VUE LOADING ---- */}
+            {activePage === "liste" && (
+              <PageVueListe
+                tasks={tasks}
+                projects={projects}
+                onToggle={handleToggle}
+                onDelete={handleDelete}
+                onEdit={setTaskToEdit}
+                loading={loading}
+              />
+            )}
+
             {/* ---- PAGE VUE LISTE ---- */}
             {activePage === "liste" && (
               <PageVueListe
@@ -631,6 +644,15 @@ function App() {
                 projects={projects}
                 onToggle={handleToggle}
                 onDelete={handleDelete}
+                onEdit={setTaskToEdit}
+              />
+            )}
+
+            {/* ---- PAGE VUE CALENDRIER ---- */}
+            {activePage === "calendrier" && (
+              <PageVueCalendrier
+                tasks={tasks}
+                projects={projects}
                 onEdit={setTaskToEdit}
               />
             )}
