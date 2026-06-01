@@ -31,7 +31,8 @@ function PageAuth({ onLogin }) {
     setMessage("");
 
     try {
-      const res = await fetch("https://127.0.0.1:8000/api/auth/login", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+        // const res = await fetch("https://127.0.0.1:8000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -65,7 +66,8 @@ function PageAuth({ onLogin }) {
     setMessage("");
 
     try {
-      const res = await fetch("https://127.0.0.1:8000/api/auth/register", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
+        // const res = await fetch("https://127.0.0.1:8000/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

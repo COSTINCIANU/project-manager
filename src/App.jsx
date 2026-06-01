@@ -237,11 +237,16 @@ function App() {
   }
 
   // Fonction pour modifier une tâche
+  // Après sauvegarde on recharge toutes les tâches depuis MySQL
+  // pour avoir les sous-tâches et tags à jour
   async function handleEdit(updatedTask) {
     // On met à jour l'affichage immédiatement
     setTasks(tasks.map((t) => (t.id === updatedTask.id ? updatedTask : t)));
     // On sauvegarde dans MySQL via Symfony
     await updateTache(updatedTask.id, updatedTask);
+    // On recharge toutes les tâches pour avoir les sous-tâches fraîches
+    const freshTasks = await getTaches();
+    if (freshTasks) setTasks(freshTasks);
   }
 
   // Fonction pour supprimer un projet

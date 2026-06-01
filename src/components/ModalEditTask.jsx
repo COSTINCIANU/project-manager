@@ -1,47 +1,119 @@
-// Importation de useState pour gérer les champs du formulaire
-import { useState } from "react"
+// =====================================================
+// ModalEditTask.jsx — Modal de modification d'une tâche
+// Permet de modifier tous les champs d'une tâche :
+// nom, description, priorité, projet, date d'échéance,
+// temps estimé, tags, et sous-tâches
+// =====================================================
+import { useState } from "react";
+import { createSousTache, updateSousTache, deleteSousTache } from "../api";
 
 function ModalEditTask({ task, projects, onSave, onClose }) {
-
   // =====================
   // ÉTATS DU FORMULAIRE
   // =====================
 
-  // Nom de la tâche — initialisé avec la valeur actuelle
-  const [name, setName] = useState(task.name)
+  // Nom de la tâche
+  const [name, setName] = useState(task.name);
 
-  // Priorité — initialisée avec la valeur actuelle
-  const [priority, setPriority] = useState(task.priority)
+  // Description détaillée de la tâche
+  const [description, setDescription] = useState(task.description || "");
 
-  // Projet — initialisé avec la valeur actuelle
-  const [projectId, setProjectId] = useState(task.projectId)
+  // Priorité : critique, haute, normale, basse
+  const [priority, setPriority] = useState(task.priority || "normale");
 
-  // Date d'échéance — initialisée avec la valeur actuelle
-  const [dueDate, setDueDate] = useState(task.dueDate || "") 
+  // Projet associé
+  const [projectId, setProjectId] = useState(task.projectId);
+
+  // Date d'échéance
+  const [dueDate, setDueDate] = useState(task.dueDate || "");
+
+  // Temps estimé en minutes
+  const [estimatedTime, setEstimatedTime] = useState(task.estimatedTime || "");
+
+  // Tags — tableau de strings ex: ["bug", "urgent"]
+  const [tags, setTags] = useState(task.tags || []);
+
+  // Champ pour saisir un nouveau tag
+  const [newTag, setNewTag] = useState("");
+
+  // Sous-tâches — liste des sous-tâches de la tâche
+  const [subTasks, setSubTasks] = useState(task.subTasks || []);
+
+  // Champ pour saisir une nouvelle sous-tâche
+  const [newSubTask, setNewSubTask] = useState("");
 
   // =====================
-  // FONCTION DE SAUVEGARDE
+  // GESTION DES TAGS
   // =====================
 
-  function handleSave() {
-    // On vérifie que le nom n'est pas vide
-    if (!name.trim()) return
+  // Ajoute un tag à la liste si non vide et non dupliqué
+  function handleAddTag() {
+    if (!newTag.trim()) return;
+    if (tags.includes(newTag.trim())) return;
+    setTags([...tags, newTag.trim()]);
+    setNewTag("");
+  }
 
-    // On envoie la tâche modifiée au composant parent
-    onSave({
-      ...task,
-      name,
-      priority,
-      projectId: parseInt(projectId),
-      dueDate, // On sauvegarde la date d'échéance
-    })
-
-    // On ferme la modal
-    onClose()
+  // Supprime un tag de la liste par son index
+  function handleRemoveTag(index) {
+    setTags(tags.filter((_, i) => i !== index));
   }
 
   // =====================
-  // STYLES
+  // GESTION DES SOUS-TÂCHES
+  // =====================
+
+  // Ajoute une nouvelle sous-tâche via l'API
+  async function handleAddSubTask() {
+    if (!newSubTask.trim()) return;
+    // On envoie la sous-tâche au backend Symfony
+    const saved = await createSousTache(task.id, {
+      name: newSubTask.trim(),
+      done: false,
+    });
+    if (saved) {
+      setSubTasks([...subTasks, saved]);
+    }
+    setNewSubTask("");
+  }
+
+  // Coche / décoche une sous-tâche
+  async function handleToggleSubTask(subTask) {
+    const updated = { ...subTask, done: !subTask.done };
+    await updateSousTache(subTask.id, updated);
+    setSubTasks(subTasks.map((st) => (st.id === subTask.id ? updated : st)));
+  }
+
+  // Supprime une sous-tâche
+  async function handleDeleteSubTask(id) {
+    await deleteSousTache(id);
+    setSubTasks(subTasks.filter((st) => st.id !== id));
+  }
+
+  // =====================
+  // SAUVEGARDE
+  // =====================
+
+  function handleSave() {
+    if (!name.trim()) return;
+
+    // On envoie toutes les données modifiées au composant parent (App.jsx)
+    onSave({
+      ...task,
+      name,
+      description,
+      priority,
+      projectId: parseInt(projectId),
+      dueDate,
+      estimatedTime: estimatedTime ? parseInt(estimatedTime) : null,
+      tags,
+    });
+
+    onClose();
+  }
+
+  // =====================
+  // STYLES RÉUTILISABLES
   // =====================
 
   const inputStyle = {
@@ -53,25 +125,21 @@ function ModalEditTask({ task, projects, onSave, onClose }) {
     outline: "none",
     marginBottom: "12px",
     background: "#fff",
-  }
+    boxSizing: "border-box",
+  };
 
-  const selectStyle = {
-    width: "100%",
-    fontSize: "13px",
-    padding: "8px 12px",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    outline: "none",
-    marginBottom: "12px",
-    background: "#fff",
-  }
+  const labelStyle = {
+    fontSize: "12px",
+    color: "#999",
+    marginBottom: "6px",
+  };
 
   // =====================
   // RENDU DE LA MODAL
   // =====================
 
   return (
-    // Fond sombre derrière la modal — clic dessus pour fermer
+    // Fond sombre — clic dessus pour fermer
     <div
       onClick={onClose}
       style={{
@@ -87,67 +155,252 @@ function ModalEditTask({ task, projects, onSave, onClose }) {
         zIndex: 1000,
       }}
     >
-      {/* Boîte de la modal — on stoppe la propagation du clic */}
+      {/* Boîte de la modal — scroll si contenu long */}
       <div
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
         style={{
           background: "#fff",
           borderRadius: "14px",
           padding: "1.5rem",
-          width: "400px",
+          width: "500px",
+          maxHeight: "85vh",
+          overflowY: "auto",
           boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
         }}
       >
-        {/* En-tête */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" }}>
-          <div style={{ fontSize: "15px", fontWeight: "500" }}>Modifier la tâche</div>
+        {/* ---- EN-TÊTE ---- */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "1.25rem",
+          }}
+        >
+          <div style={{ fontSize: "15px", fontWeight: "500" }}>
+            Modifier la tâche
+          </div>
           <div
             onClick={onClose}
-            style={{ cursor: "pointer", color: "#aaa", fontSize: "18px", lineHeight: 1 }}
+            style={{ cursor: "pointer", color: "#aaa", fontSize: "18px" }}
           >
             ✕
           </div>
         </div>
 
-        {/* Champ nom */}
-        <div style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}>Nom de la tâche</div>
+        {/* ---- NOM DE LA TÂCHE ---- */}
+        <div style={labelStyle}>Nom de la tâche *</div>
         <input
           type="text"
           value={name}
-          onChange={e => setName(e.target.value)}
-          onKeyDown={e => e.key === "Enter" && handleSave()}
+          onChange={(e) => setName(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSave()}
           style={inputStyle}
           autoFocus
         />
 
-        {/* Champ priorité */}
-        <div style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}>Priorité</div>
-        <select value={priority} onChange={e => setPriority(e.target.value)} style={selectStyle}>
-          <option value="haute">Haute</option>
-          <option value="moyenne">Moyenne</option>
-          <option value="basse">Basse</option>
+        {/* ---- DESCRIPTION ---- */}
+        <div style={labelStyle}>Description</div>
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Décrivez la tâche en détail..."
+          style={{
+            ...inputStyle,
+            minHeight: "80px",
+            resize: "vertical",
+            fontFamily: "sans-serif",
+          }}
+        />
+
+        {/* ---- PRIORITÉ ---- */}
+        <div style={labelStyle}>Priorité</div>
+        <select
+          value={priority}
+          onChange={(e) => setPriority(e.target.value)}
+          style={inputStyle}
+        >
+          <option value="critique">🔴 Critique</option>
+          <option value="haute">🟠 Haute</option>
+          <option value="normale">🟡 Normale</option>
+          <option value="basse">🟢 Basse</option>
         </select>
 
-        {/* Champ projet */}
-        <div style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}>Projet</div>
-        <select value={projectId} onChange={e => setProjectId(e.target.value)} style={selectStyle}>
-          {projects.map(p => (
-            <option key={p.id} value={p.id}>{p.name}</option>
+        {/* ---- PROJET ---- */}
+        <div style={labelStyle}>Projet</div>
+        <select
+          value={projectId}
+          onChange={(e) => setProjectId(e.target.value)}
+          style={inputStyle}
+        >
+          {projects.map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.name}
+            </option>
           ))}
         </select>
 
-        {/* Champ date d'échéance */}
-        <div style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}>Date d'échéance</div>
+        {/* ---- DATE D'ÉCHÉANCE ---- */}
+        <div style={labelStyle}>Date d'échéance</div>
         <input
           type="date"
           value={dueDate}
-          onChange={e => setDueDate(e.target.value)}
+          onChange={(e) => setDueDate(e.target.value)}
           style={inputStyle}
         />
-        
-        {/* Boutons */}
-        <div style={{ display: "flex", gap: "8px", marginTop: "4px" }}>
-          {/* Bouton annuler */}
+
+        {/* ---- TEMPS ESTIMÉ ---- */}
+        <div style={labelStyle}>Temps estimé (en minutes)</div>
+        <input
+          type="number"
+          value={estimatedTime}
+          onChange={(e) => setEstimatedTime(e.target.value)}
+          placeholder="ex: 90 = 1h30"
+          min="0"
+          style={inputStyle}
+        />
+
+        {/* ---- TAGS ---- */}
+        <div style={labelStyle}>Tags</div>
+
+        {/* Affichage des tags existants */}
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "6px",
+            marginBottom: "8px",
+          }}
+        >
+          {tags.map((tag, index) => (
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
+                background: "#f0f0f0",
+                borderRadius: "20px",
+                padding: "3px 10px",
+                fontSize: "12px",
+                color: "#444",
+              }}
+            >
+              {tag}
+              {/* Bouton pour supprimer le tag */}
+              <span
+                onClick={() => handleRemoveTag(index)}
+                style={{ cursor: "pointer", color: "#aaa", fontSize: "14px" }}
+              >
+                ×
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Champ pour ajouter un nouveau tag */}
+        <div style={{ display: "flex", gap: "6px", marginBottom: "12px" }}>
+          <input
+            type="text"
+            value={newTag}
+            onChange={(e) => setNewTag(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleAddTag()}
+            placeholder="Ajouter un tag..."
+            style={{ ...inputStyle, marginBottom: 0, flex: 1 }}
+          />
+          <button
+            onClick={handleAddTag}
+            style={{
+              padding: "8px 14px",
+              background: "#f0f0f0",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontSize: "13px",
+            }}
+          >
+            + Tag
+          </button>
+        </div>
+
+        {/* ---- SOUS-TÂCHES ---- */}
+        <div style={labelStyle}>Sous-tâches</div>
+
+        {/* Liste des sous-tâches existantes */}
+        {subTasks.map((st) => (
+          <div
+            key={st.id}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "6px 0",
+              borderBottom: "1px solid #f5f5f5",
+            }}
+          >
+            {/* Checkbox pour cocher/décocher */}
+            <input
+              type="checkbox"
+              checked={st.done}
+              onChange={() => handleToggleSubTask(st)}
+              style={{ cursor: "pointer" }}
+            />
+            {/* Nom de la sous-tâche */}
+            <span
+              style={{
+                flex: 1,
+                fontSize: "13px",
+                color: st.done ? "#aaa" : "#333",
+                textDecoration: st.done ? "line-through" : "none",
+              }}
+            >
+              {st.name}
+            </span>
+            {/* Bouton supprimer */}
+            <span
+              onClick={() => handleDeleteSubTask(st.id)}
+              style={{ cursor: "pointer", color: "#ddd", fontSize: "16px" }}
+            >
+              ×
+            </span>
+          </div>
+        ))}
+
+        {/* Champ pour ajouter une nouvelle sous-tâche */}
+        <div
+          style={{
+            display: "flex",
+            gap: "6px",
+            marginTop: "8px",
+            marginBottom: "16px",
+          }}
+        >
+          <input
+            type="text"
+            value={newSubTask}
+            onChange={(e) => setNewSubTask(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleAddSubTask()}
+            placeholder="Ajouter une sous-tâche..."
+            style={{ ...inputStyle, marginBottom: 0, flex: 1 }}
+          />
+          <button
+            onClick={handleAddSubTask}
+            style={{
+              padding: "8px 14px",
+              background: "#f0f0f0",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontSize: "13px",
+            }}
+          >
+            + Sous-tâche
+          </button>
+        </div>
+
+        {/* ---- BOUTONS ---- */}
+        <div style={{ display: "flex", gap: "8px" }}>
+          {/* Annuler */}
           <button
             onClick={onClose}
             style={{
@@ -164,7 +417,7 @@ function ModalEditTask({ task, projects, onSave, onClose }) {
             Annuler
           </button>
 
-          {/* Bouton sauvegarder */}
+          {/* Sauvegarder */}
           <button
             onClick={handleSave}
             style={{
@@ -184,7 +437,7 @@ function ModalEditTask({ task, projects, onSave, onClose }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default ModalEditTask
+export default ModalEditTask;

@@ -1,0 +1,18 @@
+services:
+  # =====================
+  # SERVICE REACT — Frontend
+  # =====================
+  react:
+    # Construction depuis notre Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # URL de l'API Symfony en local
+        VITE_API_URL: http://localhost:8080/api
+    container_name: project_manager_react
+    # Port exposé — accès via http://localhost:3000
+    ports:
+      - "3000:80"
+    # Redémarre automatiquement si le conteneur s'arrête
+    restart: unless-stopped
