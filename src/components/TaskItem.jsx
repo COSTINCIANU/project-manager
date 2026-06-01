@@ -5,7 +5,7 @@
 // et les boutons modifier/supprimer
 // =====================================================
 
-function TaskItem({ task, projectName, onToggle, onDelete, onEdit }) {
+function TaskItem({ task, projectName, onToggle, onDelete, onEdit, users }) {
   // =====================
   // CALCUL DE LA DATE D'ÉCHÉANCE
   // =====================
@@ -209,6 +209,17 @@ function TaskItem({ task, projectName, onToggle, onDelete, onEdit }) {
               </div>
             )}
           </div>
+
+          {/* Assigné à */}
+          {task.assignedTo && (
+            <div style={{ fontSize: "10px", color: "#aaa" }}>
+              👤{" "}
+              {Array.isArray(users)
+                ? users.find((u) => u.id === task.assignedTo)?.email ||
+                  "Inconnu"
+                : "Inconnu"}
+            </div>
+          )}
 
           {/* ---- BARRE DE PROGRESSION SOUS-TÂCHES ---- */}
           {subTasksTotal > 0 && (

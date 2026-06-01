@@ -32,6 +32,7 @@ import ExportPDF from "./components/ExportPDF";
 import PageVueListe from "./components/PageVueListe";
 import PageVueCalendrier from "./components/PageVueCalendrier";
 import PageVueGantt from "./components/PageVueGantt";
+import { getUtilisateurs } from "./api";
 
 function App() {
   // =====================
@@ -70,6 +71,9 @@ function App() {
   // Tâche en cours de modification — null si aucune modal ouverte
   const [taskToEdit, setTaskToEdit] = useState(null);
 
+  // Liste des utilisateurs pour l'assignation
+  const [users, setUsers] = useState([]);
+
   // =====================
   // CHARGEMENT DEPUIS MYSQL VIA API SYMFONY
   // =====================
@@ -103,6 +107,10 @@ function App() {
 
         // ---- ÉTAPE 2 : Chargement des tâches depuis MySQL via Symfony ----
         const tasksData = await getTaches();
+
+        // ---- ÉTAPE 3 : Chargement des utilisateurs ----
+        const usersData = await getUtilisateurs();
+        if (usersData) setUsers(usersData);
 
         // Si MySQL est vide on insère les données initiales
         if (tasksData.length === 0) {
@@ -524,6 +532,7 @@ function App() {
                           onToggle={handleToggle}
                           onDelete={handleDelete}
                           onEdit={setTaskToEdit}
+                          users={users}
                         />
                       ))
                     )}
@@ -610,6 +619,7 @@ function App() {
                       onToggle={handleToggle}
                       onDelete={handleDelete}
                       onEdit={setTaskToEdit}
+                      users={users}
                     />
                   ))
                 )}
