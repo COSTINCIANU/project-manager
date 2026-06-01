@@ -31,6 +31,7 @@ import PageKanban from "./components/PageKanban";
 import ExportPDF from "./components/ExportPDF";
 import PageVueListe from "./components/PageVueListe";
 import PageVueCalendrier from "./components/PageVueCalendrier";
+import PageVueGantt from "./components/PageVueGantt";
 
 function App() {
   // =====================
@@ -655,6 +656,11 @@ function App() {
                 projects={projects}
                 onEdit={setTaskToEdit}
               />
+            )}
+
+            {/* ---- PAGE VUE GANTT ---- */}
+            {activePage === "gantt" && (
+              <PageVueGantt tasks={tasks} projects={projects} />
             )}
 
             {/* ---- PAGE STATISTIQUES ---- */}

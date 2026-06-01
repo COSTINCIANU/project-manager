@@ -14,6 +14,7 @@ function Sidebar({
     { id: "kanban", label: "Kanban", icon: "▤" },
     { id: "liste", label: "Vue Liste", icon: "☰" },
     { id: "calendrier", label: "Calendrier", icon: "📅" },
+    { id: "gantt", label: "Vue Gantt", icon: "📊" },
     { id: "stats", label: "Statistiques", icon: "▲" },
     { id: "rapport", label: "Rapport PDF", icon: "📄" },
   ];
