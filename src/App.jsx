@@ -29,6 +29,7 @@ import ModalEditTask from "./components/ModalEditTask";
 import PageStats from "./components/PageStats";
 import PageKanban from "./components/PageKanban";
 import ExportPDF from "./components/ExportPDF";
+import PageVueListe from "./components/PageVueListe";
 
 function App() {
   // =====================
@@ -620,6 +621,17 @@ function App() {
                 tasks={tasks}
                 projects={projects}
                 onTaskMove={handleTaskMove}
+              />
+            )}
+
+            {/* ---- PAGE VUE LISTE ---- */}
+            {activePage === "liste" && (
+              <PageVueListe
+                tasks={tasks}
+                projects={projects}
+                onToggle={handleToggle}
+                onDelete={handleDelete}
+                onEdit={setTaskToEdit}
               />
             )}
 
