@@ -669,7 +669,7 @@ function App() {
 
             {/* ---- PAGE STATISTIQUES ---- */}
             {activePage === "stats" && (
-              <PageStats tasks={tasks} projects={projects} />
+              <PageStats tasks={tasks} projects={projects} users={users} />
             )}
 
             {/* ---- PAGE RAPPORT PDF ---- */}
