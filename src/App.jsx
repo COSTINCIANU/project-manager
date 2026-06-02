@@ -37,6 +37,7 @@ import PageInvitations from "./components/PageInvitations";
 import PageGitHub from "./components/PageGitHub";
 import PageAssistantIA from "./components/PageAssistantIA";
 import LandingPage from "./components/LandingPage";
+import PageProfil from "./components/PageProfil";
 
 function App() {
   // =====================
@@ -688,6 +689,9 @@ function App() {
             {activePage === "github" && (
               <PageGitHub tasks={tasks} projects={projects} />
             )}
+
+            {/* ---- PAGE PROFIL ---- */}
+            {activePage === "profil" && <PageProfil userEmail={userEmail} />}
 
             {/* ---- PAGE ASSISTANT IA ---- */}
             {activePage === "ia" && (
