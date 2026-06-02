@@ -917,4 +917,27 @@ React envoie juste le message à Symfony, Symfony appelle Claude avec la clé se
 Tu veux qu'on fasse ça ? C'est la bonne façon de procéder ! 🔒  
 
 
+🎉🎉🎉 Excellent !
+
+✅ Récapitulatif Phase 7 — En cours
+✅ Assistant IA (mode simulation + prêt pour vraie IA)
+⏳ Génération automatique de tâches
+⏳ Plans Gratuit / Pro / Entreprise
+⏳ Paiement Stripe
+⏳ Landing page
+
+🔧 Prochaine feature — Génération automatique de tâches
+L'idée c'est que l'utilisateur décrit un projet en texte et l'IA génère automatiquement les tâches !
+Par exemple :
+"Je veux créer une boutique en ligne"
+     ↓
+✨ IA génère automatiquement :
+- Créer la maquette
+- Configurer le backend
+- Intégrer le paiement
+- Tester le panier
+- Déployer en production
+Tu veux continuer avec cette feature ? 😊 
+
+
 
