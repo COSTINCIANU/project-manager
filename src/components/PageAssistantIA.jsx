@@ -282,6 +282,46 @@ function PageAssistantIA({ tasks, projects }) {
             Décrivez votre projet en quelques mots et l'IA génère les tâches !
           </div>
 
+          {/* Catégories de projets */}
+          <div
+            style={{
+              display: "flex",
+              gap: "6px",
+              flexWrap: "wrap",
+              marginBottom: "10px",
+            }}
+          >
+            {[
+              { icon: "💻", label: "Dev web" },
+              { icon: "🛍️", label: "E-commerce" },
+              { icon: "📱", label: "App mobile" },
+              { icon: "✏️", label: "Blog/Contenu" },
+              { icon: "🎨", label: "Design" },
+              { icon: "📊", label: "Marketing" },
+              { icon: "🏢", label: "Entreprise" },
+              { icon: "🎓", label: "Scolaire" },
+              { icon: "🏠", label: "Personnel" },
+            ].map((cat, i) => (
+              <div
+                key={i}
+                onClick={() => setProjectDescription(cat.label)}
+                style={{
+                  padding: "5px 10px",
+                  borderRadius: "20px",
+                  border: `1px solid ${projectDescription === cat.label ? "#111" : "#ddd"}`,
+                  background:
+                    projectDescription === cat.label ? "#111" : "#fff",
+                  color: projectDescription === cat.label ? "#fff" : "#444",
+                  fontSize: "12px",
+                  cursor: "pointer",
+                  transition: "all 0.15s",
+                }}
+              >
+                {cat.icon} {cat.label}
+              </div>
+            ))}
+          </div>
+
           {/* Champ description */}
           <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
             <input
@@ -289,7 +329,7 @@ function PageAssistantIA({ tasks, projects }) {
               value={projectDescription}
               onChange={(e) => setProjectDescription(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleGenerateTasks()}
-              placeholder="Ex: créer une boutique en ligne, lancer un blog..."
+              placeholder="Ex: lancer une boutique de vêtements, organiser mon mariage..."
               style={{
                 flex: 1,
                 fontSize: "13px",
