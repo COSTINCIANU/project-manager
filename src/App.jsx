@@ -386,6 +386,7 @@ function App() {
 
           {/* ---- CONTENU PRINCIPAL ---- */}
           <div
+            className="main-content"
             style={{
               flex: 1,
               padding: "2rem",
@@ -412,6 +413,7 @@ function App() {
             {activePage === "dashboard" && (
               <>
                 <div
+                  className="stat-cards"
                   style={{
                     display: "grid",
                     gridTemplateColumns: "repeat(4, 1fr)",
@@ -446,6 +448,7 @@ function App() {
                 </div>
 
                 <div
+                  className="dashboard-grid"
                   style={{
                     display: "grid",
                     gridTemplateColumns: "1fr 1fr",

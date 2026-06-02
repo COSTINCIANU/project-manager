@@ -129,6 +129,7 @@ function PageVueGantt({ tasks, projects }) {
 
   return (
     <div
+      className="gantt-container"
       style={{
         background: "#fff",
         border: "1px solid #eee",
@@ -216,7 +217,7 @@ function PageVueGantt({ tasks, projects }) {
       </div>
 
       {/* ---- GRILLE GANTT ---- */}
-      <div style={{ minWidth: "600px" }}>
+      <div style={{ minWidth: "500px" }}>
         {/* En-tête des jours */}
         <div
           style={{ display: "flex", marginBottom: "4px", paddingLeft: "200px" }}

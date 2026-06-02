@@ -168,16 +168,19 @@ function PageStats({ tasks, projects, users }) {
   return (
     <div style={{ maxWidth: "100%", overflow: "hidden" }}>
       {/* ---- CARTES RÉSUMÉ ---- */}
+      {/* Dive de card Stat avant sur descktop etait  gridTemplateColumns: "repeat(4, 1fr)", */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
+          // Mainthna en mode mobile 375px iphone SE
+          gridTemplateColumns: "repeat(2, 1fr)",
           gap: "10px",
           marginBottom: "1.5rem",
         }}
       >
         {/* Complétion globale */}
         <div
+          className="stat-cards-primary"
           style={{
             background: "#fff",
             border: "1px solid #eee",
@@ -214,6 +217,7 @@ function PageStats({ tasks, projects, users }) {
 
         {/* Tâches terminées */}
         <div
+          className="stat-cards-primary"
           style={{
             background: "#fff",
             border: "1px solid #eee",
@@ -236,6 +240,7 @@ function PageStats({ tasks, projects, users }) {
 
         {/* Tâches en retard */}
         <div
+          className="stat-cards-primary"
           style={{
             background: "#fff",
             border: "1px solid #eee",
@@ -285,6 +290,7 @@ function PageStats({ tasks, projects, users }) {
 
       {/* ---- CARTES SECONDAIRES ---- */}
       <div
+        className="stat-cards-secondary"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
@@ -524,7 +530,8 @@ function PageStats({ tasks, projects, users }) {
         >
           Tâches par projet
         </div>
-        <ResponsiveContainer width="100%" height={220}>
+        {/* <ResponsiveContainer width="100%" height={220}> */}
+        <ResponsiveContainer width="100%" height={200} minWidth={200}>
           <BarChart data={dataTachesParProjet} barSize={24}>
             <CartesianGrid
               strokeDasharray="3 3"

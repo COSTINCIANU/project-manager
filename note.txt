@@ -1101,4 +1101,82 @@ ROLE_CLIENT   → voir uniquement les projets partagés
 
 🔧 Étape 1 — Modifier l'entité User
 Ouvre :
-E:\Projets\project-manager-api\src\Entity\User.php
+E:\Projets\project-manager-api\src\Entity\User.php   
+
+
+
+Le certificat SSL est à présent installé sur le domaine « api.costincianu.fr » avec l’adresse IP « 109.234.162.77 ». L’hôte virtuel existant a été mis à jour avec le nouveau certificat. Apache redémarre en arrière-plan.  Le certificat SSL est à présent installé sur le domaine « project-manager.costincianu.fr » avec l’adresse IP « 109.234.162.77 ». L’hôte virtuel existant a été mis à jour avec le nouveau certificat. Apache redémarre en arrière-plan. le deux se ok maintna  les certificat sont genere
+
+21:34
+🎉🎉🎉 Le SSL est installé sur les deux sous-domaines !
+
+✅ https://api.costincianu.fr
+✅ https://project-manager.costincianu.fr
+🔧 Maintenant on met à jour les URLs
+1. Dans ton .env.production React change :
+
+VITE_API_URL=https://api.costincianu.fr/api
+2. Dans nelmio_cors.yaml sur le serveur ajoute la nouvelle URL :
+
+Dans le Terminal cPanel :
+
+bash
+nano ~/public_html/project-manager-api/config/packages/nelmio_cors.yaml
+Ajoute https://project-manager.costincianu.fr dans les deux listes allow_origin !
+
+Ctrl+O → Sauvegarder Ctrl+X → Quitter
+
+Puis :
+
+bash
+php bin/console cache:clear --env=prod
+Dis moi quand c'est fait ! 😊    
+
+
+
+je suis sur la lydingPage de projet
+
+21:43
+🎉🎉🎉 FÉLICITATIONS GHEORGHINA !
+
+Ton application est maintenant accessible en HTTPS sur :
+
+https://project-manager.costincianu.fr
+✅ Ce qu'on vient d'accomplir
+✅ SSL installé sur costincianu.fr
+✅ SSL installé sur project-manager.costincianu.fr
+✅ SSL installé sur api.costincianu.fr
+✅ Application accessible depuis n'importe où
+✅ Accessible depuis iPhone sur 4G/5G !
+Maintenant teste la connexion — clique sur "Se connecter" et dis moi si ça fonctionne ! 😊
+
+oui il fonctione correctmeent
+
+21:50
+🎉🎉🎉 Ton application est maintenant complètement en ligne avec HTTPS !
+
+✅ https://project-manager.costincianu.fr
+✅ https://api.costincianu.fr
+✅ SSL sécurisé
+✅ Accessible depuis iPhone sur 4G/5G !
+🔧 Prochaine étape — Responsive Mobile
+Maintenant on va adapter l'application pour les mobiles !
+
+Mais avant dis moi — est ce que tu peux tester sur ton iPhone maintenant et me dire ce que tu vois ? 📱  
+
+
+
+🔍 Problèmes identifiés
+1. La sidebar prend 50% de l'écran — le contenu est coupé à droite
+2. Les textes sont coupés dans les colonnes (Bref, Conf, Créé...)
+3. La sidebar ne se cache pas sur mobile — elle devrait être un menu hamburger
+4. Le contenu principal est trop étroit
+
+🎯 Solution — Sidebar responsive avec menu hamburger
+Sur mobile la sidebar doit :
+📱 Mobile  → Sidebar cachée + bouton hamburger ☰
+💻 Desktop → Sidebar visible normalement
+
+🔧 On commence par modifier Sidebar.jsx
+C'est le changement le plus important — une fois la sidebar responsive tout le reste devient lisible ! 
+

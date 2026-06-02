@@ -11,8 +11,8 @@
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  --heading: system-ui, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
   font: 18px/145% var(--sans);
@@ -120,7 +120,7 @@ code {
 
 /* Style global de la page */
 body {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
   background: #f5f5f5;
   color: #222;
 }
@@ -138,11 +138,103 @@ body {
 }
 
 /* Transitions globales sur les éléments interactifs */
-button, select, input {
+button,
+select,
+input {
   transition: all 0.15s ease;
 }
 
 /* Hover sur les boutons */
 button:hover {
   opacity: 0.85;
+}
+
+/* =====================
+   RESPONSIVE MOBILE
+   ===================== */
+
+@media (max-width: 768px) {
+  /* Contenu principal */
+  .main-content {
+    padding: 1rem !important;
+    padding-top: 4rem !important;
+    width: 100% !important;
+  }
+
+  /* Grille StatCards — 2 colonnes sur mobile */
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Grille Dashboard — 1 colonne sur mobile */
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Contenu principal */
+  .main-content {
+    padding: 1rem !important;
+    padding-top: 4rem !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Grille StatCards — 2 colonnes sur mobile */
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Grille Dashboard — 1 colonne sur mobile */
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Graphique progression */
+  .recharts-wrapper {
+    width: 100% !important;
+  }
+
+  /* Formulaire ajout tâche */
+  .add-task-form {
+    flex-wrap: wrap !important;
+  }
+
+  /* Tous les tableaux */
+  table {
+    display: block !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+  }
+
+  /* Calendrier */
+  .react-calendar {
+    width: 100% !important;
+  }
+
+  /* Cartes statistiques secondaires */
+  .stat-cards-secondary {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Flex wrap général */
+  .flex-mobile-wrap {
+    flex-wrap: wrap !important;
+  }
+
+  /* Inputs et selects pleine largeur */
+  select,
+  input[type="text"],
+  input[type="date"] {
+    max-width: 100% !important;
+  }
+}
+
+/* Gantt responsive */
+@media (max-width: 768px) {
+  .gantt-container {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
 }

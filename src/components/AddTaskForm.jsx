@@ -67,6 +67,7 @@ function AddTaskForm({ onAdd }) {
     >
       {/* ---- LIGNE PRINCIPALE ---- */}
       <div
+        className="add-task-form"
         style={{
           display: "flex",
           gap: "8px",
