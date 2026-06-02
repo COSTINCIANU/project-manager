@@ -13,6 +13,9 @@ import {
   createCommentaire,
   deleteCommentaire,
   getUtilisateurs,
+  getAttachments,
+  uploadAttachment,
+  deleteAttachment,
 } from "../api";
 
 function ModalEditTask({ task, projects, onSave, onClose }) {
@@ -64,6 +67,16 @@ function ModalEditTask({ task, projects, onSave, onClose }) {
   const [loadingComments, setLoadingComments] = useState(true);
 
   // =====================
+  // ÉTATS FICHIERS
+  // =====================
+
+  // Liste des fichiers attachés à la tâche
+  const [attachments, setAttachments] = useState([]);
+
+  // Chargement des fichiers
+  const [uploadingFile, setUploadingFile] = useState(false);
+
+  // =====================
   // ÉTATS ASSIGNATION
   // =====================
 
@@ -88,6 +101,10 @@ function ModalEditTask({ task, projects, onSave, onClose }) {
       // Charge les utilisateurs pour l'assignation
       const usersData = await getUtilisateurs();
       if (usersData) setUsers(usersData);
+
+      // Charge les fichiers
+      const attachmentsData = await getAttachments(task.id);
+      if (attachmentsData) setAttachments(attachmentsData);
     }
     loadData();
   }, [task.id]);
@@ -158,6 +175,38 @@ function ModalEditTask({ task, projects, onSave, onClose }) {
   async function handleDeleteComment(id) {
     await deleteCommentaire(id);
     setComments(comments.filter((c) => c.id !== id));
+  }
+
+  // =====================
+  // GESTION DES FICHIERS
+  // =====================
+
+  // Upload un fichier sur la tâche
+  async function handleUploadFile(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploadingFile(true);
+    const saved = await uploadAttachment(task.id, file);
+    if (saved) setAttachments([...attachments, saved]);
+    setUploadingFile(false);
+  }
+
+  // Supprime un fichier
+  async function handleDeleteAttachment(id) {
+    await deleteAttachment(id);
+    setAttachments(attachments.filter((a) => a.id !== id));
+  }
+
+  // Retourne l'icône selon le type de fichier
+  function getFileIcon(mimeType) {
+    if (!mimeType) return "📄";
+    if (mimeType.startsWith("image/")) return "🖼️";
+    if (mimeType === "application/pdf") return "📕";
+    if (mimeType.includes("word")) return "📝";
+    if (mimeType.includes("excel") || mimeType.includes("spreadsheet"))
+      return "📊";
+    return "📄";
   }
 
   // =====================
@@ -520,6 +569,92 @@ function ModalEditTask({ task, projects, onSave, onClose }) {
           >
             Sauvegarder
           </button>
+        </div>
+
+        {/* ---- FICHIERS ---- */}
+        <div style={labelStyle}>Fichiers joints</div>
+
+        {/* Liste des fichiers */}
+        {attachments.length === 0 ? (
+          <div style={{ fontSize: "12px", color: "#aaa", marginBottom: "8px" }}>
+            Aucun fichier joint
+          </div>
+        ) : (
+          attachments.map((attachment) => (
+            <div
+              key={attachment.id}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "6px 10px",
+                background: "#f9f9f9",
+                borderRadius: "8px",
+                marginBottom: "6px",
+                fontSize: "12px",
+              }}
+            >
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "8px" }}
+              >
+                <span>{getFileIcon(attachment.mimeType)}</span>
+                <span style={{ color: "#333" }}>{attachment.filename}</span>
+              </div>
+              <div
+                style={{ display: "flex", gap: "8px", alignItems: "center" }}
+              >
+                {/* Bouton télécharger */}
+
+                <a
+                  href={`http://project-manager-api.xena8933.odns.fr${attachment.url}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    color: "#378ADD",
+                    fontSize: "12px",
+                    textDecoration: "none",
+                  }}
+                >
+                  ⬇️
+                </a>
+                {/* Bouton supprimer */}
+                <span
+                  onClick={() => handleDeleteAttachment(attachment.id)}
+                  style={{ cursor: "pointer", color: "#ddd", fontSize: "14px" }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.color = "#e74c3c")
+                  }
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#ddd")}
+                >
+                  ×
+                </span>
+              </div>
+            </div>
+          ))
+        )}
+
+        {/* Bouton upload */}
+        <div style={{ marginBottom: "16px" }}>
+          <label
+            style={{
+              display: "inline-block",
+              padding: "8px 14px",
+              background: "#f0f0f0",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontSize: "13px",
+              color: "#444",
+            }}
+          >
+            {uploadingFile ? "Upload en cours..." : "📎 Joindre un fichier"}
+            <input
+              type="file"
+              onChange={handleUploadFile}
+              style={{ display: "none" }}
+              disabled={uploadingFile}
+            />
+          </label>
         </div>
 
         {/* ---- COMMENTAIRES ---- */}

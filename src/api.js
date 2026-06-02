@@ -250,3 +250,39 @@ export async function envoyerInvitation(invitation) {
 export async function getInvitations(projectId) {
   return callAPI("GET", `/invitations/project/${projectId}`);
 }
+
+// =====================================================
+// FICHIERS — Upload et gestion des pièces jointes
+// Permet d'uploader des fichiers sur les tâches
+// =====================================================
+
+// Récupère tous les fichiers d'une tâche
+export async function getAttachments(taskId) {
+  return callAPI("GET", `/tasks/${taskId}/attachments`);
+}
+
+// Upload un fichier sur une tâche
+// On utilise FormData car c'est un fichier binaire
+// et non du JSON
+export async function uploadAttachment(taskId, file) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await fetch(`${API_URL}/tasks/${taskId}/attachments`, {
+    method: "POST",
+    headers: {
+      // Pas de Content-Type ici — le navigateur le gère
+      // automatiquement avec le boundary pour FormData
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: formData,
+  });
+
+  if (!res.ok) return null;
+  return res.json();
+}
+
+// Supprime un fichier par son id
+export async function deleteAttachment(id) {
+  return callAPI("DELETE", `/tasks/attachments/${id}`);
+}
