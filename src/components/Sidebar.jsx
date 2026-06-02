@@ -18,6 +18,7 @@ function Sidebar({
     { id: "gantt", label: "Vue Gantt", icon: "📊" },
     { id: "stats", label: "Statistiques", icon: "▲" },
     { id: "rapport", label: "Rapport PDF", icon: "📄" },
+    { id: "github", label: "GitHub", icon: "🐙" },
   ];
 
   return (

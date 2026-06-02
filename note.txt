@@ -765,4 +765,36 @@ npm run build
 Puis FileZilla → uploade dist dans /public_html/project-manager/ 😊
 Dis moi quand c'est fait ! 🚀  
 
+C'est normal ! 😊 Le PDF se télécharge correctement — tu dois juste cliquer "Enregistrer" dans le navigateur et il s'ouvre ensuite parfaitement.
+C'est le comportement normal des fichiers téléchargés via le navigateur.
+
+✅ Récapitulatif Phase 6 — Presque terminée !
+✅ Upload de fichiers sur les tâches
+✅ Statistiques avancées améliorées
+✅ Export PDF amélioré
+✅ Export Excel (CSV)
+⏳ Intégration GitHub ← dernière feature
+
+Tu veux qu'on fasse l'intégration GitHub maintenant ou on passe directement à la Phase 7 — IA & SaaS ? 😊 
+
+
+
+11:40
+🎉 La page GitHub fonctionne parfaitement !
+
+Je vois :
+
+✅ Onglets "Commits" et "Configuration"
+✅ Message "Aucun commit pour l'instant" — normal car le webhook n'est pas encore configuré
+✅ Interface propre et professionnelle
+Maintenant on déploie sur o2switch :
+
+bash
+cd E:\Projets\project-manager
+git add .
+git commit -m "Phase 6 — Page GitHub ajoutée"
+git push origin master
+npm run build
+Puis FileZilla → uploade dist dans /public_html/project-manager/ 😊 
+
 

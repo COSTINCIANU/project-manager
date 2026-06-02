@@ -34,6 +34,7 @@ import PageVueCalendrier from "./components/PageVueCalendrier";
 import PageVueGantt from "./components/PageVueGantt";
 import { getUtilisateurs } from "./api";
 import PageInvitations from "./components/PageInvitations";
+import PageGitHub from "./components/PageGitHub";
 
 function App() {
   // =====================
@@ -675,6 +676,11 @@ function App() {
             {/* ---- PAGE RAPPORT PDF ---- */}
             {activePage === "rapport" && (
               <ExportPDF tasks={tasks} projects={projects} users={users} />
+            )}
+
+            {/* ---- PAGE GITHUB ---- */}
+            {activePage === "github" && (
+              <PageGitHub tasks={tasks} projects={projects} />
             )}
           </div>
         </>
