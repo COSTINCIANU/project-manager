@@ -98,12 +98,17 @@ function PageAuth({ onLogin }) {
   return (
     <div
       style={{
-        minHeight: "100vh",
-        background: "#f5f5f5",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: "rgba(0,0,0,0.5)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         fontFamily: "sans-serif",
+        zIndex: 1000,
       }}
     >
       <div
@@ -114,6 +119,7 @@ function PageAuth({ onLogin }) {
           width: "380px",
           border: "1px solid #eee",
           boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
+          position: "relative",
         }}
       >
         {/* Logo / Titre */}

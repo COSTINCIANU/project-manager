@@ -36,6 +36,7 @@ import { getUtilisateurs } from "./api";
 import PageInvitations from "./components/PageInvitations";
 import PageGitHub from "./components/PageGitHub";
 import PageAssistantIA from "./components/PageAssistantIA";
+import LandingPage from "./components/LandingPage";
 
 function App() {
   // =====================
@@ -76,6 +77,9 @@ function App() {
 
   // Liste des utilisateurs pour l'assignation
   const [users, setUsers] = useState([]);
+
+  // Afficher la modal de connexion sur la landing page
+  const [showAuth, setShowAuth] = useState(false);
 
   // =====================
   // CHARGEMENT DEPUIS MYSQL VIA API SYMFONY
@@ -331,7 +335,8 @@ function App() {
       }}
     >
       {/* ---- PAGE AUTH — affichée si pas connecté ---- */}
-      {!token && <PageAuth onLogin={handleLogin} />}
+      {!token && <LandingPage onLogin={() => setShowAuth(true)} />}
+      {!token && showAuth && <PageAuth onLogin={handleLogin} />}
 
       {/* ---- APPLICATION — affichée si connecté ---- */}
       {token && (
