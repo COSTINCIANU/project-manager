@@ -674,7 +674,7 @@ function App() {
 
             {/* ---- PAGE RAPPORT PDF ---- */}
             {activePage === "rapport" && (
-              <ExportPDF tasks={tasks} projects={projects} />
+              <ExportPDF tasks={tasks} projects={projects} users={users} />
             )}
           </div>
         </>

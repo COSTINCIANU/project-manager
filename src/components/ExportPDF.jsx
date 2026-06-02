@@ -1,81 +1,211 @@
-// Importation des bibliothèques pour générer le PDF
-import jsPDF from "jspdf"
-import html2canvas from "html2canvas"
-import { useState } from "react"
+// =====================================================
+// ExportPDF.jsx — Export PDF et Excel du rapport
+// Génère un rapport complet avec statistiques,
+// projets, tâches, sous-tâches et tags
+// =====================================================
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import { useState } from "react";
 
-function ExportPDF({ tasks, projects }) {
+function ExportPDF({ tasks, projects, users }) {
+  // État de chargement
+  const [loading, setLoading] = useState(false);
+  const [loadingExcel, setLoadingExcel] = useState(false);
 
-  // État de chargement pendant la génération du PDF
-  const [loading, setLoading] = useState(false)
+  // =====================
+  // DONNÉES SÉCURISÉES
+  // =====================
+  const safeTasks = Array.isArray(tasks) ? tasks : [];
+  const safeProjects = Array.isArray(projects) ? projects : [];
+  const safeUsers = Array.isArray(users) ? users : [];
 
   // =====================
   // CALCUL DES STATISTIQUES
   // =====================
-
-  const totalTasks = tasks.length
-  const doneTasks = tasks.filter(t => t.done).length
-  const highPriority = tasks.filter(t => t.priority === "haute" && !t.done).length
-  const activeProjects = projects.filter(p => p.status === "En cours").length
-  const tauxCompletion = totalTasks ? Math.round(doneTasks / totalTasks * 100) : 0
+  const totalTasks = safeTasks.length;
+  const doneTasks = safeTasks.filter((t) => t.done).length;
+  const tauxCompletion = totalTasks
+    ? Math.round((doneTasks / totalTasks) * 100)
+    : 0;
+  const activeProjects = safeProjects.filter(
+    (p) => p.status === "En cours",
+  ).length;
 
   // Tâches en retard
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const enRetard = tasks.filter(t => {
-    if (t.done || !t.dueDate) return false
-    return new Date(t.dueDate) < today
-  }).length
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const enRetard = safeTasks.filter((t) => {
+    if (t.done || !t.dueDate) return false;
+    return new Date(t.dueDate) < today;
+  }).length;
+
+  // Temps estimé total
+  const tempsEstimeTotal = safeTasks.reduce(
+    (acc, t) => acc + (t.estimatedTime || 0),
+    0,
+  );
+  const tempsEstimeTotalH = Math.round((tempsEstimeTotal / 60) * 10) / 10;
+
+  // Sous-tâches
+  const totalSousTaches = safeTasks.reduce(
+    (acc, t) => acc + (t.subTasks?.length || 0),
+    0,
+  );
+  const sousTachesTerminees = safeTasks.reduce(
+    (acc, t) => acc + (t.subTasks?.filter((st) => st.done).length || 0),
+    0,
+  );
 
   // =====================
-  // FONCTION D'EXPORT PDF
+  // FONCTIONS UTILITAIRES
   // =====================
 
-  async function handleExport() {
-    setLoading(true)
+  // Trouve le nom du projet
+  function getProjectName(projectId) {
+    const project = safeProjects.find((p) => p.id === projectId);
+    return project ? project.name : "Inconnu";
+  }
 
+  // Trouve l'email de l'utilisateur assigné
+  function getUserEmail(userId) {
+    if (!userId) return "—";
+    const user = safeUsers.find((u) => u.id === userId);
+    return user ? user.email : "Inconnu";
+  }
+
+  // Couleur de priorité
+  function getPriorityStyle(priority) {
+    switch (priority) {
+      case "critique":
+        return { bg: "#FCEBEB", color: "#A32D2D" };
+      case "haute":
+        return { bg: "#FAEEDA", color: "#854F0B" };
+      case "normale":
+        return { bg: "#E8F4FD", color: "#1976D2" };
+      case "basse":
+        return { bg: "#EAF3DE", color: "#3B6D11" };
+      default:
+        return { bg: "#f0f0f0", color: "#666" };
+    }
+  }
+
+  // =====================
+  // EXPORT PDF
+  // =====================
+  async function handleExportPDF() {
+    setLoading(true);
     try {
-      // On récupère l'élément à capturer
-      const element = document.getElementById("pdf-content")
-
-      // On capture l'élément en image
+      const element = document.getElementById("pdf-content");
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
         backgroundColor: "#ffffff",
-      })
-
-      // On crée le PDF en format A4
-      const pdf = new jsPDF("p", "mm", "a4")
-      const imgData = canvas.toDataURL("image/png")
-
-      // Dimensions A4
-      const pdfWidth = pdf.internal.pageSize.getWidth()
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width
-
-      // On ajoute l'image au PDF
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight)
-
-      // On télécharge le PDF
-      pdf.save(`rapport-projets-${new Date().toLocaleDateString("fr-FR")}.pdf`)
-
+      });
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgData = canvas.toDataURL("image/png");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`rapport-${new Date().toLocaleDateString("fr-FR")}.pdf`);
     } catch (error) {
-      console.error("Erreur export PDF :", error)
+      console.error("Erreur export PDF :", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
+    }
+  }
+
+  // =====================
+  // EXPORT EXCEL (CSV)
+  // =====================
+  function handleExportExcel() {
+    setLoadingExcel(true);
+
+    try {
+      // En-têtes du CSV
+      const headers = [
+        "Nom",
+        "Projet",
+        "Priorité",
+        "Statut",
+        "Date échéance",
+        "Temps estimé (min)",
+        "Assigné à",
+        "Tags",
+        "Sous-tâches",
+      ];
+
+      // Données des tâches
+      const rows = safeTasks.map((task) => [
+        task.name,
+        getProjectName(task.projectId),
+        task.priority || "",
+        task.done ? "Terminée" : task.inProgress ? "En cours" : "À faire",
+        task.dueDate || "",
+        task.estimatedTime || "",
+        getUserEmail(task.assignedTo),
+        (task.tags || []).join(", "),
+        `${task.subTasks?.filter((st) => st.done).length || 0}/${task.subTasks?.length || 0}`,
+      ]);
+
+      // Génère le CSV
+      const csvContent = [headers, ...rows]
+        .map((row) =>
+          row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","),
+        )
+        .join("\n");
+
+      // Télécharge le fichier
+      const blob = new Blob(["\uFEFF" + csvContent], {
+        type: "text/csv;charset=utf-8;",
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `taches-${new Date().toLocaleDateString("fr-FR")}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Erreur export Excel :", error);
+    } finally {
+      setLoadingExcel(false);
     }
   }
 
   // =====================
   // RENDU
   // =====================
-
   return (
     <div>
-
-      {/* Bouton d'export */}
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "1.5rem" }}>
+      {/* ---- BOUTONS D'EXPORT ---- */}
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          justifyContent: "flex-end",
+          marginBottom: "1.5rem",
+        }}
+      >
+        {/* Export Excel/CSV */}
         <button
-          onClick={handleExport}
+          onClick={handleExportExcel}
+          disabled={loadingExcel}
+          style={{
+            fontSize: "13px",
+            padding: "10px 20px",
+            background: loadingExcel ? "#aaa" : "#217346",
+            color: "#fff",
+            border: "none",
+            borderRadius: "8px",
+            cursor: loadingExcel ? "not-allowed" : "pointer",
+            fontWeight: "500",
+          }}
+        >
+          {loadingExcel ? "Export..." : "📊 Exporter en Excel"}
+        </button>
+
+        {/* Export PDF */}
+        <button
+          onClick={handleExportPDF}
           disabled={loading}
           style={{
             fontSize: "13px",
@@ -92,65 +222,231 @@ function ExportPDF({ tasks, projects }) {
         </button>
       </div>
 
-      {/* Contenu du rapport qui sera capturé */}
-      <div id="pdf-content" style={{ background: "#fff", padding: "2rem", borderRadius: "12px", border: "1px solid #eee" }}>
-
-        {/* En-tête du rapport */}
-        <div style={{ marginBottom: "2rem", borderBottom: "2px solid #111", paddingBottom: "1rem" }}>
+      {/* ---- CONTENU DU RAPPORT ---- */}
+      <div
+        id="pdf-content"
+        style={{
+          background: "#fff",
+          padding: "2rem",
+          borderRadius: "12px",
+          border: "1px solid #eee",
+        }}
+      >
+        {/* En-tête */}
+        <div
+          style={{
+            marginBottom: "2rem",
+            borderBottom: "2px solid #111",
+            paddingBottom: "1rem",
+          }}
+        >
           <div style={{ fontSize: "22px", fontWeight: "700", color: "#111" }}>
             📊 Rapport Project Manager
           </div>
           <div style={{ fontSize: "13px", color: "#999", marginTop: "4px" }}>
-            Généré le {new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+            Généré le{" "}
+            {new Date().toLocaleDateString("fr-FR", {
+              weekday: "long",
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
           </div>
         </div>
 
         {/* Statistiques globales */}
         <div style={{ marginBottom: "2rem" }}>
-          <div style={{ fontSize: "16px", fontWeight: "600", marginBottom: "1rem", color: "#111" }}>
+          <div
+            style={{
+              fontSize: "16px",
+              fontWeight: "600",
+              marginBottom: "1rem",
+              color: "#111",
+            }}
+          >
             Statistiques globales
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(4, 1fr)",
+              gap: "10px",
+            }}
+          >
             {[
-              { label: "Projets actifs", value: activeProjects, color: "#378ADD" },
-              { label: "Tâches totales", value: totalTasks, color: "#111" },
-              { label: "Complétion", value: `${tauxCompletion}%`, color: "#639922" },
-              { label: "En retard", value: enRetard, color: enRetard > 0 ? "#e74c3c" : "#639922" },
-            ].map(stat => (
-              <div key={stat.label} style={{ background: "#f9f9f9", borderRadius: "8px", padding: "12px" }}>
-                <div style={{ fontSize: "11px", color: "#999", marginBottom: "4px" }}>{stat.label}</div>
-                <div style={{ fontSize: "20px", fontWeight: "700", color: stat.color }}>{stat.value}</div>
+              {
+                label: "Projets actifs",
+                value: activeProjects,
+                color: "#378ADD",
+              },
+              {
+                label: "Complétion",
+                value: `${tauxCompletion}%`,
+                color: "#639922",
+              },
+              {
+                label: "En retard",
+                value: enRetard,
+                color: enRetard > 0 ? "#e74c3c" : "#639922",
+              },
+              {
+                label: "Temps estimé",
+                value: `${tempsEstimeTotalH}h`,
+                color: "#BA7517",
+              },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                style={{
+                  background: "#f9f9f9",
+                  borderRadius: "8px",
+                  padding: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "11px",
+                    color: "#999",
+                    marginBottom: "4px",
+                  }}
+                >
+                  {stat.label}
+                </div>
+                <div
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "700",
+                    color: stat.color,
+                  }}
+                >
+                  {stat.value}
+                </div>
               </div>
             ))}
           </div>
         </div>
 
+        {/* Sous-tâches stats */}
+        <div
+          style={{
+            marginBottom: "2rem",
+            background: "#f9f9f9",
+            borderRadius: "8px",
+            padding: "12px",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "13px",
+              fontWeight: "500",
+              color: "#333",
+              marginBottom: "6px",
+            }}
+          >
+            Sous-tâches : {sousTachesTerminees}/{totalSousTaches} terminées
+          </div>
+          <div
+            style={{
+              height: "6px",
+              background: "#e0e0e0",
+              borderRadius: "3px",
+            }}
+          >
+            <div
+              style={{
+                height: "100%",
+                width:
+                  totalSousTaches > 0
+                    ? `${Math.round((sousTachesTerminees / totalSousTaches) * 100)}%`
+                    : "0%",
+                background: "#639922",
+                borderRadius: "3px",
+              }}
+            />
+          </div>
+        </div>
+
         {/* Liste des projets */}
         <div style={{ marginBottom: "2rem" }}>
-          <div style={{ fontSize: "16px", fontWeight: "600", marginBottom: "1rem", color: "#111" }}>
-            Projets
+          <div
+            style={{
+              fontSize: "16px",
+              fontWeight: "600",
+              marginBottom: "1rem",
+              color: "#111",
+            }}
+          >
+            Projets ({safeProjects.length})
           </div>
-          {projects.map(project => (
-            <div key={project.id} style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "10px 0",
-              borderBottom: "1px solid #f0f0f0",
-            }}>
-              <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: project.color, flexShrink: 0 }} />
-              <div style={{ flex: 1, fontSize: "13px", fontWeight: "500" }}>{project.name}</div>
-              <div style={{ width: "150px", height: "6px", background: "#eee", borderRadius: "3px", overflow: "hidden" }}>
-                <div style={{ height: "100%", width: `${project.progress}%`, background: project.color, borderRadius: "3px" }} />
+          {safeProjects.map((project) => (
+            <div
+              key={project.id}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                padding: "10px 0",
+                borderBottom: "1px solid #f0f0f0",
+              }}
+            >
+              <div
+                style={{
+                  width: "10px",
+                  height: "10px",
+                  borderRadius: "50%",
+                  background: project.color,
+                  flexShrink: 0,
+                }}
+              />
+              <div style={{ flex: 1, fontSize: "13px", fontWeight: "500" }}>
+                {project.name}
               </div>
-              <div style={{ fontSize: "12px", color: "#888", width: "40px", textAlign: "right" }}>{project.progress}%</div>
-              <div style={{
-                fontSize: "11px",
-                padding: "2px 8px",
-                borderRadius: "20px",
-                background: project.status === "Terminé" ? "#EAF3DE" : project.status === "En attente" ? "#FAEEDA" : "#E6F1FB",
-                color: project.status === "Terminé" ? "#3B6D11" : project.status === "En attente" ? "#854F0B" : "#185FA5",
-              }}>
+              <div
+                style={{
+                  width: "120px",
+                  height: "5px",
+                  background: "#eee",
+                  borderRadius: "3px",
+                }}
+              >
+                <div
+                  style={{
+                    height: "100%",
+                    width: `${project.progress}%`,
+                    background: project.color,
+                    borderRadius: "3px",
+                  }}
+                />
+              </div>
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "#888",
+                  width: "35px",
+                  textAlign: "right",
+                }}
+              >
+                {project.progress}%
+              </div>
+              <div
+                style={{
+                  fontSize: "11px",
+                  padding: "2px 8px",
+                  borderRadius: "20px",
+                  background:
+                    project.status === "Terminé"
+                      ? "#EAF3DE"
+                      : project.status === "En attente"
+                        ? "#FAEEDA"
+                        : "#E6F1FB",
+                  color:
+                    project.status === "Terminé"
+                      ? "#3B6D11"
+                      : project.status === "En attente"
+                        ? "#854F0B"
+                        : "#185FA5",
+                }}
+              >
                 {project.status}
               </div>
             </div>
@@ -159,64 +455,141 @@ function ExportPDF({ tasks, projects }) {
 
         {/* Liste des tâches */}
         <div>
-          <div style={{ fontSize: "16px", fontWeight: "600", marginBottom: "1rem", color: "#111" }}>
-            Tâches
+          <div
+            style={{
+              fontSize: "16px",
+              fontWeight: "600",
+              marginBottom: "1rem",
+              color: "#111",
+            }}
+          >
+            Tâches ({totalTasks})
           </div>
-          {tasks.map(task => {
-            const project = projects.find(p => p.id === task.projectId)
+          {safeTasks.map((task) => {
+            const pStyle = getPriorityStyle(task.priority);
+            const subTotal = task.subTasks?.length || 0;
+            const subDone = task.subTasks?.filter((st) => st.done).length || 0;
+
             return (
-              <div key={task.id} style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                padding: "8px 0",
-                borderBottom: "1px solid #f0f0f0",
-              }}>
-                {/* Statut */}
-                <div style={{
-                  width: "14px",
-                  height: "14px",
-                  borderRadius: "3px",
-                  background: task.done ? "#639922" : "#eee",
-                  flexShrink: 0,
-                }} />
-                {/* Nom */}
-                <div style={{
-                  flex: 1,
-                  fontSize: "12px",
-                  color: task.done ? "#aaa" : "#222",
-                  textDecoration: task.done ? "line-through" : "none",
-                }}>
-                  {task.name}
+              <div
+                key={task.id}
+                style={{
+                  padding: "10px 0",
+                  borderBottom: "1px solid #f0f0f0",
+                }}
+              >
+                {/* Ligne principale */}
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "10px" }}
+                >
+                  <div
+                    style={{
+                      width: "14px",
+                      height: "14px",
+                      borderRadius: "3px",
+                      background: task.done ? "#639922" : "#eee",
+                      flexShrink: 0,
+                    }}
+                  />
+                  <div
+                    style={{
+                      flex: 1,
+                      fontSize: "12px",
+                      color: task.done ? "#aaa" : "#222",
+                      textDecoration: task.done ? "line-through" : "none",
+                      fontWeight: "500",
+                    }}
+                  >
+                    {task.name}
+                  </div>
+                  <div style={{ fontSize: "11px", color: "#aaa" }}>
+                    {getProjectName(task.projectId)}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "10px",
+                      padding: "2px 7px",
+                      borderRadius: "20px",
+                      background: pStyle.bg,
+                      color: pStyle.color,
+                    }}
+                  >
+                    {task.priority}
+                  </div>
+                  {task.dueDate && (
+                    <div style={{ fontSize: "11px", color: "#bbb" }}>
+                      📅 {new Date(task.dueDate).toLocaleDateString("fr-FR")}
+                    </div>
+                  )}
+                  {task.assignedTo && (
+                    <div style={{ fontSize: "11px", color: "#aaa" }}>
+                      👤 {getUserEmail(task.assignedTo)}
+                    </div>
+                  )}
                 </div>
-                {/* Projet */}
-                <div style={{ fontSize: "11px", color: "#aaa", width: "130px" }}>
-                  {project ? project.name : ""}
-                </div>
-                {/* Priorité */}
-                <div style={{
-                  fontSize: "10px",
-                  padding: "2px 7px",
-                  borderRadius: "20px",
-                  background: task.priority === "haute" ? "#FCEBEB" : task.priority === "moyenne" ? "#FAEEDA" : "#EAF3DE",
-                  color: task.priority === "haute" ? "#A32D2D" : task.priority === "moyenne" ? "#854F0B" : "#3B6D11",
-                }}>
-                  {task.priority}
-                </div>
-                {/* Date */}
-                {task.dueDate && (
-                  <div style={{ fontSize: "11px", color: "#bbb", width: "80px", textAlign: "right" }}>
-                    {new Date(task.dueDate).toLocaleDateString("fr-FR")}
+
+                {/* Description */}
+                {task.description && (
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      color: "#aaa",
+                      marginTop: "4px",
+                      marginLeft: "24px",
+                    }}
+                  >
+                    {task.description}
+                  </div>
+                )}
+
+                {/* Tags */}
+                {task.tags && task.tags.length > 0 && (
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "4px",
+                      marginTop: "4px",
+                      marginLeft: "24px",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    {task.tags.map((tag, i) => (
+                      <span
+                        key={i}
+                        style={{
+                          fontSize: "10px",
+                          padding: "1px 6px",
+                          borderRadius: "20px",
+                          background: "#f0f0f0",
+                          color: "#666",
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Sous-tâches */}
+                {subTotal > 0 && (
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      color: "#aaa",
+                      marginTop: "4px",
+                      marginLeft: "24px",
+                    }}
+                  >
+                    ✅ {subDone}/{subTotal} sous-tâches
                   </div>
                 )}
               </div>
-            )
+            );
           })}
         </div>
-
       </div>
     </div>
-  )
+  );
 }
 
-export default ExportPDF
+export default ExportPDF;
