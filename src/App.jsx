@@ -35,6 +35,7 @@ import PageVueGantt from "./components/PageVueGantt";
 import { getUtilisateurs } from "./api";
 import PageInvitations from "./components/PageInvitations";
 import PageGitHub from "./components/PageGitHub";
+import PageAssistantIA from "./components/PageAssistantIA";
 
 function App() {
   // =====================
@@ -681,6 +682,11 @@ function App() {
             {/* ---- PAGE GITHUB ---- */}
             {activePage === "github" && (
               <PageGitHub tasks={tasks} projects={projects} />
+            )}
+
+            {/* ---- PAGE ASSISTANT IA ---- */}
+            {activePage === "ia" && (
+              <PageAssistantIA tasks={tasks} projects={projects} />
             )}
           </div>
         </>

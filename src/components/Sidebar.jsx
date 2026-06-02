@@ -19,6 +19,7 @@ function Sidebar({
     { id: "stats", label: "Statistiques", icon: "▲" },
     { id: "rapport", label: "Rapport PDF", icon: "📄" },
     { id: "github", label: "GitHub", icon: "🐙" },
+    { id: "ia", label: "Assistant IA", icon: "🤖" },
   ];
 
   return (
