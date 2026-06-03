@@ -238,3 +238,10 @@ button:hover {
     -webkit-overflow-scrolling: touch !important;
   }
 }
+
+/* Graphiques camembert — 1 colonne sur mobile */
+@media (max-width: 768px) {
+  .charts-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

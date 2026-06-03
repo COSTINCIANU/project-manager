@@ -367,6 +367,7 @@ function PageStats({ tasks, projects, users }) {
 
       {/* ---- GRAPHIQUES CAMEMBERT ---- */}
       <div
+        className="charts-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
@@ -374,7 +375,7 @@ function PageStats({ tasks, projects, users }) {
           marginBottom: "14px",
         }}
       >
-        {/* Camembert priorités */}
+        {/* Priorités */}
         <div
           style={{
             background: "#fff",
@@ -392,59 +393,75 @@ function PageStats({ tasks, projects, users }) {
           >
             Répartition par priorité
           </div>
-          <ResponsiveContainer width="100%" height={200}>
-            <PieChart>
-              <Pie
-                data={dataPriorite}
-                cx="50%"
-                cy="50%"
-                innerRadius={50}
-                outerRadius={80}
-                dataKey="value"
-                paddingAngle={3}
-              >
-                {dataPriorite.map((entry, index) => (
-                  <Cell key={index} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip content={<CustomTooltip />} />
-            </PieChart>
-          </ResponsiveContainer>
           <div
             style={{
               display: "flex",
-              justifyContent: "center",
-              gap: "12px",
-              marginTop: "8px",
               flexWrap: "wrap",
+              gap: "8px",
+              justifyContent: "center",
+              marginBottom: "12px",
             }}
           >
-            {dataPriorite.map((d) => (
-              <div
-                key={d.name}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "5px",
-                  fontSize: "11px",
-                  color: "#666",
-                }}
-              >
-                <div
-                  style={{
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    background: d.color,
-                  }}
-                />
-                {d.name} ({d.value})
-              </div>
-            ))}
+            {dataPriorite.map((d) => {
+              const pct =
+                safeTasks.length > 0
+                  ? Math.round((d.value / safeTasks.length) * 100)
+                  : 0;
+              return (
+                <div key={d.name} style={{ textAlign: "center", width: "45%" }}>
+                  <div
+                    style={{
+                      position: "relative",
+                      width: "70px",
+                      height: "70px",
+                      margin: "0 auto 6px",
+                    }}
+                  >
+                    <svg width="70" height="70" viewBox="0 0 70 70">
+                      <circle
+                        cx="35"
+                        cy="35"
+                        r="28"
+                        fill="none"
+                        stroke="#f0f0f0"
+                        strokeWidth="8"
+                      />
+                      <circle
+                        cx="35"
+                        cy="35"
+                        r="28"
+                        fill="none"
+                        stroke={d.color}
+                        strokeWidth="8"
+                        strokeDasharray={`${pct * 1.759} 175.9`}
+                        strokeLinecap="round"
+                        transform="rotate(-90 35 35)"
+                      />
+                    </svg>
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        fontSize: "12px",
+                        fontWeight: "600",
+                        color: "#333",
+                      }}
+                    >
+                      {d.value}
+                    </div>
+                  </div>
+                  <div style={{ fontSize: "11px", color: "#666" }}>
+                    {d.name}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* Camembert statut */}
+        {/* Statut */}
         <div
           style={{
             background: "#fff",
@@ -462,55 +479,71 @@ function PageStats({ tasks, projects, users }) {
           >
             Statut des tâches
           </div>
-          <ResponsiveContainer width="100%" height={200}>
-            <PieChart>
-              <Pie
-                data={dataStatut}
-                cx="50%"
-                cy="50%"
-                innerRadius={50}
-                outerRadius={80}
-                dataKey="value"
-                paddingAngle={3}
-              >
-                {dataStatut.map((entry, index) => (
-                  <Cell key={index} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip content={<CustomTooltip />} />
-            </PieChart>
-          </ResponsiveContainer>
           <div
             style={{
               display: "flex",
-              justifyContent: "center",
-              gap: "12px",
-              marginTop: "8px",
               flexWrap: "wrap",
+              gap: "8px",
+              justifyContent: "center",
+              marginBottom: "12px",
             }}
           >
-            {dataStatut.map((d) => (
-              <div
-                key={d.name}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "5px",
-                  fontSize: "11px",
-                  color: "#666",
-                }}
-              >
-                <div
-                  style={{
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    background: d.color,
-                  }}
-                />
-                {d.name} ({d.value})
-              </div>
-            ))}
+            {dataStatut.map((d) => {
+              const pct =
+                safeTasks.length > 0
+                  ? Math.round((d.value / safeTasks.length) * 100)
+                  : 0;
+              return (
+                <div key={d.name} style={{ textAlign: "center", width: "45%" }}>
+                  <div
+                    style={{
+                      position: "relative",
+                      width: "70px",
+                      height: "70px",
+                      margin: "0 auto 6px",
+                    }}
+                  >
+                    <svg width="70" height="70" viewBox="0 0 70 70">
+                      <circle
+                        cx="35"
+                        cy="35"
+                        r="28"
+                        fill="none"
+                        stroke="#f0f0f0"
+                        strokeWidth="8"
+                      />
+                      <circle
+                        cx="35"
+                        cy="35"
+                        r="28"
+                        fill="none"
+                        stroke={d.color}
+                        strokeWidth="8"
+                        strokeDasharray={`${pct * 1.759} 175.9`}
+                        strokeLinecap="round"
+                        transform="rotate(-90 35 35)"
+                      />
+                    </svg>
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        fontSize: "12px",
+                        fontWeight: "600",
+                        color: "#333",
+                      }}
+                    >
+                      {d.value}
+                    </div>
+                  </div>
+                  <div style={{ fontSize: "11px", color: "#666" }}>
+                    {d.name}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -530,84 +563,71 @@ function PageStats({ tasks, projects, users }) {
         >
           Tâches par projet
         </div>
-        {/* <ResponsiveContainer width="100%" height={220}> */}
-        <ResponsiveContainer width="100%" height={200} minWidth={200}>
-          <BarChart data={dataTachesParProjet} barSize={24}>
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke="#f0f0f0"
-              vertical={false}
-            />
-            <XAxis
-              dataKey="name"
-              tick={{ fontSize: 11, fill: "#999" }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <YAxis
-              tick={{ fontSize: 11, fill: "#999" }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: "#f9f9f9" }} />
-            <Bar
-              dataKey="total"
-              name="Total"
-              radius={[4, 4, 0, 0]}
-              fill="#eee"
-            />
-            <Bar dataKey="terminees" name="Terminées" radius={[4, 4, 0, 0]}>
-              {dataTachesParProjet.map((entry, index) => (
-                <Cell key={index} fill={entry.color} />
-              ))}
-            </Bar>
-            <Bar
-              dataKey="enRetard"
-              name="En retard"
-              radius={[4, 4, 0, 0]}
-              fill="#FCEBEB"
-            />
-          </BarChart>
-        </ResponsiveContainer>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "16px",
-            marginTop: "8px",
-          }}
-        >
-          {[
-            { color: "#eee", label: "Total" },
-            { color: "#639922", label: "Terminées" },
-            { color: "#FCEBEB", label: "En retard" },
-          ].map((item, i) => (
-            <div
-              key={i}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-                fontSize: "11px",
-                color: "#666",
-              }}
-            >
+        {dataTachesParProjet.length === 0 ? (
+          <div
+            style={{
+              fontSize: "13px",
+              color: "#aaa",
+              textAlign: "center",
+              padding: "1rem",
+            }}
+          >
+            Aucun projet
+          </div>
+        ) : (
+          dataTachesParProjet.map((p, i) => (
+            <div key={i} style={{ marginBottom: "12px" }}>
               <div
                 style={{
-                  width: "12px",
-                  height: "8px",
-                  borderRadius: "2px",
-                  background: item.color,
-                  border: "1px solid #ddd",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  fontSize: "12px",
+                  marginBottom: "4px",
                 }}
-              />
-              {item.label}
+              >
+                <span style={{ color: "#333", fontWeight: "500" }}>
+                  {p.name}
+                </span>
+                <span style={{ color: "#888" }}>
+                  {p.terminees}/{p.total} terminées
+                </span>
+              </div>
+              <div
+                style={{
+                  height: "10px",
+                  background: "#f0f0f0",
+                  borderRadius: "5px",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    height: "100%",
+                    width: `${p.total > 0 ? (p.terminees / p.total) * 100 : 0}%`,
+                    background: p.color,
+                    borderRadius: "5px",
+                    transition: "width 0.3s",
+                  }}
+                />
+              </div>
+              {p.enRetard > 0 && (
+                <div
+                  style={{
+                    fontSize: "11px",
+                    color: "#e74c3c",
+                    marginTop: "3px",
+                  }}
+                >
+                  ⚠️ {p.enRetard} en retard
+                </div>
+              )}
             </div>
-          ))}
-        </div>
+          ))
+        )}
       </div>
 
       {/* ---- GRAPHIQUE BARRES UTILISATEURS ---- */}
+      {/* ---- PRODUCTIVITÉ PAR MEMBRE ---- */}
       {dataTachesParUser.length > 0 && (
         <div
           style={{
@@ -626,42 +646,43 @@ function PageStats({ tasks, projects, users }) {
           >
             Productivité par membre
           </div>
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={dataTachesParUser} barSize={24}>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="#f0f0f0"
-                vertical={false}
-              />
-              <XAxis
-                dataKey="name"
-                tick={{ fontSize: 11, fill: "#999" }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fontSize: 11, fill: "#999" }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <Tooltip
-                content={<CustomTooltip />}
-                cursor={{ fill: "#f9f9f9" }}
-              />
-              <Bar
-                dataKey="total"
-                name="Total"
-                radius={[4, 4, 0, 0]}
-                fill="#E8F4FD"
-              />
-              <Bar
-                dataKey="terminees"
-                name="Terminées"
-                radius={[4, 4, 0, 0]}
-                fill="#378ADD"
-              />
-            </BarChart>
-          </ResponsiveContainer>
+          {dataTachesParUser.map((u, i) => (
+            <div key={i} style={{ marginBottom: "12px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  fontSize: "12px",
+                  marginBottom: "4px",
+                }}
+              >
+                <span style={{ color: "#333", fontWeight: "500" }}>
+                  👤 {u.name}
+                </span>
+                <span style={{ color: "#888" }}>
+                  {u.terminees}/{u.total} terminées
+                </span>
+              </div>
+              <div
+                style={{
+                  height: "10px",
+                  background: "#f0f0f0",
+                  borderRadius: "5px",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    height: "100%",
+                    width: `${u.total > 0 ? (u.terminees / u.total) * 100 : 0}%`,
+                    background: "#378ADD",
+                    borderRadius: "5px",
+                    transition: "width 0.3s",
+                  }}
+                />
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
