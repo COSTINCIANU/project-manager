@@ -118,7 +118,10 @@ function PageVueCalendrier({ tasks, projects, onEdit }) {
   // =====================
 
   return (
-    <div style={{ display: "flex", gap: "20px", alignItems: "flex-start" }}>
+    <div
+      className="calendrier-container"
+      style={{ display: "flex", gap: "20px", alignItems: "flex-start" }}
+    >
       {/* ---- CALENDRIER ---- */}
       <div
         style={{
@@ -126,15 +129,15 @@ function PageVueCalendrier({ tasks, projects, onEdit }) {
           border: "1px solid #eee",
           borderRadius: "12px",
           padding: "1.25rem",
-          flex: "0 0 auto",
+          width: "100%",
         }}
       >
-        {/* Styles personnalisés pour react-calendar */}
         <style>{`
           .react-calendar {
             border: none !important;
             font-family: sans-serif !important;
-            width: 380px !important;
+            width: 100% !important;
+            max-width: 380px !important;
           }
           .react-calendar__tile {
             height: 60px !important;
@@ -174,6 +177,20 @@ function PageVueCalendrier({ tasks, projects, onEdit }) {
             font-size: 11px !important;
             color: #aaa !important;
           }
+
+          @media (max-width: 768px) {
+            .calendrier-container {
+              flex-direction: column !important;
+            }
+            .react-calendar {
+              width: 100% !important;
+              max-width: 100% !important;
+            }
+            .react-calendar__tile {
+              height: 45px !important;
+              font-size: 11px !important;
+            }
+          }
         `}</style>
 
         <Calendar
@@ -196,82 +213,33 @@ function PageVueCalendrier({ tasks, projects, onEdit }) {
             flexWrap: "wrap",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "5px",
-              fontSize: "11px",
-              color: "#666",
-            }}
-          >
+          {[
+            { color: "#e74c3c", label: "Critique" },
+            { color: "#e67e22", label: "Haute" },
+            { color: "#378ADD", label: "Normale/Basse" },
+            { color: "#639922", label: "Terminée" },
+          ].map((item, i) => (
             <div
+              key={i}
               style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                background: "#e74c3c",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+                fontSize: "11px",
+                color: "#666",
               }}
-            />
-            Critique
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "5px",
-              fontSize: "11px",
-              color: "#666",
-            }}
-          >
-            <div
-              style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                background: "#e67e22",
-              }}
-            />
-            Haute
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "5px",
-              fontSize: "11px",
-              color: "#666",
-            }}
-          >
-            <div
-              style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                background: "#378ADD",
-              }}
-            />
-            Normale/Basse
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "5px",
-              fontSize: "11px",
-              color: "#666",
-            }}
-          >
-            <div
-              style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                background: "#639922",
-              }}
-            />
-            Terminée
-          </div>
+            >
+              <div
+                style={{
+                  width: "8px",
+                  height: "8px",
+                  borderRadius: "50%",
+                  background: item.color,
+                }}
+              />
+              {item.label}
+            </div>
+          ))}
         </div>
       </div>
 
@@ -284,9 +252,9 @@ function PageVueCalendrier({ tasks, projects, onEdit }) {
           borderRadius: "12px",
           padding: "1.25rem",
           minHeight: "400px",
+          width: "100%",
         }}
       >
-        {/* En-tête */}
         <div
           style={{
             fontSize: "14px",
@@ -304,7 +272,6 @@ function PageVueCalendrier({ tasks, projects, onEdit }) {
           })}
         </div>
 
-        {/* Tâches du jour sélectionné */}
         {selectedTasks.length === 0 ? (
           <div
             style={{
@@ -341,12 +308,13 @@ function PageVueCalendrier({ tasks, projects, onEdit }) {
                 onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
                 onClick={() => onEdit(task)}
               >
-                {/* Nom + priorité */}
                 <div
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    flexWrap: "wrap",
+                    gap: "6px",
                   }}
                 >
                   <div
@@ -372,7 +340,6 @@ function PageVueCalendrier({ tasks, projects, onEdit }) {
                   </span>
                 </div>
 
-                {/* Description */}
                 {task.description && (
                   <div
                     style={{
@@ -385,14 +352,12 @@ function PageVueCalendrier({ tasks, projects, onEdit }) {
                   </div>
                 )}
 
-                {/* Projet */}
                 <div
                   style={{ fontSize: "11px", color: "#aaa", marginTop: "4px" }}
                 >
                   📁 {getProjectName(task.projectId)}
                 </div>
 
-                {/* Sous-tâches */}
                 {subTotal > 0 && (
                   <div
                     style={{
@@ -405,7 +370,6 @@ function PageVueCalendrier({ tasks, projects, onEdit }) {
                   </div>
                 )}
 
-                {/* Tags */}
                 {task.tags && task.tags.length > 0 && (
                   <div
                     style={{

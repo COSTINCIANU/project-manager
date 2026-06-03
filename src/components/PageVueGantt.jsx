@@ -217,7 +217,7 @@ function PageVueGantt({ tasks, projects }) {
       </div>
 
       {/* ---- GRILLE GANTT ---- */}
-      <div style={{ minWidth: "500px" }}>
+      <div style={{ minWidth: "400px" }}>
         {/* En-tête des jours */}
         <div
           style={{ display: "flex", marginBottom: "4px", paddingLeft: "200px" }}
@@ -298,7 +298,7 @@ function PageVueGantt({ tasks, projects }) {
                   display: "flex",
                   alignItems: "center",
                   marginBottom: "6px",
-                  background: index % 2 === 0 ? "#fafafa" : "#fff",
+                  background: index % 2 === 0 ? "#f0f0f0" : "#fff",
                   borderRadius: "6px",
                   padding: "4px 0",
                 }}
@@ -306,7 +306,7 @@ function PageVueGantt({ tasks, projects }) {
                 {/* Nom de la tâche */}
                 <div
                   style={{
-                    width: "200px",
+                    width: "120px",
                     flexShrink: 0,
                     paddingRight: "12px",
                     paddingLeft: "8px",
@@ -352,7 +352,7 @@ function PageVueGantt({ tasks, projects }) {
                           width: `${(1 / daysInMonth) * 100}%`,
                           height: "100%",
                           background: isWeekend
-                            ? "rgba(0,0,0,0.02)"
+                            ? "rgba(0,0,0,0.06)"
                             : "transparent",
                           borderLeft: "1px solid #f5f5f5",
                         }}

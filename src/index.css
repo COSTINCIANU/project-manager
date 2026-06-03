@@ -275,3 +275,17 @@ button:hover {
     grid-template-columns: 1fr 1fr !important;
   }
 }
+
+/* =====================
+   TABLETTE — 769px à 1024px  CALENDRIER 
+   ===================== */
+
+@media (max-width: 1024px) {
+  .calendrier-container {
+    flex-direction: column !important;
+  }
+  .react-calendar {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
