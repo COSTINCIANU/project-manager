@@ -335,6 +335,62 @@ function App() {
         transition: "background 0.3s",
       }}
     >
+      {/* ---- BARRE DE NAVIGATION MOBILE/TABLETTE ---- */}
+      {token && (
+        <div
+          className="topbar"
+          style={{
+            display: "none",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "56px",
+            background: "#111",
+            zIndex: 998,
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "0 1rem",
+          }}
+        >
+          {/* Espace gauche vide pour équilibrer */}
+          <div style={{ width: "40px" }} />
+
+          {/* Logo centré */}
+          <div
+            style={{
+              color: "#fff",
+              fontSize: "15px",
+              fontWeight: "600",
+              position: "absolute",
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
+          >
+            📊 Project Manager
+          </div>
+
+          {/* Profil à droite */}
+          <div
+            onClick={() => setActivePage("profil")}
+            style={{
+              width: "32px",
+              height: "32px",
+              borderRadius: "50%",
+              background: "#333",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              color: "#fff",
+              fontSize: "14px",
+            }}
+          >
+            👤
+          </div>
+        </div>
+      )}
+
       {/* ---- PAGE AUTH — affichée si pas connecté ---- */}
       {!token && <LandingPage onLogin={() => setShowAuth(true)} />}
       {!token && showAuth && <PageAuth onLogin={handleLogin} />}

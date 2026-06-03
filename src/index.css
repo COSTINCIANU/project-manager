@@ -154,8 +154,23 @@ button:hover {
    ===================== */
 
 /* =====================
-   MOBILE — max 768px
+   TOPBAR MOBILE ET TABLETTE
    ===================== */
+@media (max-width: 1024px) {
+  .topbar {
+    display: flex !important;
+  }
+
+  .main-content {
+    padding-top: 4.5rem !important;
+  }
+}
+/* sur tablette le logo "Proj" de la sidebar dépasse sur la topbar. On va le cacher sur tablette. */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .sidebar-logo {
+    display: none !important;
+  }
+}
 /* =====================
    MOBILE — max 768px
    ===================== */
@@ -273,6 +288,27 @@ button:hover {
 
   .charts-grid {
     grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* Sur tablette la sidebar est toujours visible (avec icônes) donc on n'a pas besoin du hamburger ! */
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Cache le bouton hamburger sur tablette */
+  .hamburger-btn {
+    display: none !important;
+  }
+
+  /* La sidebar reste fixe sur tablette */
+  .sidebar {
+    position: fixed !important;
+    left: 0 !important;
+    top: 56px !important;
+    height: calc(100vh - 56px) !important;
+  }
+
+  /* Décale le contenu principal */
+  .main-content {
+    margin-left: 60px !important;
   }
 }
 
