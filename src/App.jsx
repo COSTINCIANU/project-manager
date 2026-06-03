@@ -584,7 +584,10 @@ function App() {
                   <div style={{ fontSize: "14px", fontWeight: "500" }}>
                     Toutes les tâches
                   </div>
-                  <div style={{ display: "flex", gap: "6px" }}>
+                  <div
+                    className="task-filters"
+                    style={{ display: "flex", gap: "6px" }}
+                  >
                     <select
                       style={selectStyle}
                       value={filterPriority}

@@ -1,6 +1,6 @@
 // =====================================================
 // Sidebar.jsx — Navigation principale
-// Responsive : hamburger sur mobile, sidebar sur desktop
+// Mobile : hamburger | Tablette : icônes | Desktop : complet
 // =====================================================
 import { useState } from "react";
 
@@ -12,7 +12,6 @@ function Sidebar({
   userEmail,
   onLogout,
 }) {
-  // État pour afficher/masquer la sidebar sur mobile
   const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
@@ -31,7 +30,6 @@ function Sidebar({
     { id: "profil", label: "Mon profil", icon: "👤" },
   ];
 
-  // Fonction pour naviguer et fermer la sidebar sur mobile
   function handleNavigate(id) {
     onNavigate(id);
     setIsOpen(false);
@@ -42,6 +40,7 @@ function Sidebar({
       {/* ---- BOUTON HAMBURGER (mobile uniquement) ---- */}
       <button
         onClick={() => setIsOpen(!isOpen)}
+        className="hamburger-btn"
         style={{
           display: "none",
           position: "fixed",
@@ -59,18 +58,16 @@ function Sidebar({
           alignItems: "center",
           justifyContent: "center",
         }}
-        className="hamburger-btn"
       >
         {isOpen ? "✕" : "☰"}
       </button>
 
-      {/* ---- OVERLAY (mobile uniquement) ---- */}
+      {/* ---- OVERLAY MOBILE ---- */}
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}
           className="sidebar-overlay"
           style={{
-            display: "none",
             position: "fixed",
             top: 0,
             left: 0,
@@ -84,7 +81,7 @@ function Sidebar({
 
       {/* ---- SIDEBAR ---- */}
       <div
-        className="sidebar"
+        className={`sidebar ${isOpen ? "open" : ""}`}
         style={{
           width: "220px",
           minHeight: "100vh",
@@ -95,27 +92,33 @@ function Sidebar({
           gap: "4px",
           flexShrink: 0,
           zIndex: 1000,
+          transition: "width 0.3s",
         }}
       >
         {/* Logo */}
         <div
+          className="sidebar-logo"
           style={{
             color: "#fff",
             fontSize: "16px",
             fontWeight: "600",
             marginBottom: "2rem",
             paddingLeft: "10px",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
           }}
         >
           Project Manager
         </div>
 
         {/* Menu items */}
-        <div style={{ flex: 1, overflowY: "auto" }}>
+        <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>
           {menuItems.map((item) => (
             <div
               key={item.id}
               onClick={() => handleNavigate(item.id)}
+              className="sidebar-item"
+              title={item.label}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -129,6 +132,8 @@ function Sidebar({
                 fontWeight: activePage === item.id ? "500" : "400",
                 transition: "all 0.15s",
                 marginBottom: "2px",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
               }}
               onMouseEnter={(e) => {
                 if (activePage !== item.id)
@@ -139,22 +144,26 @@ function Sidebar({
                   e.currentTarget.style.background = "transparent";
               }}
             >
-              <span style={{ fontSize: "16px" }}>{item.icon}</span>
-              {item.label}
+              <span style={{ fontSize: "16px", flexShrink: 0 }}>
+                {item.icon}
+              </span>
+              <span className="sidebar-label">{item.label}</span>
             </div>
           ))}
         </div>
 
         {/* Partie basse */}
         <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-          {/* Email utilisateur */}
+          {/* Email */}
           {userEmail && (
             <div
+              className="sidebar-email"
               style={{
                 padding: "10px 12px",
                 borderRadius: "8px",
                 background: "#222",
                 marginBottom: "4px",
+                overflow: "hidden",
               }}
             >
               <div
@@ -179,6 +188,7 @@ function Sidebar({
           {/* Mode sombre */}
           <div
             onClick={onToggleDark}
+            title={darkMode ? "Mode clair" : "Mode sombre"}
             style={{
               display: "flex",
               alignItems: "center",
@@ -188,20 +198,26 @@ function Sidebar({
               cursor: "pointer",
               color: "#aaa",
               fontSize: "14px",
-              transition: "all 0.15s",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.background = "#222")}
             onMouseLeave={(e) =>
               (e.currentTarget.style.background = "transparent")
             }
           >
-            <span style={{ fontSize: "16px" }}>{darkMode ? "☀" : "☾"}</span>
-            {darkMode ? "Mode clair" : "Mode sombre"}
+            <span style={{ fontSize: "16px", flexShrink: 0 }}>
+              {darkMode ? "☀" : "☾"}
+            </span>
+            <span className="sidebar-label">
+              {darkMode ? "Mode clair" : "Mode sombre"}
+            </span>
           </div>
 
           {/* Déconnexion */}
           <div
             onClick={onLogout}
+            title="Déconnexion"
             style={{
               display: "flex",
               alignItems: "center",
@@ -211,38 +227,19 @@ function Sidebar({
               cursor: "pointer",
               color: "#e74c3c",
               fontSize: "14px",
-              transition: "all 0.15s",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.background = "#222")}
             onMouseLeave={(e) =>
               (e.currentTarget.style.background = "transparent")
             }
           >
-            <span style={{ fontSize: "16px" }}>⏻</span>
-            Déconnexion
+            <span style={{ fontSize: "16px", flexShrink: 0 }}>⏻</span>
+            <span className="sidebar-label">Déconnexion</span>
           </div>
         </div>
       </div>
-
-      {/* ---- CSS RESPONSIVE ---- */}
-      <style>{`
-        @media (max-width: 768px) {
-          .hamburger-btn {
-            display: flex !important;
-          }
-          .sidebar-overlay {
-            display: block !important;
-          }
-          .sidebar {
-            position: fixed !important;
-            top: 0 !important;
-            left: ${isOpen ? "0" : "-240px"} !important;
-            height: 100vh !important;
-            transition: left 0.3s ease !important;
-            overflow-y: auto !important;
-          }
-        }
-      `}</style>
     </>
   );
 }

@@ -153,95 +153,125 @@ button:hover {
    RESPONSIVE MOBILE
    ===================== */
 
-@media (max-width: 768px) {
-  /* Contenu principal */
-  .main-content {
-    padding: 1rem !important;
-    padding-top: 4rem !important;
-    width: 100% !important;
-  }
-
-  /* Grille StatCards — 2 colonnes sur mobile */
-  .stat-cards {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-
-  /* Grille Dashboard — 1 colonne sur mobile */
-  .dashboard-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
+/* =====================
+   MOBILE — max 768px
+   ===================== */
+/* =====================
+   MOBILE — max 768px
+   ===================== */
 
 @media (max-width: 768px) {
-  /* Contenu principal */
-  .main-content {
-    padding: 1rem !important;
-    padding-top: 4rem !important;
-    width: 100% !important;
-    overflow-x: hidden !important;
-  }
-
-  /* Grille StatCards — 2 colonnes sur mobile */
-  .stat-cards {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-
-  /* Grille Dashboard — 1 colonne sur mobile */
-  .dashboard-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  /* Graphique progression */
-  .recharts-wrapper {
-    width: 100% !important;
-  }
-
   /* Formulaire ajout tâche */
   .add-task-form {
     flex-wrap: wrap !important;
   }
 
-  /* Tous les tableaux */
-  table {
-    display: block !important;
-    overflow-x: auto !important;
-    white-space: nowrap !important;
+  /* Selects dans le header tâches */
+  .task-filters {
+    flex-wrap: wrap !important;
+    gap: 4px !important;
   }
 
-  /* Calendrier */
-  .react-calendar {
-    width: 100% !important;
+  /* Bouton ajouter pleine largeur */
+  .add-task-form button {
+    width: auto !important;
   }
 
-  /* Cartes statistiques secondaires */
+  /* Overflow caché sur toutes les cartes */
+  .dashboard-grid > div {
+    overflow: hidden !important;
+    min-width: 0 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .hamburger-btn {
+    display: flex !important;
+  }
+
+  .sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: -250px !important;
+    height: 100vh !important;
+    transition: left 0.3s ease !important;
+    width: 220px !important;
+  }
+
+  .sidebar.open {
+    left: 0 !important;
+  }
+
+  .main-content {
+    padding: 1rem !important;
+    padding-top: 4rem !important;
+    overflow-x: hidden !important;
+  }
+
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+  }
+
   .stat-cards-secondary {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 
-  /* Flex wrap général */
-  .flex-mobile-wrap {
-    flex-wrap: wrap !important;
-  }
-
-  /* Inputs et selects pleine largeur */
-  select,
-  input[type="text"],
-  input[type="date"] {
-    max-width: 100% !important;
-  }
-}
-
-/* Gantt responsive */
-@media (max-width: 768px) {
-  .gantt-container {
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-}
-
-/* Graphiques camembert — 1 colonne sur mobile */
-@media (max-width: 768px) {
   .charts-grid {
     grid-template-columns: 1fr !important;
+  }
+}
+
+/* =====================
+   TABLETTE — 769px à 1024px
+   ===================== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Sidebar icônes seulement */
+  .sidebar {
+    width: 60px !important;
+    padding: 1.5rem 0.5rem !important;
+  }
+
+  /* Cache le texte des labels */
+  .sidebar-label {
+    display: none !important;
+  }
+
+  /* Cache logo texte */
+  .sidebar-logo {
+    font-size: 20px !important;
+    padding-left: 4px !important;
+    text-align: center !important;
+  }
+
+  /* Cache email */
+  .sidebar-email {
+    display: none !important;
+  }
+
+  /* Centre les icônes */
+  .sidebar-item {
+    justify-content: center !important;
+    padding: 10px 8px !important;
+  }
+
+  /* Cartes en 2 colonnes */
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .stat-cards-secondary {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr 1fr !important;
   }
 }
