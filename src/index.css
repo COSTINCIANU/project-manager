@@ -313,6 +313,20 @@ button:hover {
 }
 
 /* =====================
+   TABLETTE — 769px KANBAN
+   ===================== */
+
+@media (max-width: 768px) {
+  .kanban-board {
+    flex-direction: column !important;
+  }
+
+  .kanban-colonne {
+    min-height: 200px !important;
+    width: 100% !important;
+  }
+}
+/* =====================
    TABLETTE — 769px à 1024px  CALENDRIER 
    ===================== */
 
