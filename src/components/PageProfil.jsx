@@ -16,6 +16,9 @@ function PageProfil({ userEmail }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState(null);
+  // Avatar
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
   // =====================
   // CHARGEMENT DU PROFIL
@@ -86,6 +89,44 @@ function PageProfil({ userEmail }) {
   }
 
   // =====================
+  // UPLOAD AVATAR
+  // =====================
+  async function handleAvatarUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Prévisualisation locale
+    const reader = new FileReader();
+    reader.onload = (ev) => setAvatarPreview(ev.target.result);
+    reader.readAsDataURL(file);
+
+    setUploadingAvatar(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("avatar", file);
+
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/avatar`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
+        },
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (data.avatar) {
+        setProfile({ ...profile, avatar: data.avatar });
+        setMessage("Avatar mis à jour !");
+      }
+    } catch (err) {
+      setError("Erreur lors de l'upload de l'avatar");
+    } finally {
+      setUploadingAvatar(false);
+    }
+  }
+
+  // =====================
   // COULEUR DU RÔLE
   // =====================
   function getRoleStyle(r) {
@@ -136,24 +177,67 @@ function PageProfil({ userEmail }) {
             marginBottom: "1.5rem",
           }}
         >
-          {/* Avatar initiales */}
-          <div
-            style={{
-              width: "64px",
-              height: "64px",
-              borderRadius: "50%",
-              background: "#111",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "24px",
-              color: "#fff",
-              fontWeight: "600",
-              flexShrink: 0,
-            }}
-          >
-            {(name || userEmail || "?")[0].toUpperCase()}
-          </div>
+          {/* Avatar cliquable */}
+          <label style={{ cursor: "pointer", position: "relative" }}>
+            <div
+              style={{
+                width: "64px",
+                height: "64px",
+                borderRadius: "50%",
+                background: "#111",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "24px",
+                color: "#fff",
+                fontWeight: "600",
+                flexShrink: 0,
+                overflow: "hidden",
+              }}
+            >
+              {avatarPreview || profile?.avatar ? (
+                <img
+                  src={
+                    avatarPreview ||
+                    `https://api.costincianu.fr${profile.avatar}`
+                  }
+                  alt="avatar"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              ) : (
+                (name || userEmail || "?")[0].toUpperCase()
+              )}
+            </div>
+            {/* Overlay au survol */}
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "64px",
+                height: "64px",
+                borderRadius: "50%",
+                background: "rgba(0,0,0,0.4)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                opacity: 0,
+                transition: "opacity 0.2s",
+                fontSize: "18px",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = "0")}
+            >
+              📷
+            </div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarUpload}
+              style={{ display: "none" }}
+              disabled={uploadingAvatar}
+            />
+          </label>
 
           <div>
             <div style={{ fontSize: "16px", fontWeight: "600", color: "#111" }}>
@@ -161,6 +245,11 @@ function PageProfil({ userEmail }) {
             </div>
             <div style={{ fontSize: "13px", color: "#aaa", marginTop: "2px" }}>
               {userEmail}
+            </div>
+            <div style={{ fontSize: "11px", color: "#aaa", marginTop: "4px" }}>
+              {uploadingAvatar
+                ? "Upload en cours..."
+                : "Cliquez sur la photo pour changer"}
             </div>
             <div
               style={{
