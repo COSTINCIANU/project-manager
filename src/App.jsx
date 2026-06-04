@@ -326,79 +326,73 @@ function App() {
   // =====================
 
   return (
-    <div
-      style={{
-        display: "flex",
-        minHeight: "100vh",
-        background: darkMode ? "#1a1a1a" : "#f5f5f5",
-        fontFamily: "sans-serif",
-        transition: "background 0.3s",
-      }}
-    >
-      {/* ---- BARRE DE NAVIGATION MOBILE/TABLETTE ---- */}
-      {token && (
-        <div
-          className="topbar"
-          style={{
-            display: "none",
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: "56px",
-            background: "#111",
-            zIndex: 998,
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "0 1rem",
-          }}
-        >
-          {/* Espace gauche vide pour équilibrer */}
-          <div style={{ width: "40px" }} />
-
-          {/* Logo centré */}
-          <div
-            style={{
-              color: "#fff",
-              fontSize: "15px",
-              fontWeight: "600",
-              position: "absolute",
-              left: "50%",
-              transform: "translateX(-50%)",
-            }}
-          >
-            📊 Project Manager
-          </div>
-
-          {/* Profil à droite */}
-          <div
-            onClick={() => setActivePage("profil")}
-            style={{
-              width: "32px",
-              height: "32px",
-              borderRadius: "50%",
-              background: "#333",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              color: "#fff",
-              fontSize: "14px",
-            }}
-          >
-            👤
-          </div>
-        </div>
-      )}
-
-      {/* ---- PAGE AUTH — affichée si pas connecté ---- */}
+    <>
+      {/* ---- LANDING PAGE — affichée si pas connecté ---- */}
       {!token && <LandingPage onLogin={() => setShowAuth(true)} />}
       {!token && showAuth && <PageAuth onLogin={handleLogin} />}
 
       {/* ---- APPLICATION — affichée si connecté ---- */}
       {token && (
-        <>
-          {/* Écran de chargement pendant la connexion à MySQL */}
+        <div
+          style={{
+            display: "flex",
+            minHeight: "100vh",
+            width: "100%",
+            background: darkMode ? "#1a1a1a" : "#f5f5f5",
+            fontFamily: "sans-serif",
+            transition: "background 0.3s",
+          }}
+        >
+          {/* ---- BARRE DE NAVIGATION MOBILE/TABLETTE ---- */}
+          <div
+            className="topbar"
+            style={{
+              display: "none",
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "56px",
+              background: "#111",
+              zIndex: 998,
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "0 1rem",
+            }}
+          >
+            <div style={{ width: "40px" }} />
+            <div
+              style={{
+                color: "#fff",
+                fontSize: "15px",
+                fontWeight: "600",
+                position: "absolute",
+                left: "50%",
+                transform: "translateX(-50%)",
+              }}
+            >
+              📊 Project Manager
+            </div>
+            <div
+              onClick={() => setActivePage("profil")}
+              style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "50%",
+                background: "#333",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                color: "#fff",
+                fontSize: "14px",
+              }}
+            >
+              👤
+            </div>
+          </div>
+
+          {/* Écran de chargement */}
           {loading && (
             <div
               style={{
@@ -579,7 +573,6 @@ function App() {
                         </select>
                       </div>
                     </div>
-
                     {filteredTasks.length === 0 ? (
                       <div
                         style={{
@@ -669,7 +662,6 @@ function App() {
                     </select>
                   </div>
                 </div>
-
                 {filteredTasks.length === 0 ? (
                   <div
                     style={{
@@ -723,6 +715,7 @@ function App() {
                 loading={loading}
               />
             )}
+
             {/* ---- PAGE VUE CALENDRIER ---- */}
             {activePage === "calendrier" && (
               <PageVueCalendrier
@@ -760,9 +753,9 @@ function App() {
               <PageAssistantIA tasks={tasks} projects={projects} />
             )}
           </div>
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 }
 

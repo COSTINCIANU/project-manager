@@ -129,24 +129,46 @@ function PageVueCalendrier({ tasks, projects, onEdit }) {
           border: "1px solid #eee",
           borderRadius: "12px",
           padding: "1.25rem",
-          width: "100%",
+          flex: "1",
         }}
       >
+        {/* <div
+        style={{
+          background: "#fff",
+          border: "1px solid #eee",
+          borderRadius: "12px",
+          padding: "1.25rem",
+          width: "100%",
+        }}
+      > */}
         <style>{`
           .react-calendar {
             border: none !important;
             font-family: sans-serif !important;
             width: 100% !important;
-            max-width: 380px !important;
+          }
+
+          @media (max-width: 1024px) {
+            .react-calendar {
+              width: 100% !important;
+              max-width: 100% !important;
+            }
           }
           .react-calendar__tile {
-            height: 60px !important;
+            height: 80px !important;
             display: flex !important;
             flex-direction: column !important;
             align-items: center !important;
             justify-content: flex-start !important;
             padding-top: 8px !important;
             font-size: 13px !important;
+          }
+
+          @media (max-width: 768px) {
+            .react-calendar__tile {
+              height: 45px !important;
+              font-size: 11px !important;
+            }
           }
           .react-calendar__tile--active {
             background: #111 !important;
