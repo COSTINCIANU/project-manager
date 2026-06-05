@@ -13,6 +13,7 @@ function TaskItem({
   onEdit,
   users,
   userRole,
+  tasks,
 }) {
   // =====================
   // CALCUL DE LA DATE D'ÉCHÉANCE
@@ -96,6 +97,17 @@ function TaskItem({
     if (m === 0) return `${h}h`;
     return `${h}h${m}`;
   }
+
+  // =====================
+  // DÉPENDANCE — tâche bloquante
+  // Si dependsOn est défini, on cherche la tâche parente
+  // Si elle n'est pas terminée, la tâche est bloquée
+  // =====================
+  const dependsOnTask =
+    task.dependsOn && Array.isArray(tasks)
+      ? tasks.find((t) => t.id === task.dependsOn)
+      : null;
+  const isBlocked = dependsOnTask && !dependsOnTask.done;
 
   // =====================
   // RENDU DU COMPOSANT
@@ -186,6 +198,22 @@ function TaskItem({
           >
             {/* Nom du projet */}
             <div style={{ fontSize: "11px", color: "#aaa" }}>{projectName}</div>
+
+            {/* Badge bloquée par dépendance */}
+            {isBlocked && (
+              <div
+                style={{
+                  fontSize: "10px",
+                  color: "#e67e22",
+                  fontWeight: "500",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "3px",
+                }}
+              >
+                🔒 Bloquée par : {dependsOnTask.name}
+              </div>
+            )}
 
             {/* Date d'échéance */}
             {getDueDateText() && (

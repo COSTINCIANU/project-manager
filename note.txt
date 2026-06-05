@@ -1723,3 +1723,27 @@ Affiche les actions en temps réel via polling toutes les 30 secondes
 Est structuré pour faciliter une migration WebSocket future
 Montre qui est "actif" récemment (dernières 5 minutes)
 On réutilise l'endpoint /api/logs qu'on a déjà. Crée src/components/PageActivite.jsx en local dans VS Code :
+
+
+🎉 Parfait ! La page Activité fonctionne parfaitement !
+
+✅ Flux d'activité affiché avec dates relatives
+✅ Bouton "Actualiser" manuel
+✅ Mise à jour automatique toutes les 30s
+✅ Membres actifs (vide car plus de 5 min d'inactivité)
+
+La section 2 est maintenant complète ✅ :
+
+✅ Invitations par email
+✅ Assignation de tâches
+✅ Activité en temps réel (polling + architecture WebSocket préparée)
+✅ Système de permissions
+✅ Historique des actions
+
+On passe à la section 3 — Gestion de Projets Avancée :
+
+❌ Dépendances entre tâches
+
+C'est la seule chose qui reste dans cette section. On attaque ?
+
+*************************************

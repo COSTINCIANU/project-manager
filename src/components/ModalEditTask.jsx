@@ -18,7 +18,7 @@ import {
   deleteAttachment,
 } from "../api";
 
-function ModalEditTask({ task, projects, onSave, onClose }) {
+function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
   // =====================
   // ÉTATS DU FORMULAIRE
   // =====================
@@ -85,6 +85,9 @@ function ModalEditTask({ task, projects, onSave, onClose }) {
 
   // Utilisateur assigné à la tâche
   const [assignedTo, setAssignedTo] = useState(task.assignedTo || "");
+
+  // Dépendance — ID de la tâche bloquante
+  const [dependsOn, setDependsOn] = useState(task.dependsOn || "");
 
   // =====================
   // CHARGEMENT DES COMMENTAIRES
@@ -227,6 +230,7 @@ function ModalEditTask({ task, projects, onSave, onClose }) {
       estimatedTime: estimatedTime ? parseInt(estimatedTime) : null,
       tags,
       assignedTo: assignedTo ? parseInt(assignedTo) : null,
+      dependsOn: dependsOn ? parseInt(dependsOn) : null,
     });
 
     onClose();
@@ -393,6 +397,24 @@ function ModalEditTask({ task, projects, onSave, onClose }) {
               {user.email}
             </option>
           ))}
+        </select>
+
+        {/* ---- DÉPENDANCE ---- */}
+        <div style={labelStyle}>Dépend de (bloquée par)</div>
+        <select
+          value={dependsOn}
+          onChange={(e) => setDependsOn(e.target.value)}
+          style={inputStyle}
+        >
+          <option value="">— Aucune dépendance —</option>
+          {Array.isArray(tasks) &&
+            tasks
+              .filter((t) => t.id !== task.id)
+              .map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}
+                </option>
+              ))}
         </select>
 
         {/* ---- TAGS ---- */}

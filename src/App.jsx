@@ -496,6 +496,7 @@ function App() {
               projects={projects}
               onSave={handleEdit}
               onClose={() => setTaskToEdit(null)}
+              tasks={tasks}
             />
           )}
 
@@ -670,6 +671,7 @@ function App() {
                           onEdit={setTaskToEdit}
                           users={users}
                           userRole={userRole}
+                          tasks={tasks}
                         />
                       ))
                     )}
@@ -761,6 +763,7 @@ function App() {
                       onEdit={setTaskToEdit}
                       users={users}
                       userRole={userRole}
+                      tasks={tasks}
                     />
                   ))
                 )}
