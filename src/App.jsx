@@ -83,6 +83,11 @@ function App() {
   // Afficher la modal de connexion sur la landing page
   const [showAuth, setShowAuth] = useState(false);
 
+  // Rôle métier de l'utilisateur connecté
+  const [userRole, setUserRole] = useState(
+    localStorage.getItem("user_role") || "dev",
+  );
+
   // Détection du token OAuth dans l'URL après redirection Google/GitHub
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -178,6 +183,29 @@ function App() {
     // On lance le chargement au démarrage de l'application
     loadData();
   }, []);
+
+  // =====================
+  // CHARGEMENT DU RÔLE UTILISATEUR
+  // =====================
+  // Chargement du rôle depuis l'API au démarrage
+  useEffect(() => {
+    async function loadRole() {
+      if (!token) return;
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (data.role) {
+          setUserRole(data.role);
+          localStorage.setItem("user_role", data.role);
+        }
+      } catch (err) {
+        console.error("Erreur chargement rôle :", err);
+      }
+    }
+    loadRole();
+  }, [token]);
 
   // =====================
   // FILTRAGE DES TÂCHES
@@ -319,6 +347,7 @@ function App() {
   function handleLogin(newToken, email) {
     setToken(newToken);
     setUserEmail(email);
+    localStorage.removeItem("user_role");
   }
 
   // Fonction de déconnexion
@@ -326,6 +355,8 @@ function App() {
     // On supprime le token du localStorage
     localStorage.removeItem("jwt_token");
     localStorage.removeItem("user_email");
+    localStorage.removeItem("user_role");
+    setUserRole("dev");
     setToken(null);
     setUserEmail("");
   }
@@ -636,10 +667,11 @@ function App() {
                           onDelete={handleDelete}
                           onEdit={setTaskToEdit}
                           users={users}
+                          userRole={userRole}
                         />
                       ))
                     )}
-                    <AddTaskForm onAdd={handleAdd} />
+                    <AddTaskForm onAdd={handleAdd} userRole={userRole} />
                   </div>
                 </div>
               </>
@@ -651,6 +683,7 @@ function App() {
                 projects={projects}
                 onAdd={handleAddProject}
                 onDelete={handleDeleteProject}
+                userRole={userRole}
               />
             )}
 
@@ -725,10 +758,11 @@ function App() {
                       onDelete={handleDelete}
                       onEdit={setTaskToEdit}
                       users={users}
+                      userRole={userRole}
                     />
                   ))
                 )}
-                <AddTaskForm onAdd={handleAdd} />
+                <AddTaskForm onAdd={handleAdd} userRole={userRole} />
               </div>
             )}
 
@@ -738,12 +772,13 @@ function App() {
                 tasks={tasks}
                 projects={projects}
                 onTaskMove={handleTaskMove}
+                userRole={userRole}
               />
             )}
 
             {/* ---- PAGE INVITATIONS ---- */}
             {activePage === "invitations" && (
-              <PageInvitations projects={projects} />
+              <PageInvitations projects={projects} userRole={userRole} />
             )}
 
             {/* ---- PAGE VUE LISTE ---- */}
@@ -755,6 +790,7 @@ function App() {
                 onDelete={handleDelete}
                 onEdit={setTaskToEdit}
                 loading={loading}
+                userRole={userRole}
               />
             )}
 
