@@ -5,7 +5,15 @@
 // et les boutons modifier/supprimer
 // =====================================================
 
-function TaskItem({ task, projectName, onToggle, onDelete, onEdit, users }) {
+function TaskItem({
+  task,
+  projectName,
+  onToggle,
+  onDelete,
+  onEdit,
+  users,
+  userRole,
+}) {
   // =====================
   // CALCUL DE LA DATE D'ÉCHÉANCE
   // =====================
@@ -318,24 +326,26 @@ function TaskItem({ task, projectName, onToggle, onDelete, onEdit, users }) {
           ✎
         </div>
 
-        {/* ---- BOUTON SUPPRIMER ---- */}
-        <div
-          onClick={() => onDelete(task.id)}
-          style={{
-            fontSize: "16px",
-            color: "#ddd",
-            cursor: "pointer",
-            lineHeight: 1,
-            padding: "0 4px",
-            transition: "color 0.15s",
-            flexShrink: 0,
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = "#e74c3c")}
-          onMouseLeave={(e) => (e.currentTarget.style.color = "#ddd")}
-          title="Supprimer la tâche"
-        >
-          ✕
-        </div>
+        {/* ---- BOUTON SUPPRIMER — visible uniquement pour manager et admin ---- */}
+        {(userRole === "admin" || userRole === "manager") && (
+          <div
+            onClick={() => onDelete(task.id)}
+            style={{
+              fontSize: "16px",
+              color: "#ddd",
+              cursor: "pointer",
+              lineHeight: 1,
+              padding: "0 4px",
+              transition: "color 0.15s",
+              flexShrink: 0,
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#e74c3c")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#ddd")}
+            title="Supprimer la tâche"
+          >
+            ✕
+          </div>
+        )}
       </div>
     </div>
   );

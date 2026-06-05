@@ -5,7 +5,7 @@
 // =====================================================
 import { useState } from "react";
 
-function AddTaskForm({ onAdd }) {
+function AddTaskForm({ onAdd, userRole }) {
   // =====================
   // ÉTATS DU FORMULAIRE
   // =====================
@@ -56,6 +56,9 @@ function AddTaskForm({ onAdd }) {
   // =====================
   // RENDU DU FORMULAIRE
   // =====================
+
+  // Les clients ne peuvent pas ajouter de tâches
+  if (userRole === "client") return null;
 
   return (
     <div
