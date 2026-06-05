@@ -83,6 +83,29 @@ function App() {
   // Afficher la modal de connexion sur la landing page
   const [showAuth, setShowAuth] = useState(false);
 
+  // Détection du token OAuth dans l'URL après redirection Google/GitHub
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const oauthToken = params.get("oauth_token");
+    const oauthEmail = params.get("oauth_email");
+    const oauthError = params.get("oauth_error");
+
+    if (oauthToken && oauthEmail) {
+      // On sauvegarde le token et on connecte l'utilisateur
+      localStorage.setItem("jwt_token", oauthToken);
+      localStorage.setItem("user_email", oauthEmail);
+      setToken(oauthToken);
+      setUserEmail(oauthEmail);
+      // On nettoie l'URL
+      window.history.replaceState({}, "", "/");
+    }
+
+    if (oauthError) {
+      // On nettoie l'URL
+      window.history.replaceState({}, "", "/");
+    }
+  }, []);
+
   // =====================
   // CHARGEMENT DEPUIS MYSQL VIA API SYMFONY
   // =====================
