@@ -20,6 +20,11 @@ function PageAuth({ onLogin }) {
   // État de chargement
   const [loading, setLoading] = useState(false);
 
+  // Mot de passe réinitialisation — accessible via le lien dans l'email
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotMessage, setForgotMessage] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
+
   // =====================
   // FONCTIONS
   // =====================
@@ -91,6 +96,29 @@ function PageAuth({ onLogin }) {
     }
   }
 
+  // Fonction de réinitialisation mot de passe
+  async function handleForgotPassword() {
+    setForgotLoading(true);
+    setForgotMessage("");
+    setError("");
+
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/auth/forgot-password`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: forgotEmail }),
+        },
+      );
+      const data = await res.json();
+      setForgotMessage(data.message || "Email envoyé !");
+    } catch (err) {
+      setError("Impossible de contacter le serveur");
+    } finally {
+      setForgotLoading(false);
+    }
+  }
   // =====================
   // RENDU
   // =====================
@@ -117,6 +145,8 @@ function PageAuth({ onLogin }) {
           borderRadius: "16px",
           padding: "2.5rem",
           width: "380px",
+          maxHeight: "90vh",
+          overflowY: "auto",
           border: "1px solid #eee",
           boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
           position: "relative",
@@ -172,6 +202,107 @@ function PageAuth({ onLogin }) {
           ))}
         </div>
 
+        {/* Mode mot de passe oublié */}
+        {mode === "forgot" && (
+          <div>
+            <div
+              style={{
+                fontSize: "13px",
+                color: "#666",
+                marginBottom: "1rem",
+                textAlign: "center",
+              }}
+            >
+              Entrez votre email pour recevoir un lien de réinitialisation
+            </div>
+
+            {forgotMessage && (
+              <div
+                style={{
+                  background: "#EAF3DE",
+                  color: "#3B6D11",
+                  padding: "10px 14px",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                  marginBottom: "1rem",
+                }}
+              >
+                ✅ {forgotMessage}
+              </div>
+            )}
+
+            {error && (
+              <div
+                style={{
+                  background: "#FCEBEB",
+                  color: "#A32D2D",
+                  padding: "10px 14px",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                  marginBottom: "1rem",
+                }}
+              >
+                ❌ {error}
+              </div>
+            )}
+
+            <div style={{ marginBottom: "12px" }}>
+              <div
+                style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}
+              >
+                Email
+              </div>
+              <input
+                type="email"
+                placeholder="votre@email.com"
+                value={forgotEmail}
+                onChange={(e) => setForgotEmail(e.target.value)}
+                style={{
+                  width: "100%",
+                  fontSize: "13px",
+                  padding: "10px 12px",
+                  border: "1px solid #ddd",
+                  borderRadius: "8px",
+                  outline: "none",
+                  boxSizing: "border-box",
+                }}
+              />
+            </div>
+
+            <button
+              onClick={handleForgotPassword}
+              disabled={forgotLoading || !forgotEmail}
+              style={{
+                width: "100%",
+                padding: "12px",
+                background: forgotLoading || !forgotEmail ? "#aaa" : "#111",
+                color: "#fff",
+                border: "none",
+                borderRadius: "8px",
+                cursor:
+                  forgotLoading || !forgotEmail ? "not-allowed" : "pointer",
+                fontSize: "14px",
+                fontWeight: "500",
+                marginBottom: "12px",
+              }}
+            >
+              {forgotLoading ? "Envoi..." : "📧 Envoyer le lien"}
+            </button>
+
+            <div
+              onClick={() => setMode("login")}
+              style={{
+                fontSize: "12px",
+                color: "#aaa",
+                textAlign: "center",
+                cursor: "pointer",
+              }}
+            >
+              ← Retour à la connexion
+            </div>
+          </div>
+        )}
+
         {/* Message de succès */}
         {message && (
           <div
@@ -205,75 +336,101 @@ function PageAuth({ onLogin }) {
         )}
 
         {/* Champ email */}
-        <div style={{ marginBottom: "12px" }}>
-          <div style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}>
-            Email
+        {mode !== "forgot" && (
+          <div style={{ marginBottom: "12px" }}>
+            <div
+              style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}
+            >
+              Email
+            </div>
+            <input
+              type="email"
+              placeholder="votre@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{
+                width: "100%",
+                fontSize: "13px",
+                padding: "10px 12px",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+                outline: "none",
+                boxSizing: "border-box",
+              }}
+            />
           </div>
-          <input
-            type="email"
-            placeholder="votre@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{
-              width: "100%",
-              fontSize: "13px",
-              padding: "10px 12px",
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              outline: "none",
-              boxSizing: "border-box",
-            }}
-          />
-        </div>
+        )}
 
         {/* Champ mot de passe */}
-        <div style={{ marginBottom: "1.5rem" }}>
-          <div style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}>
-            Mot de passe
+        {mode !== "forgot" && (
+          <div style={{ marginBottom: "1.5rem" }}>
+            <div
+              style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}
+            >
+              Mot de passe
+            </div>
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) =>
+                e.key === "Enter" &&
+                (mode === "login" ? handleLogin() : handleRegister())
+              }
+              style={{
+                width: "100%",
+                fontSize: "13px",
+                padding: "10px 12px",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+                outline: "none",
+                boxSizing: "border-box",
+              }}
+            />
           </div>
-          <input
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onKeyDown={(e) =>
-              e.key === "Enter" &&
-              (mode === "login" ? handleLogin() : handleRegister())
-            }
+        )}
+
+        {/* Lien mot de passe oublié */}
+        {mode === "login" && (
+          <div
+            onClick={() => setMode("forgot")}
             style={{
-              width: "100%",
-              fontSize: "13px",
-              padding: "10px 12px",
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              outline: "none",
-              boxSizing: "border-box",
+              fontSize: "12px",
+              color: "#aaa",
+              textAlign: "right",
+              cursor: "pointer",
+              marginBottom: "12px",
             }}
-          />
-        </div>
+          >
+            Mot de passe oublié ?
+          </div>
+        )}
 
         {/* Bouton principal */}
-        <button
-          onClick={mode === "login" ? handleLogin : handleRegister}
-          disabled={loading}
-          style={{
-            width: "100%",
-            padding: "12px",
-            background: loading ? "#aaa" : "#111",
-            color: "#fff",
-            border: "none",
-            borderRadius: "8px",
-            cursor: loading ? "not-allowed" : "pointer",
-            fontSize: "14px",
-            fontWeight: "500",
-          }}
-        >
-          {loading
-            ? "Chargement..."
-            : mode === "login"
-              ? "Se connecter"
-              : "S'inscrire"}
-        </button>
+        {mode !== "forgot" && (
+          <button
+            onClick={mode === "login" ? handleLogin : handleRegister}
+            disabled={loading}
+            style={{
+              width: "100%",
+              padding: "12px",
+              background: loading ? "#aaa" : "#111",
+              color: "#fff",
+              border: "none",
+              borderRadius: "8px",
+              cursor: loading ? "not-allowed" : "pointer",
+              fontSize: "14px",
+              fontWeight: "500",
+            }}
+          >
+            {loading
+              ? "Chargement..."
+              : mode === "login"
+                ? "Se connecter"
+                : "S'inscrire"}
+          </button>
+        )}
       </div>
     </div>
   );

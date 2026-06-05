@@ -38,6 +38,7 @@ import PageGitHub from "./components/PageGitHub";
 import PageAssistantIA from "./components/PageAssistantIA";
 import LandingPage from "./components/LandingPage";
 import PageProfil from "./components/PageProfil";
+import PageResetPassword from "./components/PageResetPassword";
 
 function App() {
   // =====================
@@ -327,6 +328,24 @@ function App() {
 
   return (
     <>
+      {/* ---- PAGE RESET PASSWORD — détection via URL ?token=XXX ---- */}
+      {(() => {
+        const params = new URLSearchParams(window.location.search);
+        const resetToken = params.get("token");
+        if (window.location.pathname === "/reset-password" && resetToken) {
+          return (
+            <PageResetPassword
+              token={resetToken}
+              onDone={() => {
+                window.history.replaceState({}, "", "/");
+                setShowAuth(true);
+              }}
+            />
+          );
+        }
+        return null;
+      })()}
+
       {/* ---- LANDING PAGE — affichée si pas connecté ---- */}
       {!token && <LandingPage onLogin={() => setShowAuth(true)} />}
       {!token && showAuth && <PageAuth onLogin={handleLogin} />}
