@@ -20,6 +20,10 @@ function PageProfil({ userEmail }) {
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
+  // 2FA — état activé ou non
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+  const [twoFactorLoading, setTwoFactorLoading] = useState(false);
+
   // =====================
   // CHARGEMENT DU PROFIL
   // =====================
@@ -36,6 +40,7 @@ function PageProfil({ userEmail }) {
           setProfile(data);
           setName(data.name || "");
           setRole(data.role || "dev");
+          setTwoFactorEnabled(data.twoFactorEnabled || false);
         }
       } catch (err) {
         console.error("Erreur chargement profil :", err);
@@ -123,6 +128,38 @@ function PageProfil({ userEmail }) {
       setError("Erreur lors de l'upload de l'avatar");
     } finally {
       setUploadingAvatar(false);
+    }
+  }
+
+  // =====================
+  //  ACTIVER / DESACTIVER LE 2FA
+  // =====================
+  async function handleToggle2FA() {
+    setTwoFactorLoading(true);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/auth/2fa/toggle`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
+          },
+          body: JSON.stringify({
+            email: userEmail,
+            enabled: !twoFactorEnabled,
+          }),
+        },
+      );
+      const data = await res.json();
+      if (res.ok) {
+        setTwoFactorEnabled(!twoFactorEnabled);
+        setMessage(data.message);
+      }
+    } catch (err) {
+      setError("Erreur lors de la modification du 2FA");
+    } finally {
+      setTwoFactorLoading(false);
     }
   }
 
@@ -413,6 +450,62 @@ function PageProfil({ userEmail }) {
         >
           {loading ? "Sauvegarde..." : "💾 Sauvegarder le profil"}
         </button>
+      </div>
+
+      {/* ---- SÉCURITÉ 2FA ---- */}
+      <div
+        style={{
+          background: "#fff",
+          border: "1px solid #eee",
+          borderRadius: "12px",
+          padding: "1.5rem",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "14px",
+            fontWeight: "500",
+            marginBottom: "1rem",
+          }}
+        >
+          🔐 Sécurité — Double authentification
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>
+            <div style={{ fontSize: "13px", color: "#333", fontWeight: "500" }}>
+              Authentification par email
+            </div>
+            <div style={{ fontSize: "12px", color: "#aaa", marginTop: "2px" }}>
+              Un code à 6 chiffres sera envoyé à chaque connexion
+            </div>
+          </div>
+          <button
+            onClick={handleToggle2FA}
+            disabled={twoFactorLoading}
+            style={{
+              padding: "8px 16px",
+              borderRadius: "8px",
+              border: "none",
+              cursor: twoFactorLoading ? "not-allowed" : "pointer",
+              fontSize: "13px",
+              fontWeight: "500",
+              background: twoFactorEnabled ? "#FCEBEB" : "#EAF3DE",
+              color: twoFactorEnabled ? "#A32D2D" : "#3B6D11",
+            }}
+          >
+            {twoFactorLoading
+              ? "..."
+              : twoFactorEnabled
+                ? "Désactiver"
+                : "Activer"}
+          </button>
+        </div>
       </div>
 
       {/* ---- INFORMATIONS DU COMPTE ---- */}
