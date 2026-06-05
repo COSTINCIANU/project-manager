@@ -20,10 +20,17 @@ function PageAuth({ onLogin }) {
   // État de chargement
   const [loading, setLoading] = useState(false);
 
-  // Mot de passe réinitialisation — accessible via le lien dans l'email
+  // Mot de passe réinitialisation
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotMessage, setForgotMessage] = useState("");
   const [forgotLoading, setForgotLoading] = useState(false);
+
+  // 2FA — affichage du formulaire de code
+  const [show2FA, setShow2FA] = useState(false);
+  // Code 2FA saisi par l'utilisateur
+  const [twoFactorCode, setTwoFactorCode] = useState("");
+  // Chargement vérification 2FA
+  const [twoFactorLoading, setTwoFactorLoading] = useState(false);
 
   // =====================
   // FONCTIONS
@@ -37,7 +44,6 @@ function PageAuth({ onLogin }) {
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
-        // const res = await fetch("https://127.0.0.1:8000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -46,16 +52,26 @@ function PageAuth({ onLogin }) {
       const data = await res.json();
 
       if (!res.ok) {
-        // Erreur — on affiche le message d'erreur
         setError(data.error || "Erreur de connexion");
         return;
       }
 
-      // Connexion réussie — on sauvegarde le token
+      // Si le 2FA est activé sur ce compte
+      if (data.twoFactorRequired) {
+        // On envoie le code par email
+        await fetch(`${import.meta.env.VITE_API_URL}/auth/2fa/send`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
+        // On affiche le formulaire de code
+        setShow2FA(true);
+        return;
+      }
+
+      // Connexion normale sans 2FA
       localStorage.setItem("jwt_token", data.token);
       localStorage.setItem("user_email", data.email);
-
-      // On informe le composant parent que l'utilisateur est connecté
       onLogin(data.token, data.email);
     } catch (error) {
       setError("Impossible de contacter le serveur");
@@ -72,7 +88,6 @@ function PageAuth({ onLogin }) {
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
-        // const res = await fetch("https://127.0.0.1:8000/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -85,7 +100,6 @@ function PageAuth({ onLogin }) {
         return;
       }
 
-      // Inscription réussie — on passe en mode login
       setMessage("Inscription réussie ! Connectez-vous maintenant.");
       setMode("login");
       setPassword("");
@@ -119,6 +133,40 @@ function PageAuth({ onLogin }) {
       setForgotLoading(false);
     }
   }
+
+  // Vérification du code 2FA
+  async function handle2FAVerify() {
+    setTwoFactorLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/auth/2fa/verify`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, code: twoFactorCode }),
+        },
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Code invalide");
+        return;
+      }
+
+      // Connexion réussie
+      localStorage.setItem("jwt_token", data.token);
+      localStorage.setItem("user_email", data.email);
+      onLogin(data.token, data.email);
+    } catch (err) {
+      setError("Impossible de contacter le serveur");
+    } finally {
+      setTwoFactorLoading(false);
+    }
+  }
+
   // =====================
   // RENDU
   // =====================
@@ -159,51 +207,159 @@ function PageAuth({ onLogin }) {
             Project Manager
           </div>
           <div style={{ fontSize: "13px", color: "#999", marginTop: "4px" }}>
-            {mode === "login"
-              ? "Connectez-vous à votre compte"
-              : "Créez votre compte"}
+            {show2FA
+              ? "Vérification en deux étapes"
+              : mode === "login"
+                ? "Connectez-vous à votre compte"
+                : "Créez votre compte"}
           </div>
         </div>
 
-        {/* Onglets Login / Register */}
-        <div
-          style={{
-            display: "flex",
-            background: "#f5f5f5",
-            borderRadius: "8px",
-            padding: "4px",
-            marginBottom: "1.5rem",
-          }}
-        >
-          {["login", "register"].map((m) => (
+        {/* Onglets Login / Register — cachés en mode 2FA et forgot */}
+        {!show2FA && mode !== "forgot" && (
+          <div
+            style={{
+              display: "flex",
+              background: "#f5f5f5",
+              borderRadius: "8px",
+              padding: "4px",
+              marginBottom: "1.5rem",
+            }}
+          >
+            {["login", "register"].map((m) => (
+              <div
+                key={m}
+                onClick={() => {
+                  setMode(m);
+                  setError("");
+                  setMessage("");
+                }}
+                style={{
+                  flex: 1,
+                  textAlign: "center",
+                  padding: "8px",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  fontSize: "13px",
+                  fontWeight: "500",
+                  background: mode === m ? "#fff" : "transparent",
+                  color: mode === m ? "#111" : "#999",
+                  boxShadow: mode === m ? "0 1px 4px rgba(0,0,0,0.08)" : "none",
+                  transition: "all 0.15s",
+                }}
+              >
+                {m === "login" ? "Connexion" : "Inscription"}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Mode 2FA — saisie du code reçu par email */}
+        {show2FA && (
+          <div>
             <div
-              key={m}
-              onClick={() => {
-                setMode(m);
-                setError("");
-                setMessage("");
-              }}
               style={{
-                flex: 1,
-                textAlign: "center",
-                padding: "8px",
-                borderRadius: "6px",
-                cursor: "pointer",
                 fontSize: "13px",
-                fontWeight: "500",
-                background: mode === m ? "#fff" : "transparent",
-                color: mode === m ? "#111" : "#999",
-                boxShadow: mode === m ? "0 1px 4px rgba(0,0,0,0.08)" : "none",
-                transition: "all 0.15s",
+                color: "#666",
+                marginBottom: "1rem",
+                textAlign: "center",
               }}
             >
-              {m === "login" ? "Connexion" : "Inscription"}
+              Un code a été envoyé à <strong>{email}</strong>
             </div>
-          ))}
-        </div>
+
+            {error && (
+              <div
+                style={{
+                  background: "#FCEBEB",
+                  color: "#A32D2D",
+                  padding: "10px 14px",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                  marginBottom: "1rem",
+                }}
+              >
+                ❌ {error}
+              </div>
+            )}
+
+            <div style={{ marginBottom: "1.5rem" }}>
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "#999",
+                  marginBottom: "6px",
+                }}
+              >
+                Code à 6 chiffres
+              </div>
+              <input
+                type="text"
+                placeholder="000000"
+                value={twoFactorCode}
+                onChange={(e) => setTwoFactorCode(e.target.value)}
+                maxLength={6}
+                onKeyDown={(e) => e.key === "Enter" && handle2FAVerify()}
+                style={{
+                  width: "100%",
+                  fontSize: "24px",
+                  fontWeight: "600",
+                  letterSpacing: "8px",
+                  textAlign: "center",
+                  padding: "12px",
+                  border: "1px solid #ddd",
+                  borderRadius: "8px",
+                  outline: "none",
+                  boxSizing: "border-box",
+                }}
+              />
+            </div>
+
+            <button
+              onClick={handle2FAVerify}
+              disabled={twoFactorLoading || twoFactorCode.length !== 6}
+              style={{
+                width: "100%",
+                padding: "12px",
+                background:
+                  twoFactorLoading || twoFactorCode.length !== 6
+                    ? "#aaa"
+                    : "#111",
+                color: "#fff",
+                border: "none",
+                borderRadius: "8px",
+                cursor:
+                  twoFactorLoading || twoFactorCode.length !== 6
+                    ? "not-allowed"
+                    : "pointer",
+                fontSize: "14px",
+                fontWeight: "500",
+                marginBottom: "12px",
+              }}
+            >
+              {twoFactorLoading ? "Vérification..." : "Vérifier le code"}
+            </button>
+
+            <div
+              onClick={() => {
+                setShow2FA(false);
+                setTwoFactorCode("");
+                setError("");
+              }}
+              style={{
+                fontSize: "12px",
+                color: "#aaa",
+                textAlign: "center",
+                cursor: "pointer",
+              }}
+            >
+              ← Retour à la connexion
+            </div>
+          </div>
+        )}
 
         {/* Mode mot de passe oublié */}
-        {mode === "forgot" && (
+        {!show2FA && mode === "forgot" && (
           <div>
             <div
               style={{
@@ -248,7 +404,11 @@ function PageAuth({ onLogin }) {
 
             <div style={{ marginBottom: "12px" }}>
               <div
-                style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}
+                style={{
+                  fontSize: "12px",
+                  color: "#999",
+                  marginBottom: "6px",
+                }}
               >
                 Email
               </div>
@@ -304,7 +464,7 @@ function PageAuth({ onLogin }) {
         )}
 
         {/* Message de succès */}
-        {message && (
+        {!show2FA && message && (
           <div
             style={{
               background: "#EAF3DE",
@@ -320,7 +480,7 @@ function PageAuth({ onLogin }) {
         )}
 
         {/* Message d'erreur */}
-        {error && (
+        {!show2FA && error && (
           <div
             style={{
               background: "#FCEBEB",
@@ -336,10 +496,14 @@ function PageAuth({ onLogin }) {
         )}
 
         {/* Champ email */}
-        {mode !== "forgot" && (
+        {!show2FA && mode !== "forgot" && (
           <div style={{ marginBottom: "12px" }}>
             <div
-              style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}
+              style={{
+                fontSize: "12px",
+                color: "#999",
+                marginBottom: "6px",
+              }}
             >
               Email
             </div>
@@ -362,10 +526,14 @@ function PageAuth({ onLogin }) {
         )}
 
         {/* Champ mot de passe */}
-        {mode !== "forgot" && (
+        {!show2FA && mode !== "forgot" && (
           <div style={{ marginBottom: "1.5rem" }}>
             <div
-              style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}
+              style={{
+                fontSize: "12px",
+                color: "#999",
+                marginBottom: "6px",
+              }}
             >
               Mot de passe
             </div>
@@ -392,7 +560,7 @@ function PageAuth({ onLogin }) {
         )}
 
         {/* Boutons OAuth */}
-        {mode === "login" && (
+        {!show2FA && mode === "login" && (
           <div style={{ marginBottom: "1rem" }}>
             <div
               style={{
@@ -406,7 +574,7 @@ function PageAuth({ onLogin }) {
             </div>
             <div style={{ display: "flex", gap: "8px" }}>
               <a
-                href="https://api.costincianu.fr/api/auth/github"
+                hrref="https://api.costincianu.fr/api/auth/github"
                 style={{
                   flex: 1,
                   display: "flex",
@@ -436,7 +604,7 @@ function PageAuth({ onLogin }) {
               </a>
 
               <a
-                href="https://api.costincianu.fr/api/auth/google"
+                hrref="https://api.costincianu.fr/api/auth/google"
                 style={{
                   flex: 1,
                   display: "flex",
@@ -479,7 +647,7 @@ function PageAuth({ onLogin }) {
         )}
 
         {/* Lien mot de passe oublié */}
-        {mode === "login" && (
+        {!show2FA && mode === "login" && (
           <div
             onClick={() => setMode("forgot")}
             style={{
@@ -495,7 +663,7 @@ function PageAuth({ onLogin }) {
         )}
 
         {/* Bouton principal */}
-        {mode !== "forgot" && (
+        {!show2FA && mode !== "forgot" && (
           <button
             onClick={mode === "login" ? handleLogin : handleRegister}
             disabled={loading}
