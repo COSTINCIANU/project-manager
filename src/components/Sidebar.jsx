@@ -27,6 +27,7 @@ function Sidebar({
     { id: "rapport", label: "Rapport PDF", icon: "📄" },
     { id: "github", label: "GitHub", icon: "🐙" },
     { id: "historique", label: "Historique", icon: "📋" },
+    { id: "activite", label: "Activité", icon: "⚡" },
     { id: "ia", label: "Assistant IA", icon: "🤖" },
     { id: "profil", label: "Mon profil", icon: "👤" },
   ];

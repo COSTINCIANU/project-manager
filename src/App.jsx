@@ -40,6 +40,7 @@ import LandingPage from "./components/LandingPage";
 import PageProfil from "./components/PageProfil";
 import PageResetPassword from "./components/PageResetPassword";
 import PageHistorique from "./components/PageHistorique";
+import PageActivite from "./components/PageActivite";
 
 function App() {
   // =====================
@@ -826,6 +827,9 @@ function App() {
 
             {/* ---- PAGE HISTORIQUE ---- */}
             {activePage === "historique" && <PageHistorique />}
+
+            {/* ---- PAGE ACTIVITÉ EN TEMPS RÉEL ---- */}
+            {activePage === "activite" && <PageActivite />}
 
             {/* ---- PAGE PROFIL ---- */}
             {activePage === "profil" && <PageProfil userEmail={userEmail} />}

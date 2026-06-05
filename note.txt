@@ -1681,4 +1681,45 @@ bashcd ~/public_html/project-manager-api
 php bin/console make:migration
 Non attends — avant la migration, on doit d'abord ajouter les champs twoFactorCode et twoFactorExpiresAt à l'entité User.
 Montre-moi l'entité User actuelle Git Bash local :
-bashcat /e/Projets/project-manager-api/src/Entity/User.php
+bashcat /e/Projets/project-manager-api/src/Entity/User.php  
+
+git add .
+git commit -m "ajout page historique des actions"
+git push origin master
+npm run build    
+
+***********************
+Polling  et (et on prépare l'architecture WebSocket en commentaires pour une migration future.)
+
+je prefer que on finise la section 2 et apre on passe a 3
+
+22:40
+Tu as raison ! Finissons la section 2 avec Activité en temps réel.
+
+Pour l'activité en temps réel, on a deux options :
+
+Option A — Polling (simple) :
+
+React interroge l'API toutes les 30 secondes
+Pas de WebSocket, fonctionne sur o2switch
+Moins "temps réel" mais très stable
+Option B — WebSocket (complexe) :
+
+Vraie communication en temps réel
+Nécessite un serveur WebSocket séparé
+Difficile à configurer sur o2switch mutualisé
+Je recommande Option A — Polling car o2switch mutualisé ne supporte pas facilement les WebSockets. Le résultat sera quasi identique pour l'utilisateur.
+
+On part sur le polling ?
+
+on peux faire les parametre pour les deux au cas ou je vais changer de hbergeur par la suite stp
+
+22:41
+Bonne idée ! On va faire le polling maintenant qui fonctionne sur o2switch, et on prépare l'architecture WebSocket en commentaires pour une migration future.
+
+Concrètement on va créer un composant PageActivite.jsx qui :
+
+Affiche les actions en temps réel via polling toutes les 30 secondes
+Est structuré pour faciliter une migration WebSocket future
+Montre qui est "actif" récemment (dernières 5 minutes)
+On réutilise l'endpoint /api/logs qu'on a déjà. Crée src/components/PageActivite.jsx en local dans VS Code :
