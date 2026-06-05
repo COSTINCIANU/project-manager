@@ -39,6 +39,7 @@ import PageAssistantIA from "./components/PageAssistantIA";
 import LandingPage from "./components/LandingPage";
 import PageProfil from "./components/PageProfil";
 import PageResetPassword from "./components/PageResetPassword";
+import PageHistorique from "./components/PageHistorique";
 
 function App() {
   // =====================
@@ -822,6 +823,9 @@ function App() {
             {activePage === "github" && (
               <PageGitHub tasks={tasks} projects={projects} />
             )}
+
+            {/* ---- PAGE HISTORIQUE ---- */}
+            {activePage === "historique" && <PageHistorique />}
 
             {/* ---- PAGE PROFIL ---- */}
             {activePage === "profil" && <PageProfil userEmail={userEmail} />}
