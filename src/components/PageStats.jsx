@@ -138,6 +138,48 @@ function PageStats({ tasks, projects, users }) {
     .filter((u) => u.total > 0);
 
   // =====================
+  // BURNDOWN CHART
+  // Calcule le nombre de tâches restantes jour par jour
+  // sur les 30 derniers jours
+  // Ligne idéale = décroissance linéaire théorique
+  // Ligne réelle = tâches non terminées à chaque date
+  // =====================
+  const burndownData = (() => {
+    const days = 30;
+    const data = [];
+    const totalTasks = safeTasks.length;
+
+    for (let i = days; i >= 0; i--) {
+      // Date du jour calculé
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      date.setHours(0, 0, 0, 0);
+
+      // Tâches restantes réelles à cette date
+      // Une tâche est "terminée" si sa dueDate est avant cette date et done=true
+      const termineesAvantDate = safeTasks.filter((t) => {
+        if (!t.done || !t.dueDate) return false;
+        return new Date(t.dueDate) <= date;
+      }).length;
+
+      const restantes = totalTasks - termineesAvantDate;
+
+      // Ligne idéale — décroissance linéaire parfaite
+      const ideal = Math.round(totalTasks - (totalTasks / days) * (days - i));
+
+      data.push({
+        jour: date.toLocaleDateString("fr-FR", {
+          day: "2-digit",
+          month: "2-digit",
+        }),
+        restantes: Math.max(0, restantes),
+        ideal: Math.max(0, ideal),
+      });
+    }
+    return data;
+  })();
+
+  // =====================
   // TOOLTIP PERSONNALISÉ
   // =====================
   function CustomTooltip({ active, payload }) {
@@ -685,6 +727,117 @@ function PageStats({ tasks, projects, users }) {
           ))}
         </div>
       )}
+
+      {/* ---- BURNDOWN CHART ---- */}
+      <div
+        style={{
+          background: "#fff",
+          border: "1px solid #eee",
+          borderRadius: "12px",
+          padding: "1.25rem",
+          marginTop: "14px",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "14px",
+            fontWeight: "500",
+            marginBottom: "0.5rem",
+          }}
+        >
+          📉 Burndown Chart — 30 derniers jours
+        </div>
+        <div style={{ fontSize: "12px", color: "#aaa", marginBottom: "1rem" }}>
+          Tâches restantes par rapport à la progression idéale
+        </div>
+
+        {/* Légende */}
+        <div style={{ display: "flex", gap: "16px", marginBottom: "1rem" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "12px",
+            }}
+          >
+            <div
+              style={{
+                width: "20px",
+                height: "3px",
+                background: "#378ADD",
+                borderRadius: "2px",
+              }}
+            />
+            <span style={{ color: "#666" }}>Réel</span>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "12px",
+            }}
+          >
+            <div
+              style={{
+                width: "20px",
+                height: "3px",
+                background: "#e74c3c",
+                borderRadius: "2px",
+                borderTop: "2px dashed #e74c3c",
+              }}
+            />
+            <span style={{ color: "#666" }}>Idéal</span>
+          </div>
+        </div>
+
+        {/* Graphique */}
+        <ResponsiveContainer width="100%" height={250}>
+          <LineChart
+            data={burndownData}
+            margin={{ top: 5, right: 10, left: -20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis
+              dataKey="jour"
+              tick={{ fontSize: 10, fill: "#aaa" }}
+              interval={4}
+            />
+            <YAxis tick={{ fontSize: 10, fill: "#aaa" }} />
+            <Tooltip
+              contentStyle={{
+                background: "#fff",
+                border: "1px solid #eee",
+                borderRadius: "8px",
+                fontSize: "12px",
+              }}
+              formatter={(value, name) => [
+                value + " tâches",
+                name === "restantes" ? "Réel" : "Idéal",
+              ]}
+            />
+            {/* Ligne réelle */}
+            <Line
+              type="monotone"
+              dataKey="restantes"
+              stroke="#378ADD"
+              strokeWidth={2}
+              dot={false}
+              activeDot={{ r: 4 }}
+            />
+            {/* Ligne idéale */}
+            <Line
+              type="monotone"
+              dataKey="ideal"
+              stroke="#e74c3c"
+              strokeWidth={2}
+              strokeDasharray="5 5"
+              dot={false}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }

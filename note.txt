@@ -1746,4 +1746,33 @@ On passe à la section 3 — Gestion de Projets Avancée :
 
 C'est la seule chose qui reste dans cette section. On attaque ?
 
+✎23:58Claude a répondu : 🎉 Les dépendances entre tâches fonctionnent parfaitement !🎉 Les dépendances entre tâches fonctionnent parfaitement !
+On voit :
+
+🔒 "Bloquée par : test log" — la tâche est bien bloquée
+La case à cocher est désactivée
+Le badge orange s'affiche correctement
+
+La section 3 est maintenant complète ✅ :
+
+✅ Priorités
+✅ Dates d'échéance
+✅ Sous-tâches
+✅ Dépendances entre tâches
+✅ Chronomètre (temps estimé)
+
+Il est tard — on s'arrête là pour ce soir ? On a fait énormément aujourd'hui ! Demain on attaque la section 4 — Burndown chart.
+
+
 *************************************
+On a vraiment bien avancé aujourd'hui :
+✅ SMTP email fonctionnel
+✅ Reset password complet
+✅ OAuth Google + GitHub
+✅ 2FA email avec toggle profil
+✅ Système de permissions par rôle
+✅ Historique des actions
+✅ Activité en temps réel
+✅ Dépendances entre tâches
+À demain pour la section 4 ! 👋
+
