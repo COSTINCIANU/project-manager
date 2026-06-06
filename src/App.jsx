@@ -46,6 +46,7 @@ function App() {
   // =====================
   // ÉTATS DE L'APPLICATION
   // =====================
+  // / *****************Les Effet Fin ********************/
 
   // Token JWT de l'utilisateur connecté
   const [token, setToken] = useState(localStorage.getItem("jwt_token") || null);
@@ -89,6 +90,11 @@ function App() {
   const [userRole, setUserRole] = useState(
     localStorage.getItem("user_role") || "dev",
   );
+
+  // Nombre de mentions non lues
+  const [unreadMentions, setUnreadMentions] = useState(0);
+
+  // / *****************Les Effet Fin ********************/
 
   // Détection du token OAuth dans l'URL après redirection Google/GitHub
   useEffect(() => {
@@ -207,6 +213,30 @@ function App() {
       }
     }
     loadRole();
+  }, [token]);
+
+  // =====================
+  // CHARGEMENT DES MENTIONS NON LUES
+  // Polling toutes les 60 secondes
+  // =====================
+  useEffect(() => {
+    async function loadMentions() {
+      if (!token) return;
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/mentions`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setUnreadMentions(data.length);
+        }
+      } catch (err) {
+        console.error("Erreur chargement mentions :", err);
+      }
+    }
+    loadMentions();
+    const interval = setInterval(loadMentions, 60000);
+    return () => clearInterval(interval);
   }, [token]);
 
   // =====================
@@ -508,6 +538,7 @@ function App() {
             onToggleDark={() => setDarkMode(!darkMode)}
             userEmail={userEmail}
             onLogout={handleLogout}
+            unreadMentions={unreadMentions}
           />
 
           {/* ---- CONTENU PRINCIPAL ---- */}

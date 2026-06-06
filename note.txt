@@ -1776,3 +1776,80 @@ On a vraiment bien avancé aujourd'hui :
 ✅ Dépendances entre tâches
 À demain pour la section 4 ! 👋
 
+
+
+
+07/0512/0517/0522/0527/0501/0606/06
+
+22:17
+🎉 Le Burndown Chart fonctionne ! Les deux lignes (Réelle et Idéale) s'affichent avec les dates sur l'axe X.
+
+La section 4 est complète ✅ :
+
+✅ Graphiques d'avancement
+✅ Burndown chart
+✅ Productivité par membre
+✅ Export PDF / Excel
+On passe à la section 5 — Communication :
+
+
+********************************************
+On passe à la section 5 — Communication :
+
+✅ Commentaires sur tâches
+❌ Mentions (@nom)
+❌ Chat temps réel
+❌ Notifications push
+
+On commence par les mentions (@nom) ?
+
+Pour les mentions @nom dans les commentaires, voici ce qu'on va faire :
+Backend Symfony :
+
+Détecter les @email dans le contenu du commentaire
+Enregistrer les mentions dans une table mention
+Envoyer un email de notification à la personne mentionnée
+
+Frontend React :
+
+Dans ModalEditTask.jsx, détecter la saisie @ et afficher une liste de suggestions d'utilisateurs
+Afficher les mentions en surbrillance dans les commentaires
+
+On commence par le backend. Crée src/Entity/Mention.php en local dans VS Code :
+
+Push sur GitHub depuis Git Bash local :
+
+cd /e/Projets/project-manager-api
+git add .
+git commit -m "ajout mentions @utilisateur dans les commentaires"
+git push origin master
+
+
+******************************
+Puis SSH o2switch :
+
+cd ~/public_html/project-manager-api
+git pull origin master
+php bin/console doctrine:query:sql "CREATE TABLE mention (id INT AUTO_INCREMENT NOT NULL, mentioned_email VARCHAR(180) NOT NULL, mentioned_by_email VARCHAR(180) NOT NULL, comment_id INT NOT NULL, task_id INT NOT NULL, is_read TINYINT(1) NOT NULL DEFAULT 0, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB"
+php bin/console cache:clear
+
+
+
+22:27
+Maintenant on passe au frontend React. On doit modifier ModalEditTask.jsx pour :
+
+Détecter la saisie @ dans le champ commentaire et afficher les suggestions
+Afficher les mentions en surbrillance dans les commentaires existants
+Envoyer les mentions à l'API après création d'un commentaire
+Mais d'abord, on doit aussi ajouter un badge de notifications dans la sidebar pour voir les mentions non lues.
+
+On commence par modifier ModalEditTask.jsx. Ajoute ces états après const [newComment, setNewComment] = useState(""); :
+
+Git Bash local :
+cd /e/Projets/project-manager
+git add .
+git commit -m "ajout mentions @utilisateur et badge notifications"
+git push origin master
+npm run build
+
+********************************************

@@ -90,6 +90,16 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
   const [dependsOn, setDependsOn] = useState(task.dependsOn || "");
 
   // =====================
+  // ÉTATS MENTIONS
+  // =====================
+
+  // Suggestions d'utilisateurs pour les mentions @
+  const [mentionSuggestions, setMentionSuggestions] = useState([]);
+
+  // Position du curseur pour afficher les suggestions
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  // =====================
   // CHARGEMENT DES COMMENTAIRES
   // =====================
 
@@ -167,11 +177,40 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
   // Ajoute un nouveau commentaire
   async function handleAddComment() {
     if (!newComment.trim()) return;
+
+    // On crée le commentaire
     const saved = await createCommentaire(task.id, {
       content: newComment.trim(),
     });
-    if (saved) setComments([...comments, saved]);
+
+    if (saved) {
+      setComments([...comments, saved]);
+
+      // Détection et envoi des mentions @email
+      const hasMention = newComment.includes("@");
+      if (hasMention) {
+        try {
+          await fetch(`${import.meta.env.VITE_API_URL}/mentions`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
+            },
+            body: JSON.stringify({
+              content: newComment.trim(),
+              commentId: saved.id,
+              taskId: task.id,
+              taskName: task.name,
+            }),
+          });
+        } catch (err) {
+          console.error("Erreur envoi mentions :", err);
+        }
+      }
+    }
+
     setNewComment("");
+    setShowSuggestions(false);
   }
 
   // Supprime un commentaire
@@ -747,15 +786,92 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
         )}
 
         {/* Champ pour ajouter un commentaire */}
-        <div style={{ display: "flex", gap: "6px", marginBottom: "16px" }}>
-          <input
-            type="text"
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
-            placeholder="Ajouter un commentaire..."
-            style={{ ...inputStyle, marginBottom: 0, flex: 1 }}
-          />
+        <div
+          style={{
+            position: "relative",
+            display: "flex",
+            gap: "6px",
+            marginBottom: "16px",
+          }}
+        >
+          <div style={{ flex: 1, position: "relative" }}>
+            <input
+              type="text"
+              value={newComment}
+              onChange={(e) => {
+                setNewComment(e.target.value);
+                // Détection de @ pour afficher les suggestions
+                const val = e.target.value;
+                const atIndex = val.lastIndexOf("@");
+                if (atIndex !== -1) {
+                  const search = val.slice(atIndex + 1).toLowerCase();
+                  const suggestions = users.filter((u) =>
+                    u.email.toLowerCase().includes(search),
+                  );
+                  setMentionSuggestions(suggestions);
+                  setShowSuggestions(suggestions.length > 0);
+                } else {
+                  setShowSuggestions(false);
+                }
+              }}
+              onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
+              placeholder="Ajouter un commentaire... (@email pour mentionner)"
+              style={{
+                ...inputStyle,
+                marginBottom: 0,
+                width: "100%",
+                boxSizing: "border-box",
+              }}
+            />
+
+            {/* Suggestions de mentions */}
+            {showSuggestions && (
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: "100%",
+                  left: 0,
+                  right: 0,
+                  background: "#fff",
+                  border: "1px solid #ddd",
+                  borderRadius: "8px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                  zIndex: 100,
+                  maxHeight: "150px",
+                  overflowY: "auto",
+                }}
+              >
+                {mentionSuggestions.map((u) => (
+                  <div
+                    key={u.id}
+                    onClick={() => {
+                      // Remplace le @recherche par @email complet
+                      const atIndex = newComment.lastIndexOf("@");
+                      setNewComment(
+                        newComment.slice(0, atIndex) + "@" + u.email + " ",
+                      );
+                      setShowSuggestions(false);
+                    }}
+                    style={{
+                      padding: "8px 12px",
+                      cursor: "pointer",
+                      fontSize: "13px",
+                      color: "#333",
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.background = "#f5f5f5")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.background = "transparent")
+                    }
+                  >
+                    👤 {u.email}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           <button
             onClick={handleAddComment}
             style={{

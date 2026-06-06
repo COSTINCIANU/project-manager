@@ -11,6 +11,7 @@ function Sidebar({
   onToggleDark,
   userEmail,
   onLogout,
+  unreadMentions,
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -136,6 +137,7 @@ function Sidebar({
                 marginBottom: "2px",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
+                position: "relative",
               }}
               onMouseEnter={(e) => {
                 if (activePage !== item.id)
@@ -149,7 +151,27 @@ function Sidebar({
               <span style={{ fontSize: "16px", flexShrink: 0 }}>
                 {item.icon}
               </span>
-              <span className="sidebar-label">{item.label}</span>
+              <span className="sidebar-label" style={{ flex: 1 }}>
+                {item.label}
+              </span>
+              {/* Badge mentions non lues sur l'item invitations */}
+              {item.id === "invitations" && unreadMentions > 0 && (
+                <span
+                  style={{
+                    background: "#e74c3c",
+                    color: "#fff",
+                    borderRadius: "20px",
+                    fontSize: "10px",
+                    fontWeight: "600",
+                    padding: "1px 6px",
+                    minWidth: "18px",
+                    textAlign: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  {unreadMentions}
+                </span>
+              )}
             </div>
           ))}
         </div>
