@@ -41,6 +41,7 @@ import PageProfil from "./components/PageProfil";
 import PageResetPassword from "./components/PageResetPassword";
 import PageHistorique from "./components/PageHistorique";
 import PageActivite from "./components/PageActivite";
+import PageChat from "./components/PageChat";
 
 function App() {
   // =====================
@@ -864,6 +865,9 @@ function App() {
 
             {/* ---- PAGE ACTIVITÉ EN TEMPS RÉEL ---- */}
             {activePage === "activite" && <PageActivite />}
+
+            {/* ---- PAGE CHAT ---- */}
+            {activePage === "chat" && <PageChat userEmail={userEmail} />}
 
             {/* ---- PAGE PROFIL ---- */}
             {activePage === "profil" && <PageProfil userEmail={userEmail} />}

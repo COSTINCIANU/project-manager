@@ -1852,4 +1852,35 @@ git commit -m "ajout mentions @utilisateur et badge notifications"
 git push origin master
 npm run build
 
+Puis FileZilla — upload dist/ sur o2switch.
+
+
+22:46Claude a répondu : Teste en prod :Teste en prod :
+
+Va sur https://project-manager.costincianu.fr
+Ouvre une tâche → modal modification
+Dans le champ commentaire tape @ suivi d'une lettre
+Les suggestions d'utilisateurs doivent apparaître
+Clique sur un utilisateur → son email est inséré
+Envoie le commentaire → l'utilisateur mentionné reçoit un email  
+
+
+
+Il reste :
+
+❌ Chat temps réel
+❌ Notifications push
+
+On continue ?Vous avez dit : oui stpoui stp23:35Claude a répondu : Pour le Chat temps réel, comme pour l'activité, on va faire du polling (compatible o2switch) avec architecture WebSocket préparée pour migration future.Pour le Chat temps réel, comme pour l'activité, on va faire du polling (compatible o2switch) avec architecture WebSocket préparée pour migration future.
+Le chat sera une page dédiée où les membres de l'équipe peuvent échanger des messages.
+Plan :
+
+Entité ChatMessage en Symfony
+Controller ChatController
+Page PageChat.jsx en React avec polling 5 secondes
+
+On commence. Crée src/Entity/ChatMessage.php en local dans VS Code :
+
+
+
 ********************************************

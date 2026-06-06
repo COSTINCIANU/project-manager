@@ -29,6 +29,7 @@ function Sidebar({
     { id: "github", label: "GitHub", icon: "🐙" },
     { id: "historique", label: "Historique", icon: "📋" },
     { id: "activite", label: "Activité", icon: "⚡" },
+    { id: "chat", label: "Chat", icon: "💬" },
     { id: "ia", label: "Assistant IA", icon: "🤖" },
     { id: "profil", label: "Mon profil", icon: "👤" },
   ];
