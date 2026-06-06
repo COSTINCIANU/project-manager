@@ -3,6 +3,7 @@
 // Permet de modifier le nom, rôle et mot de passe
 // =====================================================
 import { useState, useEffect } from "react";
+import { usePushNotifications } from "../hooks/usePushNotifications";
 
 function PageProfil({ userEmail }) {
   // =====================
@@ -23,6 +24,15 @@ function PageProfil({ userEmail }) {
   // 2FA — état activé ou non
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
   const [twoFactorLoading, setTwoFactorLoading] = useState(false);
+
+  // Hook pour les notifications push
+  const {
+    isSubscribed,
+    isSupported,
+    loading: pushLoading,
+    subscribe,
+    unsubscribe,
+  } = usePushNotifications();
 
   // =====================
   // CHARGEMENT DU PROFIL
@@ -506,6 +516,64 @@ function PageProfil({ userEmail }) {
                 : "Activer"}
           </button>
         </div>
+      </div>
+
+      {/* ---- NOTIFICATIONS PUSH ---- */}
+      <div
+        style={{
+          background: "#fff",
+          border: "1px solid #eee",
+          borderRadius: "12px",
+          padding: "1.5rem",
+        }}
+      >
+        <div
+          style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}
+        >
+          🔔 Notifications push
+        </div>
+        {!isSupported ? (
+          <div style={{ fontSize: "13px", color: "#aaa" }}>
+            Votre navigateur ne supporte pas les notifications push
+          </div>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
+              <div
+                style={{ fontSize: "13px", color: "#333", fontWeight: "500" }}
+              >
+                Notifications navigateur
+              </div>
+              <div
+                style={{ fontSize: "12px", color: "#aaa", marginTop: "2px" }}
+              >
+                Recevez des alertes même quand l'app est fermée
+              </div>
+            </div>
+            <button
+              onClick={isSubscribed ? unsubscribe : subscribe}
+              disabled={pushLoading}
+              style={{
+                padding: "8px 16px",
+                borderRadius: "8px",
+                border: "none",
+                cursor: pushLoading ? "not-allowed" : "pointer",
+                fontSize: "13px",
+                fontWeight: "500",
+                background: isSubscribed ? "#FCEBEB" : "#EAF3DE",
+                color: isSubscribed ? "#A32D2D" : "#3B6D11",
+              }}
+            >
+              {pushLoading ? "..." : isSubscribed ? "Désactiver" : "Activer"}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* ---- INFORMATIONS DU COMPTE ---- */}
