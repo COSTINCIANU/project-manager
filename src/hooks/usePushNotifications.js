@@ -80,7 +80,11 @@ export function usePushNotifications() {
       const registration = await navigator.serviceWorker.register("/sw.js");
 
       // On récupère la clé publique VAPID depuis l'API
-      const res = await fetch(`${API_URL}/push/vapid-key`);
+      const res = await fetch(`${API_URL}/push/vapid-key`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
+        },
+      });
       const { publicKey } = await res.json();
 
       // On demande l'autorisation à l'utilisateur
