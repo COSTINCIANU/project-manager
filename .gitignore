@@ -27,6 +27,14 @@ dist-ssr
 notes.txt
 notes.md
 
+note.txt 
+/note.txt
+
+infos.txt
+/infos.txt
+
+
+
 # Variables d'environnement — ne jamais partager
 .env
 .env.local
