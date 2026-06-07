@@ -2090,3 +2090,111 @@ Change la plage à 3 mois dans le sélecteur — les tâches devraient apparaît
 On voit les tâches avec leurs barres colorées sur l'axe temporel ✅
 
 ************ fin section 7  ********************
+
+************ section 8  ********************
+
+Pour la section 8, voici l'ordre de priorité :
+
+Google Calendar — synchroniser les tâches avec Google Calendar
+Slack — envoyer des notifications dans Slack
+API publique — endpoints publics pour intégrations externes
+Stripe — paiement (lié au SaaS)
+
+On commence par Google Calendar — c'est le plus utile pour la gestion de projet.
+Avant de coder, as-tu déjà activé l'API Google Calendar dans Google Cloud Console ? Va sur :
+https://console.cloud.google.com/apis/library → cherche "Google Calendar API" → Activer
+
+https://console.cloud.google.com/apis/api/calendar-json.googleapis.com/metrics?project=project-manager-498513
+
+
+
+
+oui mais je veux aussi savoir comment je vais faire par la suite quant tout sera fini pour pas avoir cette problme  et que tout reste vraiment fluide et proffessionnl
+
+18:20
+Bonne question ! Voici le processus complet pour valider l'app Google officiellement :
+
+Ce qu'il faut préparer :
+
+Politique de confidentialité — une page publique sur ton site qui explique comment tu utilises les données Google. Ex : https://project-manager.costincianu.fr/privacy
+Page d'accueil — ton site doit avoir une page d'accueil publique décrivant l'app (tu as déjà la Landing Page ✅)
+Vérification du domaine — dans Google Cloud Console → "Domaines autorisés" → vérifier costincianu.fr via Google Search Console
+Soumettre pour validation — dans Google Cloud Console → "Centre de validation" → soumettre chaque scope sensible avec une démonstration vidéo de 3-5 minutes montrant comment tu utilises les données
+Les scopes que tu utilises :
+
+drive.readonly → accès lecture Drive
+calendar.events → accès Calendar
+Délai : 2 à 6 semaines pour la validation Google.
+
+Pour ton CDA — note dans ta documentation que l'app est en mode test et que la validation Google est prévue après la formation.
+
+On ajoute le message d'avertissement dans la page et on continue ?
+
+et pourquoi on fait pas  tout ça mainthna ?
+
+18:21
+On peut le faire maintenant ! Voici l'ordre :
+
+Étape 1 — Créer la page Politique de confidentialité (rapide — 10 min) Étape 2 — Vérifier le domaine dans Google Search Console (rapide) Étape 3 — Soumettre pour validation (ça prend du temps côté Google mais on peut soumettre maintenant)
+
+On commence par la page Politique de confidentialité. Crée public/privacy.html en local dans VS Code dans le dossier project-manager :
+
+
+
+
+🎉 La page de politique de confidentialité est en ligne sur https://project-manager.costincianu.fr/privacy.html ✅
+Maintenant ajoute ce lien dans Google Cloud Console :
+
+Va sur https://console.cloud.google.com/auth/branding?project=project-manager-498513
+Cherche "Lien vers la politique de confidentialité"
+Ajoute : https://project-manager.costincianu.fr/privacy.html
+Sauvegarde
+
+
+Je vois la page ! Remplis les champs comme ça :
+Page d'accueil de l'application :
+https://project-manager.costincianu.fr
+Lien vers les règles de confidentialité :
+https://project-manager.costincianu.fr/privacy.html
+Lien vers les conditions d'utilisation :
+https://project-manager.costincianu.fr/privacy.html
+Puis clique "Enregistrer" !
+
+
+Maintenant va dans "Centre de validation" dans le menu gauche → clique "Préparer la vérification" pour soumettre l'app à Google.
+
+Centre de validation
+Branding status
+ Votre branding n'est pas visible par les utilisateurs. Vous pouvez consulter plus de détails et valider votre branding sur la page de branding.
+Data access status
+ La validation n'est pas requise, car votre application ne demande aucun niveau d'accès sensible ou restreint.
+
+18:30
+Bonne nouvelle ! Google dit que "La validation n'est pas requise" pour tes scopes actuels ! ✅
+
+Ça veut dire que l'avertissement devrait disparaître. Reteste maintenant en prod — va sur Google Calendar dans la sidebar et clique "Se connecter" — l'avertissement est peut-être moins sévère maintenant.
+
+
+🎉 Google Calendar est connecté ! ✅
+Le message "Aucune tâche avec date d'échéance" apparaît car tes tâches ont des dates passées. Ajoute une date d'échéance future sur une tâche et reteste !
+Mais d'abord — l'avertissement Google a disparu cette fois ?
+
+
+
+🎉 Google Calendar fonctionne parfaitement !
+Les tâches s'affichent automatiquement et pas d'erreurs en console ✅
+Teste maintenant le bouton "🔄 Tout synchroniser" — les tâches doivent apparaître dans ton Google Calendar !
+
+🎉🎉🎉 Google Calendar fonctionne parfaitement !
+5 tâches synchronisées avec succès ! Vérifie maintenant ton Google Calendar — les événements doivent être visibles avec les couleurs selon la priorité !
+La section 8 avance bien :
+
+✅ GitHub
+✅ Google Calendar
+❌ Slack
+❌ Stripe
+❌ API publique
+
+On continue avec Slack ?
+
+************ fin section 8  ********************

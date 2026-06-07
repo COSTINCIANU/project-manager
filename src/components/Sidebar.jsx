@@ -29,6 +29,7 @@ function Sidebar({
     { id: "rapport", label: "Rapport PDF", icon: "📄" },
     { id: "github", label: "GitHub", icon: "🐙" },
     { id: "calendar-sync", label: "Google Calendar", icon: "📅" },
+    { id: "api-publique", label: "API Publique", icon: "🔌" },
     { id: "wiki", label: "Wiki", icon: "📚" },
     { id: "historique", label: "Historique", icon: "📋" },
     { id: "activite", label: "Activité", icon: "⚡" },
