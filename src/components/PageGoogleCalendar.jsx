@@ -43,7 +43,8 @@ function PageGoogleCalendar({ tasks, projects }) {
     gapiScript.onload = () => {
       window.gapi.load("client", () => {
         window.gapi.client
-          .init({ discoveryDocs: [DISCOVERY_DOC] })
+          .init({})
+          .then(() => window.gapi.client.load("calendar", "v3"))
           .then(() => setGapiLoaded(true));
       });
     };
