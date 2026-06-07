@@ -18,6 +18,7 @@ import {
   deleteAttachment,
 } from "../api";
 import MarkdownEditor from "./MarkdownEditor";
+import GoogleDrivePicker from "./GoogleDrivePicker";
 
 function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
   // =====================
@@ -488,6 +489,20 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
             >
               Ouvrir →
             </a>
+          )}
+        </div>
+
+        {/* ---- BOUTON GOOGLE DRIVE ---- */}
+        <div style={{ marginBottom: "12px" }}>
+          <GoogleDrivePicker
+            onFilePicked={(file) => {
+              setExternalLink(file.url);
+            }}
+          />
+          {externalLink && (
+            <div style={{ fontSize: "11px", color: "#aaa", marginTop: "6px" }}>
+              🔗 {externalLink}
+            </div>
           )}
         </div>
 

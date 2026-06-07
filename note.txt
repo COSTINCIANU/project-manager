@@ -1960,5 +1960,31 @@ On commence par Option B. Dans Task.php en VS Code local, ajoute ce champ après
 cd ~/public_html/project-manager-api
 php bin/console doctrine:query:sql "ALTER TABLE task ADD external_link VARCHAR(500) DEFAULT NULL"
 
+12:22Claude a répondu : Teste en prod — ouvre une tâche en modification (bouton ✎), scrolle vers le bas et tu dois voir le champ "Lien externe (Google Drive, Dropbox.Teste en prod — ouvre une tâche en modification (bouton ✎), scrolle vers le bas et tu dois voir le champ "Lien externe (Google Drive, Dropbox...)". Colle un lien Google Drive et vérifie que le bouton "Ouvrir →" apparaît !
+
+
+Le champ est bien là ! ✅
+Maintenant on passe à l'Option A — Intégration Google Drive via l'API.
+C'est plus complexe — ça permet de parcourir et sélectionner des fichiers directement depuis Google Drive sans quitter l'app.
+Pour ça on a besoin de :
+
+Google Drive API activée dans Google Cloud Console
+Google Picker API — widget Google pour sélectionner des fichiers
+Un bouton "📁 Choisir depuis Google Drive" dans ModalEditTask.jsx
+
+C'est entièrement côté frontend — pas besoin de modifier Symfony.
+On attaque ?
+
+Dans Google Cloud Console (https://console.cloud.google.com) sur ton projet Project Manager :
+
+Va dans APIs & Services → Bibliothèque
+Cherche "Google Drive API" → Activer
+Cherche "Google Picker API" → Activer
+Va dans Identifiants → ton client OAuth existant → ajoute dans Origines JavaScript autorisées :
+
+https://project-manager.costincianu.fr
+http://localhost:5173
+Dis-moi quand c'est fait !
+
 
 ************ fin section 6  ********************
