@@ -1910,4 +1910,55 @@ cd /e/Projets/project-manager
 npm install marked
 
 
+Push, build et déploie :
+Git Bash local :
+bashcd /e/Projets/project-manager
+git add .
+git commit -m "ajout Wiki par projet et éditeur Markdown"
+git push origin master
+npm run build
+Puis FileZilla — upload dist/ sur o2switch.
+
+
+🎉 La page Wiki s'affiche parfaitement !
+Maintenant teste la création d'une page — clique sur "+ Nouvelle page" et crée une page avec du contenu Markdown comme :
+markdown# Guide de démarrage
+
+## Installation
+- Cloner le repo
+- Lancer `npm install`
+
+## Fonctionnalités
+**Gestion des tâches** avec priorités et dates d'échéance
+
+
+🎉 Le Wiki fonctionne parfaitement !
+
+✅ Page créée avec titre
+✅ Markdown rendu correctement (titres, listes, gras)
+✅ Métadonnées (auteur, date)
+✅ Boutons Modifier et Supprimer
+
+La section 6 avance bien :
+
+✅ Upload de fichiers
+✅ Éditeur Markdown
+✅ Wiki par projet
+❌ Google Drive / Dropbox
+
+Pour Google Drive / Dropbox, c'est une intégration externe complexe. On peut faire deux choses :
+Option A — Intégration complète Google Drive (OAuth Google Drive API) — complexe
+Option B — Lien simple vers Google Drive/Dropbox dans les tâches — rapide
+Quelle option tu préfères, ou on passe directement à la section 7 ?
+
+
+Oui ! On fait les deux :
+Option B d'abord (rapide) — un champ "Lien externe" dans ModalEditTask.jsx pour coller un lien Google Drive/Dropbox
+Puis Option A — intégration Google Drive via l'API (plus complexe)
+On commence par Option B. Dans Task.php en VS Code local, ajoute ce champ après private ?int $dependsOn = null; :
+
+cd ~/public_html/project-manager-api
+php bin/console doctrine:query:sql "ALTER TABLE task ADD external_link VARCHAR(500) DEFAULT NULL"
+
+
 ************ fin section 6  ********************

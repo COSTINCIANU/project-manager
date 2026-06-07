@@ -90,6 +90,9 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
   // Dépendance — ID de la tâche bloquante
   const [dependsOn, setDependsOn] = useState(task.dependsOn || "");
 
+  // Lien externe — Google Drive, Dropbox, etc.
+  const [externalLink, setExternalLink] = useState(task.externalLink || "");
+
   // =====================
   // ÉTATS MENTIONS
   // =====================
@@ -271,6 +274,7 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
       tags,
       assignedTo: assignedTo ? parseInt(assignedTo) : null,
       dependsOn: dependsOn ? parseInt(dependsOn) : null,
+      externalLink: externalLink || null,
     });
 
     onClose();
@@ -451,6 +455,41 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
                 </option>
               ))}
         </select>
+
+        {/* ---- LIEN EXTERNE — Google Drive / Dropbox ---- */}
+        <div style={labelStyle}>Lien externe (Google Drive, Dropbox...)</div>
+        <div style={{ position: "relative", marginBottom: "12px" }}>
+          <input
+            type="url"
+            value={externalLink}
+            onChange={(e) => setExternalLink(e.target.value)}
+            placeholder="https://drive.google.com/..."
+            style={{
+              ...inputStyle,
+              marginBottom: 0,
+              paddingRight: externalLink ? "80px" : "12px",
+            }}
+          />
+          {externalLink && (
+            <a
+              href={externalLink}
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                position: "absolute",
+                right: "8px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                fontSize: "11px",
+                color: "#378ADD",
+                textDecoration: "none",
+                fontWeight: "500",
+              }}
+            >
+              Ouvrir →
+            </a>
+          )}
+        </div>
 
         {/* ---- TAGS ---- */}
         <div style={labelStyle}>Tags</div>
