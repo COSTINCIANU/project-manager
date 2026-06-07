@@ -119,6 +119,28 @@ function PageApiPublique() {
         gap: "14px",
       }}
     >
+      {/* ---- MESSAGE INFO TOKEN ---- */}
+      <div
+        style={{
+          background: "#E8F4FD",
+          border: "1px solid #b3d9f7",
+          borderRadius: "12px",
+          padding: "1rem 1.5rem",
+          fontSize: "13px",
+          color: "#1565C0",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+        }}
+      >
+        <span style={{ fontSize: "18px" }}>ℹ️</span>
+        <div>
+          Si le bouton "Créer" ne répond pas, votre session a peut-être expiré.
+          <strong> Déconnectez-vous et reconnectez-vous</strong> pour rafraîchir
+          votre token JWT (validité : 1 heure).
+        </div>
+      </div>
+
       {/* ---- DOCUMENTATION ---- */}
       <div
         style={{
