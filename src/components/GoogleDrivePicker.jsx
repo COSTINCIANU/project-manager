@@ -3,6 +3,8 @@
 // Permet de sélectionner un fichier depuis Google Drive
 // et d'insérer son lien dans la tâche
 // Utilise Google Picker API
+// Token sauvegardé 10 minutes pour éviter
+// de redemander l'autorisation à chaque fois
 // =====================================================
 import { useEffect, useState } from "react";
 
@@ -11,6 +13,9 @@ const DISCOVERY_DOCS = [
   "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
 ];
 const SCOPES = "https://www.googleapis.com/auth/drive.readonly";
+
+// Durée de validité du token en millisecondes (10 minutes)
+const TOKEN_EXPIRY_MS = 10 * 60 * 1000;
 
 function GoogleDrivePicker({ onFilePicked }) {
   // =====================
@@ -23,10 +28,18 @@ function GoogleDrivePicker({ onFilePicked }) {
   // Google Identity Services chargé
   const [gisLoaded, setGisLoaded] = useState(false);
 
-  // Token d'accès Google
-  const [accessToken, setAccessToken] = useState(
-    localStorage.getItem("google_access_token") || null,
-  );
+  // Token d'accès Google — récupéré depuis localStorage si non expiré
+  const [accessToken, setAccessToken] = useState(() => {
+    const token = localStorage.getItem("google_access_token");
+    const expiresAt = localStorage.getItem("google_token_expires");
+    if (token && expiresAt && Date.now() < parseInt(expiresAt)) {
+      return token;
+    }
+    // Token expiré ou absent — on nettoie
+    localStorage.removeItem("google_access_token");
+    localStorage.removeItem("google_token_expires");
+    return null;
+  });
 
   // Chargement
   const [loading, setLoading] = useState(false);
@@ -77,6 +90,10 @@ function GoogleDrivePicker({ onFilePicked }) {
             id: file.id,
             mimeType: file.mimeType,
           });
+          // On nettoie le token après utilisation
+          localStorage.removeItem("google_access_token");
+          localStorage.removeItem("google_token_expires");
+          setAccessToken(null);
         }
       })
       .build();
@@ -91,22 +108,32 @@ function GoogleDrivePicker({ onFilePicked }) {
     if (!gapiLoaded || !gisLoaded) return;
     setLoading(true);
 
-    // Si on a déjà un token sauvegardé on ouvre directement le picker
+    // Vérifie si on a un token valide non expiré
     const savedToken = localStorage.getItem("google_access_token");
-    if (savedToken) {
+    const expiresAt = localStorage.getItem("google_token_expires");
+
+    if (savedToken && expiresAt && Date.now() < parseInt(expiresAt)) {
+      // Token valide — on ouvre directement le picker
       openPicker(savedToken);
       setLoading(false);
       return;
     }
 
-    // Sinon on demande l'autorisation
+    // Token expiré ou absent — on nettoie et on redemande
+    localStorage.removeItem("google_access_token");
+    localStorage.removeItem("google_token_expires");
+    setAccessToken(null);
+
+    // On demande l'autorisation
     const tokenClient = window.google.accounts.oauth2.initTokenClient({
       client_id: GOOGLE_CLIENT_ID,
       scope: SCOPES,
       callback: (response) => {
         if (response.access_token) {
-          // On sauvegarde le token pour éviter de redemander l'autorisation
+          // On sauvegarde le token avec expiration de 10 minutes
+          const expiresAt = Date.now() + TOKEN_EXPIRY_MS;
           localStorage.setItem("google_access_token", response.access_token);
+          localStorage.setItem("google_token_expires", expiresAt);
           setAccessToken(response.access_token);
           openPicker(response.access_token);
         }
