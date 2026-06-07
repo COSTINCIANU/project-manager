@@ -2051,6 +2051,26 @@ Sauvegarde Ctrl+O → Entrée → Ctrl+X.
 
 Dis-moi quand c'est fait !
 
+Maintenant on ajoute Dropbox. C'est très simple avec le Dropbox Chooser — un widget officiel qui ne nécessite qu'une clé API.
+Pour obtenir la clé Dropbox :
+
+Va sur https://www.dropbox.com/developers/apps
+Clique "Create app"
+Choisis "Scoped access" → "Full Dropbox"
+Donne un nom : Project Manager
+Dans les paramètres → "Chooser/Saver domains" → ajoute project-manager.costincianu.fr
+Copie ton App key
+
+Dis-moi quand tu as la clé !
+
+Connexion ou inscription
+Continuer sur Dropbox
+
+Je souhaite recevoir des informations marketing de Dropbox par e-mail.
+En sélectionnant « Accepter et s’inscrire », j’accepte les conditions d’utilisation de Dropbox et le contrat de services. Pour découvrir comment nous utilisons et protégeons vos données, consultez notre politique de confidentialité.
+
+Accepter et s’inscrire
+
 
 ************ fin section 6  ********************
 
@@ -2062,5 +2082,11 @@ Maintenant on passe à la section 7 — Vue Timeline ?
 C'est la dernière vue manquante. La Timeline affiche les tâches sur un axe temporel horizontal, similaire au Gantt mais plus interactif et centré sur les dates de début/fin.
 On attaque ?Vous avez dit : oui stpoui stp14:00Pour la Vue Timeline, on va créer src/components/PageVueTimeline.jsx.La timeline affiche les tâches sur un axe temporel — chaque tâche est représentée par une barre horizontale entre sa date de création et sa date d'échéance.
 
+14:09Claude a répondu : La Timeline s'affiche parfaitement avec l'axe des dates !La Timeline s'affiche parfaitement avec l'axe des dates ! ✅
+Le message "Aucune tâche avec date d'échéance pour cette période" apparaît car tes tâches ont des dates en avril/mai 2026 qui sont avant la fenêtre actuelle (fin mai → fin juin).
+Change la plage à 3 mois dans le sélecteur — les tâches devraient apparaître !
+
+🎉 La Vue Timeline fonctionne parfaitement !
+On voit les tâches avec leurs barres colorées sur l'axe temporel ✅
 
 ************ fin section 7  ********************

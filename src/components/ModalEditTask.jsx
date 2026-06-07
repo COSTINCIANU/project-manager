@@ -19,6 +19,7 @@ import {
 } from "../api";
 import MarkdownEditor from "./MarkdownEditor";
 import GoogleDrivePicker from "./GoogleDrivePicker";
+import DropboxChooser from "./DropboxChooser";
 
 function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
   // =====================
@@ -504,6 +505,15 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
               🔗 {externalLink}
             </div>
           )}
+        </div>
+
+        {/* ---- BOUTON DROPBOX ---- */}
+        <div style={{ marginBottom: "12px" }}>
+          <DropboxChooser
+            onFilePicked={(file) => {
+              setExternalLink(file.url);
+            }}
+          />
         </div>
 
         {/* ---- TAGS ---- */}
