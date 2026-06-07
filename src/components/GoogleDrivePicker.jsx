@@ -24,7 +24,9 @@ function GoogleDrivePicker({ onFilePicked }) {
   const [gisLoaded, setGisLoaded] = useState(false);
 
   // Token d'accès Google
-  const [accessToken, setAccessToken] = useState(null);
+  const [accessToken, setAccessToken] = useState(
+    localStorage.getItem("google_access_token") || null,
+  );
 
   // Chargement
   const [loading, setLoading] = useState(false);
@@ -87,12 +89,12 @@ function GoogleDrivePicker({ onFilePicked }) {
   // =====================
   function handleClick() {
     if (!gapiLoaded || !gisLoaded) return;
-
     setLoading(true);
 
-    // Si on a déjà un token valide on ouvre directement le picker
-    if (accessToken) {
-      openPicker(accessToken);
+    // Si on a déjà un token sauvegardé on ouvre directement le picker
+    const savedToken = localStorage.getItem("google_access_token");
+    if (savedToken) {
+      openPicker(savedToken);
       setLoading(false);
       return;
     }
@@ -103,6 +105,8 @@ function GoogleDrivePicker({ onFilePicked }) {
       scope: SCOPES,
       callback: (response) => {
         if (response.access_token) {
+          // On sauvegarde le token pour éviter de redemander l'autorisation
+          localStorage.setItem("google_access_token", response.access_token);
           setAccessToken(response.access_token);
           openPicker(response.access_token);
         }
@@ -110,7 +114,7 @@ function GoogleDrivePicker({ onFilePicked }) {
       },
     });
 
-    tokenClient.requestAccessToken({ prompt: "consent" });
+    tokenClient.requestAccessToken({ prompt: "" });
   }
 
   // =====================

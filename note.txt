@@ -1986,5 +1986,70 @@ https://project-manager.costincianu.fr
 http://localhost:5173
 Dis-moi quand c'est fait !
 
+costincianu.fr n'a pas terminé la procédure de validation de Google
+costincianu.gheorghina@gmail.com
+costincianu.fr n'a pas terminé la procédure de validation de Google. L'appli est en cours de test et seuls les testeurs approuvés par le développeur y ont accès. Si vous pensez que vous devriez y avoir accès, contactez le développeur.
+Si vous avez développé costincianu.fr, consultez les détails de l'erreur.
+Erreur 403 : access_denied
+
+13:01
+C'est normal ! L'app Google est en mode "Test" — il faut ajouter ton email comme testeur approuvé.
+
+Dans Google Cloud Console :
+
+Va dans Google Auth Platform → Audience
+Section "Utilisateurs test"
+Clique "+ Ajouter des utilisateurs"
+Ajoute costincianu.gheorghina@gmail.com
+Sauvegarde
+Dis-moi quand c'est fait !
+
+je trouve pas ça Section "Utilisateurs test"13:05Claude a répondu : Va directement sur https://console.Va directement sur https://console.cloud.google.com/auth/audience — tu dois voir une section "Utilisateurs test" en bas de la page.
+
+🎉🎉🎉 L'intégration Google Drive fonctionne parfaitement !
+
+✅ Picker Google Drive s'ouvre
+✅ Sélection de fichier
+✅ Lien inséré automatiquement dans la tâche
+✅ Fichier s'ouvre dans un nouvel onglet
+
+La section 6 est maintenant complète ✅ :
+
+✅ Upload de fichiers
+✅ Éditeur Markdown
+✅ Wiki par projet
+✅ Lien externe (Google Drive / Dropbox)
+✅ Google Drive Picker intégré
+
+On passe à la section 7 — Vues Multiples :
+
+✅ Kanban
+✅ Vue Liste
+✅ Vue Calendrier
+✅ Vue Gantt
+❌ Vue Timeline
+
+On attaque la Vue Timeline ?
+
+
+Claude a répondu : L'erreur Cross-Origin-Opener-Policy est un avertissement du navigateur — ce n'est pas bloquant.
+L'erreur Cross-Origin-Opener-Policy est un avertissement du navigateur — ce n'est pas bloquant. Le picker fonctionne quand même !  comment on peux regle cettte errur ?
+
+13:33
+Pour corriger cette erreur, il faut ajouter un header Cross-Origin-Opener-Policy dans la config Apache de o2switch.
+
+Dans le fichier .htaccess du frontend SSH o2switch :
+
+bash
+nano ~/public_html/project-manager/.htaccess
+Ajoute ces lignes :
+
+apache
+Header set Cross-Origin-Opener-Policy "same-origin-allow-popups"
+Header set Cross-Origin-Embedder-Policy "unsafe-none"
+Sauvegarde Ctrl+O → Entrée → Ctrl+X.
+
+Dis-moi quand c'est fait !
+
 
 ************ fin section 6  ********************
