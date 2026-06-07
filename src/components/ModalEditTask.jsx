@@ -17,6 +17,7 @@ import {
   uploadAttachment,
   deleteAttachment,
 } from "../api";
+import MarkdownEditor from "./MarkdownEditor";
 
 function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
   // =====================
@@ -362,18 +363,13 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
           autoFocus
         />
 
-        {/* ---- DESCRIPTION ---- */}
-        <div style={labelStyle}>Description</div>
-        <textarea
+        {/* ---- DESCRIPTION MARKDOWN ---- */}
+        <div style={labelStyle}>Description (Markdown supporté)</div>
+        <MarkdownEditor
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Décrivez la tâche en détail..."
-          style={{
-            ...inputStyle,
-            minHeight: "80px",
-            resize: "vertical",
-            fontFamily: "sans-serif",
-          }}
+          onChange={setDescription}
+          placeholder="Décrivez la tâche en détail... **gras**, _italique_, # titre"
+          minHeight="120px"
         />
 
         {/* ---- PRIORITÉ ---- */}

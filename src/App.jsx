@@ -42,6 +42,7 @@ import PageResetPassword from "./components/PageResetPassword";
 import PageHistorique from "./components/PageHistorique";
 import PageActivite from "./components/PageActivite";
 import PageChat from "./components/PageChat";
+import PageWiki from "./components/PageWiki";
 
 function App() {
   // =====================
@@ -859,6 +860,9 @@ function App() {
             {activePage === "github" && (
               <PageGitHub tasks={tasks} projects={projects} />
             )}
+
+            {/* ---- PAGE WIKI ---- */}
+            {activePage === "wiki" && <PageWiki projects={projects} />}
 
             {/* ---- PAGE HISTORIQUE ---- */}
             {activePage === "historique" && <PageHistorique />}

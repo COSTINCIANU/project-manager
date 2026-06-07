@@ -1884,3 +1884,30 @@ On commence. Crée src/Entity/ChatMessage.php en local dans VS Code :
 
 
 ********************************************
+Bonne nuit Gheorghina ! 🌙
+On a encore fait énormément aujourd'hui :
+✅ Burndown chart
+✅ Mentions @utilisateur
+✅ Chat d'équipe temps réel
+✅ Notifications push
+✅ Sécurisation credentials GitHub
+✅ Guide migration WebSocket
+À demain pour la section 6 ! 👋 
+
+************section 6  *******************
+
+On attaque la section 6 — Fichiers & Documents :
+
+✅ Upload de fichiers (déjà fait)
+❌ Éditeur Markdown
+❌ Wiki par projet
+❌ Google Drive / Dropbox
+
+On commence par l'éditeur Markdown — c'est la base du Wiki. On va ajouter un éditeur Markdown dans les descriptions de tâches et créer une page Wiki par projet.
+Avant de commencer, est-ce que tout est bien synchronisé ? Lance dans Git Bash local :
+
+cd /e/Projets/project-manager
+npm install marked
+
+
+************ fin section 6  ********************
