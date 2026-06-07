@@ -2053,3 +2053,14 @@ Dis-moi quand c'est fait !
 
 
 ************ fin section 6  ********************
+
+
+************ section 7  ********************
+
+🎉 Parfait ! Le token fonctionne correctement.
+Maintenant on passe à la section 7 — Vue Timeline ?
+C'est la dernière vue manquante. La Timeline affiche les tâches sur un axe temporel horizontal, similaire au Gantt mais plus interactif et centré sur les dates de début/fin.
+On attaque ?Vous avez dit : oui stpoui stp14:00Pour la Vue Timeline, on va créer src/components/PageVueTimeline.jsx.La timeline affiche les tâches sur un axe temporel — chaque tâche est représentée par une barre horizontale entre sa date de création et sa date d'échéance.
+
+
+************ fin section 7  ********************

@@ -43,6 +43,7 @@ import PageHistorique from "./components/PageHistorique";
 import PageActivite from "./components/PageActivite";
 import PageChat from "./components/PageChat";
 import PageWiki from "./components/PageWiki";
+import PageVueTimeline from "./components/PageVueTimeline";
 
 function App() {
   // =====================
@@ -844,6 +845,11 @@ function App() {
             {/* ---- PAGE VUE GANTT ---- */}
             {activePage === "gantt" && (
               <PageVueGantt tasks={tasks} projects={projects} />
+            )}
+
+            {/* ---- PAGE VUE TIMELINE ---- */}
+            {activePage === "timeline" && (
+              <PageVueTimeline tasks={tasks} projects={projects} />
             )}
 
             {/* ---- PAGE STATISTIQUES ---- */}

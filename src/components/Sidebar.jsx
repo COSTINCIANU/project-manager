@@ -24,6 +24,7 @@ function Sidebar({
     { id: "liste", label: "Vue Liste", icon: "☰" },
     { id: "calendrier", label: "Calendrier", icon: "📅" },
     { id: "gantt", label: "Vue Gantt", icon: "📊" },
+    { id: "timeline", label: "Timeline", icon: "📅" },
     { id: "stats", label: "Statistiques", icon: "▲" },
     { id: "rapport", label: "Rapport PDF", icon: "📄" },
     { id: "github", label: "GitHub", icon: "🐙" },
