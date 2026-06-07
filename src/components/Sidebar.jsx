@@ -28,6 +28,7 @@ function Sidebar({
     { id: "stats", label: "Statistiques", icon: "▲" },
     { id: "rapport", label: "Rapport PDF", icon: "📄" },
     { id: "github", label: "GitHub", icon: "🐙" },
+    { id: "calendar-sync", label: "Google Calendar", icon: "📅" },
     { id: "wiki", label: "Wiki", icon: "📚" },
     { id: "historique", label: "Historique", icon: "📋" },
     { id: "activite", label: "Activité", icon: "⚡" },

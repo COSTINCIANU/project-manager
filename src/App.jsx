@@ -44,6 +44,7 @@ import PageActivite from "./components/PageActivite";
 import PageChat from "./components/PageChat";
 import PageWiki from "./components/PageWiki";
 import PageVueTimeline from "./components/PageVueTimeline";
+import PageGoogleCalendar from "./components/PageGoogleCalendar";
 
 function App() {
   // =====================
@@ -865,6 +866,11 @@ function App() {
             {/* ---- PAGE GITHUB ---- */}
             {activePage === "github" && (
               <PageGitHub tasks={tasks} projects={projects} />
+            )}
+
+            {/* ---- PAGE GOOGLE CALENDAR ---- */}
+            {activePage === "calendar-sync" && (
+              <PageGoogleCalendar tasks={tasks} projects={projects} />
             )}
 
             {/* ---- PAGE WIKI ---- */}
