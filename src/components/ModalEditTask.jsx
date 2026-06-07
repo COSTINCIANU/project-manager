@@ -493,22 +493,13 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
           )}
         </div>
 
-        {/* ---- BOUTON GOOGLE DRIVE ---- */}
-        <div style={{ marginBottom: "12px" }}>
+        {/* ---- BOUTONS CLOUD — Google Drive et Dropbox côte à côte ---- */}
+        <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
           <GoogleDrivePicker
             onFilePicked={(file) => {
               setExternalLink(file.url);
             }}
           />
-          {externalLink && (
-            <div style={{ fontSize: "11px", color: "#aaa", marginTop: "6px" }}>
-              🔗 {externalLink}
-            </div>
-          )}
-        </div>
-
-        {/* ---- BOUTON DROPBOX ---- */}
-        <div style={{ marginBottom: "12px" }}>
           <DropboxChooser
             onFilePicked={(file) => {
               setExternalLink(file.url);
