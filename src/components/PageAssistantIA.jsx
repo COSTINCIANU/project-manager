@@ -167,6 +167,86 @@ function PageAssistantIA({ tasks, projects }) {
       setLoadingGeneration(false);
     }
   }
+
+  // =====================
+  // RÉSUMÉ AUTOMATIQUE DU PROJET
+  // =====================
+  async function handleSummary() {
+    setLoading(true);
+    const summaryPrompt =
+      "Génère un résumé exécutif complet de l'état actuel de tous mes projets. Inclus : avancement global, points positifs, points d'attention, et recommandations prioritaires.";
+
+    const newMessages = [...messages, { role: "user", content: summaryPrompt }];
+    setMessages(newMessages);
+    setInput("");
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/ai/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
+        },
+        body: JSON.stringify({
+          messages: newMessages.map((m) => ({
+            role: m.role,
+            content: m.content,
+          })),
+          system: buildContext(),
+        }),
+      });
+
+      const data = await response.json();
+      setMessages([
+        ...newMessages,
+        { role: "assistant", content: data.content, simulated: data.simulated },
+      ]);
+    } catch (error) {
+      console.error("Erreur résumé :", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // =====================
+  // DÉTECTION DE RISQUES
+  // =====================
+  async function handleRiskDetection() {
+    setLoading(true);
+    const riskPrompt =
+      "Analyse mes projets et tâches et détecte tous les risques potentiels. Identifie : tâches en retard, dépendances bloquantes, tâches critiques non assignées, projets en danger. Donne un niveau de risque (🔴 Critique / 🟠 Élevé / 🟡 Moyen / 🟢 Faible) pour chaque risque identifié.";
+
+    const newMessages = [...messages, { role: "user", content: riskPrompt }];
+    setMessages(newMessages);
+    setInput("");
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/ai/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
+        },
+        body: JSON.stringify({
+          messages: newMessages.map((m) => ({
+            role: m.role,
+            content: m.content,
+          })),
+          system: buildContext(),
+        }),
+      });
+
+      const data = await response.json();
+      setMessages([
+        ...newMessages,
+        { role: "assistant", content: data.content, simulated: data.simulated },
+      ]);
+    } catch (error) {
+      console.error("Erreur risques :", error);
+    } finally {
+      setLoading(false);
+    }
+  }
   // =====================
   // SUGGESTIONS RAPIDES
   // =====================
@@ -261,6 +341,40 @@ function PageAssistantIA({ tasks, projects }) {
           }}
         >
           ✨ {showGenerator ? "Fermer" : "Générer des tâches"}
+        </button>
+
+        <button
+          onClick={handleSummary}
+          disabled={loading}
+          style={{
+            fontSize: "12px",
+            padding: "6px 14px",
+            background: "#378ADD",
+            color: "#fff",
+            border: "none",
+            borderRadius: "6px",
+            cursor: loading ? "not-allowed" : "pointer",
+            fontWeight: "500",
+          }}
+        >
+          📊 Résumé auto
+        </button>
+
+        <button
+          onClick={handleRiskDetection}
+          disabled={loading}
+          style={{
+            fontSize: "12px",
+            padding: "6px 14px",
+            background: "#e74c3c",
+            color: "#fff",
+            border: "none",
+            borderRadius: "6px",
+            cursor: loading ? "not-allowed" : "pointer",
+            fontWeight: "500",
+          }}
+        >
+          ⚠️ Détecter risques
         </button>
       </div>
 
