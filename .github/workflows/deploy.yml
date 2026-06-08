@@ -84,16 +84,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: 22022
-          script: |
-            cd ~/public_html/project-manager-api
-            git pull origin master
-            composer install --no-dev --optimize-autoloader
-            php bin/console cache:clear
-            echo "✅ Backend déployé avec succès !"
+      - name: Deploy via Webhook
+        run: |
+          curl -X POST "${{ secrets.DEPLOY_WEBHOOK_URL }}" \
+            -H "X-Deploy-Token: ${{ secrets.DEPLOY_TOKEN }}"
+
+  # deploy-backend:
+  #   name: Deploy Backend
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Deploy via SSH
+  #       uses: appleboy/ssh-action@v1.0.3
+  #       with:
+  #         host: ${{ secrets.SSH_HOST }}
+  #         username: ${{ secrets.SSH_USERNAME }}
+  #         password: ${{ secrets.SSH_PASSWORD }}
+  #         port: 22022
+  #         script: |
+  #           cd ~/public_html/project-manager-api
+  #           git pull origin master
+  #           composer install --no-dev --optimize-autoloader
+  #           php bin/console cache:clear
+  #           echo "✅ Backend déployé avec succès !"
