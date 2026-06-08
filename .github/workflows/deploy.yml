@@ -80,33 +80,33 @@ jobs:
   # JOB 3 — Deploy Backend Symfony sur o2switch
   # =====================
 
-  # deploy-backend:
-  #   name: Deploy Backend
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Deploy via Webhook
-  #       run: |
-  #         curl --http1.1 --insecure --max-time 30 -X POST "${{ secrets.DEPLOY_WEBHOOK_URL }}" \
-  #           -H "X-Deploy-Token: ${{ secrets.DEPLOY_TOKEN }}" || true
-
   deploy-backend:
     name: Deploy Backend
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup SSH key
+      - name: Deploy via Webhook
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -p 22 ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
+          curl --http1.1 --insecure --max-time 30 -X POST "${{ secrets.DEPLOY_WEBHOOK_URL }}" \
+            -H "X-Deploy-Token: ${{ secrets.DEPLOY_TOKEN }}" || true
 
-      - name: Deploy via SSH
-        run: |
-          ssh -i ~/.ssh/id_rsa -p 22022 -o StrictHostKeyChecking=no \
-            ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} \
-            "cd ~/public_html/project-manager-api && git pull origin master && php bin/console cache:clear"
+  # deploy-backend:
+  #   name: Deploy Backend
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Setup SSH key
+  #       run: |
+  #         mkdir -p ~/.ssh
+  #         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+  #         chmod 600 ~/.ssh/id_rsa
+  #         ssh-keyscan -p 22 ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
+
+  #     - name: Deploy via SSH
+  #       run: |
+  #         ssh -i ~/.ssh/id_rsa -p 22022 -o StrictHostKeyChecking=no \
+  #           ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} \
+  #           "cd ~/public_html/project-manager-api && git pull origin master && php bin/console cache:clear"
 
   # deploy-backend:
   #   name: Deploy Backend
