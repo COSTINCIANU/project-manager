@@ -93,7 +93,7 @@ jobs:
 
       - name: Deploy via SSH
         run: |
-          ssh -i ~/.ssh/id_rsa -p 22 -o StrictHostKeyChecking=no \
+          ssh -i ~/.ssh/id_rsa -p 22022 -o StrictHostKeyChecking=no \
             ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} \
             "cd ~/public_html/project-manager-api && git pull origin master && php bin/console cache:clear"
 
