@@ -325,6 +325,8 @@ function PageAssistantIA({ tasks, projects }) {
           borderBottom: "1px solid #f0f0f0",
           display: "flex",
           justifyContent: "flex-end",
+          gap: "8px",
+          flexWrap: "wrap",
         }}
       >
         <button
