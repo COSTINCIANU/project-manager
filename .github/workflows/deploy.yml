@@ -86,7 +86,7 @@ jobs:
     steps:
       - name: Deploy via Webhook
         run: |
-          curl -X POST "${{ secrets.DEPLOY_WEBHOOK_URL }}" \
+          curl --http1.1 -X POST "${{ secrets.DEPLOY_WEBHOOK_URL }}" \
             -H "X-Deploy-Token: ${{ secrets.DEPLOY_TOKEN }}"
 
   # deploy-backend:
