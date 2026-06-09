@@ -212,8 +212,17 @@ function App() {
         });
         const data = await res.json();
         if (data.role) {
-          setUserRole(data.role);
-          localStorage.setItem("user_role", data.role);
+          // Normalise le rôle — ROLE_ADMIN → admin
+          const normalizedRole =
+            data.role === "ROLE_ADMIN"
+              ? "admin"
+              : data.role === "ROLE_MANAGER"
+                ? "manager"
+                : data.role === "ROLE_USER"
+                  ? "dev"
+                  : data.role;
+          setUserRole(normalizedRole);
+          localStorage.setItem("user_role", normalizedRole);
         }
       } catch (err) {
         console.error("Erreur chargement rôle :", err);
