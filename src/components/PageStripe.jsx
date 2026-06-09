@@ -289,7 +289,9 @@ function PageStripe() {
                 fontWeight: "500",
               }}
             >
-              {loading === plan.ctaAction ? "⏳ Chargement..." : plan.cta}
+              {loading === plan.ctaAction && plan.ctaAction
+                ? "⏳ Chargement..."
+                : plan.cta}
             </button>
           </div>
         ))}
