@@ -160,9 +160,15 @@ function App() {
         // ---- ÉTAPE 2 : Chargement des tâches depuis MySQL via Symfony ----
         const tasksData = await getTaches();
 
+        // Si l'API retourne une erreur 401 — token expiré → déconnexion
+        if (tasksData && tasksData.code === 401) {
+          handleLogout();
+          return;
+        }
+
         // ---- ÉTAPE 3 : Chargement des utilisateurs ----
         const usersData = await getUtilisateurs();
-        if (usersData) setUsers(usersData);
+        if (Array.isArray(usersData)) setUsers(usersData);
 
         // Si MySQL est vide on insère les données initiales
         if (tasksData.length === 0) {
