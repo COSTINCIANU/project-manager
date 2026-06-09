@@ -546,6 +546,7 @@ function App() {
             userEmail={userEmail}
             onLogout={handleLogout}
             unreadMentions={unreadMentions}
+            userRole={userRole}
           />
 
           {/* ---- CONTENU PRINCIPAL ---- */}

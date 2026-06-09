@@ -12,6 +12,7 @@ function Sidebar({
   userEmail,
   onLogout,
   unreadMentions,
+  userRole,
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
