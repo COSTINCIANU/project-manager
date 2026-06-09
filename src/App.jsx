@@ -46,6 +46,7 @@ import PageWiki from "./components/PageWiki";
 import PageVueTimeline from "./components/PageVueTimeline";
 import PageGoogleCalendar from "./components/PageGoogleCalendar";
 import PageApiPublique from "./components/PageApiPublique";
+import PageStripe from "./components/PageStripe";
 
 function App() {
   // =====================
@@ -876,6 +877,9 @@ function App() {
 
             {/* ---- PAGE API PUBLIQUE ---- */}
             {activePage === "api-publique" && <PageApiPublique />}
+
+            {/* ---- PAGE STRIPE ---- */}
+            {activePage === "stripe" && <PageStripe />}
 
             {/* ---- PAGE WIKI ---- */}
             {activePage === "wiki" && <PageWiki projects={projects} />}
