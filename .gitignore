@@ -37,4 +37,4 @@ infos.txt
 
 # Variables d'environnement — ne jamais partager
 .env
-.env.local
+.env.localvendor/
