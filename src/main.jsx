@@ -20,5 +20,7 @@ Sentry.init({
   environment: import.meta.env.MODE,
 });
 
+// Sentry.captureException(new Error("Test Sentry"));
+
 // On retire StrictMode pour éviter le double appel des useEffect en développement
 createRoot(document.getElementById("root")).render(<App />);

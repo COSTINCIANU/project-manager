@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Fond noir arrondi -->
+  <rect width="512" height="512" rx="100" fill="#111111"/>
+  
+  <!-- Graphique barres stylisé -->
+  <rect x="80" y="280" width="80" height="150" rx="10" fill="#378ADD"/>
+  <rect x="200" y="200" width="80" height="230" rx="10" fill="#9B7FD4"/>
+  <rect x="320" y="150" width="80" height="280" rx="10" fill="#639922"/>
+  
+  <!-- Ligne de tendance -->
+  <polyline 
+    points="120,260 240,180 360,130" 
+    fill="none" 
+    stroke="#fff" 
+    stroke-width="12" 
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  
+  <!-- Points sur la ligne -->
+  <circle cx="120" cy="260" r="12" fill="#fff"/>
+  <circle cx="240" cy="180" r="12" fill="#fff"/>
+  <circle cx="360" cy="130" r="12" fill="#fff"/>
+  
+  <!-- PM text -->
+  <text x="256" y="490" 
+    font-family="sans-serif" 
+    font-size="48" 
+    font-weight="700" 
+    fill="#fff" 
+    text-anchor="middle"
+    opacity="0.5"
+  >PM</text>
+</svg>

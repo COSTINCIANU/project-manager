@@ -47,6 +47,7 @@ import PageVueTimeline from "./components/PageVueTimeline";
 import PageGoogleCalendar from "./components/PageGoogleCalendar";
 import PageApiPublique from "./components/PageApiPublique";
 import PageStripe from "./components/PageStripe";
+import PageAdmin from "./components/PageAdmin";
 
 function App() {
   // =====================
@@ -880,6 +881,9 @@ function App() {
 
             {/* ---- PAGE STRIPE ---- */}
             {activePage === "stripe" && <PageStripe />}
+
+            {/* ---- PAGE ADMIN ---- */}
+            {activePage === "admin" && <PageAdmin />}
 
             {/* ---- PAGE WIKI ---- */}
             {activePage === "wiki" && <PageWiki projects={projects} />}

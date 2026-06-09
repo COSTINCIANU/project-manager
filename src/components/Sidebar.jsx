@@ -31,6 +31,7 @@ function Sidebar({
     { id: "calendar-sync", label: "Google Calendar", icon: "📅" },
     { id: "api-publique", label: "API Publique", icon: "🔌" },
     { id: "stripe", label: "Tarifs", icon: "💳" },
+    { id: "admin", label: "Admin", icon: "🛡️", adminOnly: true },
     { id: "wiki", label: "Wiki", icon: "📚" },
     { id: "historique", label: "Historique", icon: "📋" },
     { id: "activite", label: "Activité", icon: "⚡" },
@@ -122,64 +123,66 @@ function Sidebar({
 
         {/* Menu items */}
         <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>
-          {menuItems.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => handleNavigate(item.id)}
-              className="sidebar-item"
-              title={item.label}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                padding: "10px 12px",
-                borderRadius: "8px",
-                cursor: "pointer",
-                background: activePage === item.id ? "#fff" : "transparent",
-                color: activePage === item.id ? "#111" : "#aaa",
-                fontSize: "14px",
-                fontWeight: activePage === item.id ? "500" : "400",
-                transition: "all 0.15s",
-                marginBottom: "2px",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                position: "relative",
-              }}
-              onMouseEnter={(e) => {
-                if (activePage !== item.id)
-                  e.currentTarget.style.background = "#222";
-              }}
-              onMouseLeave={(e) => {
-                if (activePage !== item.id)
-                  e.currentTarget.style.background = "transparent";
-              }}
-            >
-              <span style={{ fontSize: "16px", flexShrink: 0 }}>
-                {item.icon}
-              </span>
-              <span className="sidebar-label" style={{ flex: 1 }}>
-                {item.label}
-              </span>
-              {/* Badge mentions non lues sur l'item invitations */}
-              {item.id === "invitations" && unreadMentions > 0 && (
-                <span
-                  style={{
-                    background: "#e74c3c",
-                    color: "#fff",
-                    borderRadius: "20px",
-                    fontSize: "10px",
-                    fontWeight: "600",
-                    padding: "1px 6px",
-                    minWidth: "18px",
-                    textAlign: "center",
-                    flexShrink: 0,
-                  }}
-                >
-                  {unreadMentions}
+          {menuItems
+            .filter((item) => !item.adminOnly || userRole === "admin")
+            .map((item) => (
+              <div
+                key={item.id}
+                onClick={() => handleNavigate(item.id)}
+                className="sidebar-item"
+                title={item.label}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  padding: "10px 12px",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  background: activePage === item.id ? "#fff" : "transparent",
+                  color: activePage === item.id ? "#111" : "#aaa",
+                  fontSize: "14px",
+                  fontWeight: activePage === item.id ? "500" : "400",
+                  transition: "all 0.15s",
+                  marginBottom: "2px",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  position: "relative",
+                }}
+                onMouseEnter={(e) => {
+                  if (activePage !== item.id)
+                    e.currentTarget.style.background = "#222";
+                }}
+                onMouseLeave={(e) => {
+                  if (activePage !== item.id)
+                    e.currentTarget.style.background = "transparent";
+                }}
+              >
+                <span style={{ fontSize: "16px", flexShrink: 0 }}>
+                  {item.icon}
                 </span>
-              )}
-            </div>
-          ))}
+                <span className="sidebar-label" style={{ flex: 1 }}>
+                  {item.label}
+                </span>
+                {/* Badge mentions non lues sur l'item invitations */}
+                {item.id === "invitations" && unreadMentions > 0 && (
+                  <span
+                    style={{
+                      background: "#e74c3c",
+                      color: "#fff",
+                      borderRadius: "20px",
+                      fontSize: "10px",
+                      fontWeight: "600",
+                      padding: "1px 6px",
+                      minWidth: "18px",
+                      textAlign: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {unreadMentions}
+                  </span>
+                )}
+              </div>
+            ))}
         </div>
 
         {/* Partie basse */}
