@@ -1,30 +1,36 @@
 // Importation de useState pour gérer le formulaire d'ajout
-import { useState } from "react"
+import { useState } from "react";
 
-function PageProjets({ projects, onAdd, onDelete }) {
-
+function PageProjets({ projects = [], onAdd, onDelete }) {
   // =====================
   // ÉTATS DU FORMULAIRE
   // =====================
 
   // Nom du nouveau projet
-  const [name, setName] = useState("")
+  const [name, setName] = useState("");
 
   // Statut du nouveau projet
-  const [status, setStatus] = useState("En cours")
+  const [status, setStatus] = useState("En cours");
 
   // Afficher ou cacher le formulaire d'ajout
-  const [showForm, setShowForm] = useState(false)
+  const [showForm, setShowForm] = useState(false);
 
   // =====================
   // COULEURS DISPONIBLES
   // =====================
 
   // Liste des couleurs disponibles pour les projets
-  const colors = ["#378ADD", "#BA7517", "#639922", "#888780", "#D85A30", "#D4537E"]
+  const colors = [
+    "#378ADD",
+    "#BA7517",
+    "#639922",
+    "#888780",
+    "#D85A30",
+    "#D4537E",
+  ];
 
   // Couleur sélectionnée par défaut
-  const [selectedColor, setSelectedColor] = useState(colors[0])
+  const [selectedColor, setSelectedColor] = useState(colors[0]);
 
   // =====================
   // FONCTION D'AJOUT
@@ -32,7 +38,7 @@ function PageProjets({ projects, onAdd, onDelete }) {
 
   function handleAdd() {
     // On vérifie que le nom n'est pas vide
-    if (!name.trim()) return
+    if (!name.trim()) return;
 
     // On crée le nouveau projet
     onAdd({
@@ -41,13 +47,13 @@ function PageProjets({ projects, onAdd, onDelete }) {
       status,
       color: selectedColor,
       progress: 0, // Un nouveau projet commence à 0%
-    })
+    });
 
     // On remet le formulaire à zéro
-    setName("")
-    setStatus("En cours")
-    setSelectedColor(colors[0])
-    setShowForm(false)
+    setName("");
+    setStatus("En cours");
+    setSelectedColor(colors[0]);
+    setShowForm(false);
   }
 
   // =====================
@@ -62,7 +68,7 @@ function PageProjets({ projects, onAdd, onDelete }) {
     borderRadius: "8px",
     outline: "none",
     marginBottom: "10px",
-  }
+  };
 
   const selectStyle = {
     width: "100%",
@@ -73,7 +79,7 @@ function PageProjets({ projects, onAdd, onDelete }) {
     outline: "none",
     marginBottom: "10px",
     background: "#fff",
-  }
+  };
 
   // =====================
   // RENDU DE LA PAGE
@@ -81,9 +87,15 @@ function PageProjets({ projects, onAdd, onDelete }) {
 
   return (
     <div>
-
       {/* ---- EN-TÊTE AVEC BOUTON AJOUTER ---- */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "1.5rem",
+        }}
+      >
         <div style={{ fontSize: "14px", color: "#999" }}>
           {projects.length} projet{projects.length > 1 ? "s" : ""} au total
         </div>
@@ -108,14 +120,22 @@ function PageProjets({ projects, onAdd, onDelete }) {
 
       {/* ---- FORMULAIRE D'AJOUT ---- */}
       {showForm && (
-        <div style={{
-          background: "#fff",
-          border: "1px solid #eee",
-          borderRadius: "12px",
-          padding: "1.25rem",
-          marginBottom: "1.5rem",
-        }}>
-          <div style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}>
+        <div
+          style={{
+            background: "#fff",
+            border: "1px solid #eee",
+            borderRadius: "12px",
+            padding: "1.25rem",
+            marginBottom: "1.5rem",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "14px",
+              fontWeight: "500",
+              marginBottom: "1rem",
+            }}
+          >
             Nouveau projet
           </div>
 
@@ -124,13 +144,17 @@ function PageProjets({ projects, onAdd, onDelete }) {
             type="text"
             placeholder="Nom du projet..."
             value={name}
-            onChange={e => setName(e.target.value)}
-            onKeyDown={e => e.key === "Enter" && handleAdd()}
+            onChange={(e) => setName(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleAdd()}
             style={inputStyle}
           />
 
           {/* Sélection du statut */}
-          <select value={status} onChange={e => setStatus(e.target.value)} style={selectStyle}>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            style={selectStyle}
+          >
             <option value="En cours">En cours</option>
             <option value="En attente">En attente</option>
             <option value="Terminé">Terminé</option>
@@ -138,9 +162,13 @@ function PageProjets({ projects, onAdd, onDelete }) {
 
           {/* Sélection de la couleur */}
           <div style={{ marginBottom: "14px" }}>
-            <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>Couleur</div>
+            <div
+              style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}
+            >
+              Couleur
+            </div>
             <div style={{ display: "flex", gap: "8px" }}>
-              {colors.map(color => (
+              {colors.map((color) => (
                 <div
                   key={color}
                   onClick={() => setSelectedColor(color)}
@@ -151,7 +179,10 @@ function PageProjets({ projects, onAdd, onDelete }) {
                     background: color,
                     cursor: "pointer",
                     // Bordure blanche si couleur sélectionnée
-                    border: selectedColor === color ? "3px solid #111" : "3px solid transparent",
+                    border:
+                      selectedColor === color
+                        ? "3px solid #111"
+                        : "3px solid transparent",
                     transition: "border 0.15s",
                   }}
                 />
@@ -180,88 +211,139 @@ function PageProjets({ projects, onAdd, onDelete }) {
       )}
 
       {/* ---- GRILLE DES PROJETS ---- */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "14px" }}>
-        {projects.map(project => (
-          <div
-            key={project.id}
-            style={{
-              background: "#fff",
-              border: "1px solid #eee",
-              borderRadius: "12px",
-              padding: "1.25rem",
-              transition: "box-shadow 0.2s, transform 0.2s",
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.07)"
-              e.currentTarget.style.transform = "translateY(-2px)"
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.boxShadow = "none"
-              e.currentTarget.style.transform = "translateY(0)"
-            }}
-          >
-            {/* En-tête de la carte projet */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                {/* Point coloré */}
-                <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: project.color }} />
-                {/* Nom du projet */}
-                <div style={{ fontSize: "14px", fontWeight: "500" }}>{project.name}</div>
-              </div>
-
-              {/* Bouton supprimer */}
-              <button
-                onClick={() => onDelete(project.id)}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: "14px",
+        }}
+      >
+        {Array.isArray(projects) &&
+          projects.map((project) => (
+            <div
+              key={project.id}
+              style={{
+                background: "#fff",
+                border: "1px solid #eee",
+                borderRadius: "12px",
+                padding: "1.25rem",
+                transition: "box-shadow 0.2s, transform 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.07)";
+                e.currentTarget.style.transform = "translateY(-2px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.transform = "translateY(0)";
+              }}
+            >
+              {/* En-tête de la carte projet */}
+              <div
                 style={{
-                  fontSize: "12px",
-                  padding: "4px 10px",
-                  background: "#fff0f0",
-                  color: "#c0392b",
-                  border: "1px solid #fdd",
-                  borderRadius: "6px",
-                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: "12px",
                 }}
               >
-                Supprimer
-              </button>
-            </div>
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "10px" }}
+                >
+                  {/* Point coloré */}
+                  <div
+                    style={{
+                      width: "12px",
+                      height: "12px",
+                      borderRadius: "50%",
+                      background: project.color,
+                    }}
+                  />
+                  {/* Nom du projet */}
+                  <div style={{ fontSize: "14px", fontWeight: "500" }}>
+                    {project.name}
+                  </div>
+                </div>
 
-            {/* Barre de progression */}
-            <div style={{ height: "6px", background: "#eee", borderRadius: "3px", overflow: "hidden", marginBottom: "8px" }}>
-              <div style={{
-                height: "100%",
-                width: `${project.progress}%`,
-                background: project.color,
-                borderRadius: "3px",
-                transition: "width 0.3s ease",
-              }} />
-            </div>
+                {/* Bouton supprimer */}
+                <button
+                  onClick={() => onDelete(project.id)}
+                  style={{
+                    fontSize: "12px",
+                    padding: "4px 10px",
+                    background: "#fff0f0",
+                    color: "#c0392b",
+                    border: "1px solid #fdd",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Supprimer
+                </button>
+              </div>
 
-            {/* Infos bas de carte */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <div style={{ fontSize: "12px", color: "#aaa" }}>{project.progress}% complété</div>
+              {/* Barre de progression */}
+              <div
+                style={{
+                  height: "6px",
+                  background: "#eee",
+                  borderRadius: "3px",
+                  overflow: "hidden",
+                  marginBottom: "8px",
+                }}
+              >
+                <div
+                  style={{
+                    height: "100%",
+                    width: `${project.progress}%`,
+                    background: project.color,
+                    borderRadius: "3px",
+                    transition: "width 0.3s ease",
+                  }}
+                />
+              </div>
 
-              {/* Badge statut */}
-              <div style={{
-                fontSize: "11px",
-                padding: "3px 10px",
-                borderRadius: "20px",
-                fontWeight: "500",
-                background: project.status === "Terminé" ? "#EAF3DE"
-                  : project.status === "En attente" ? "#FAEEDA"
-                  : "#E6F1FB",
-                color: project.status === "Terminé" ? "#3B6D11"
-                  : project.status === "En attente" ? "#854F0B"
-                  : "#185FA5",
-              }}>
-                {project.status}
+              {/* Infos bas de carte */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <div style={{ fontSize: "12px", color: "#aaa" }}>
+                  {project.progress}% complété
+                </div>
+
+                {/* Badge statut */}
+                <div
+                  style={{
+                    fontSize: "11px",
+                    padding: "3px 10px",
+                    borderRadius: "20px",
+                    fontWeight: "500",
+                    background:
+                      project.status === "Terminé"
+                        ? "#EAF3DE"
+                        : project.status === "En attente"
+                          ? "#FAEEDA"
+                          : "#E6F1FB",
+                    color:
+                      project.status === "Terminé"
+                        ? "#3B6D11"
+                        : project.status === "En attente"
+                          ? "#854F0B"
+                          : "#185FA5",
+                  }}
+                >
+                  {project.status}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
-  )
+  );
 }
 
-export default PageProjets
+export default PageProjets;
