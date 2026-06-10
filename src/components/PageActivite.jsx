@@ -59,21 +59,62 @@ function PageActivite() {
     }
   }
 
+  // =====================
+  // Connexion Mercure — temps réel !
+  // =====================
   useEffect(() => {
     // Chargement initial
     fetchLogs();
 
-    // Polling toutes les 30 secondes
-    // Pour WebSocket : supprimer ce setInterval
-    // et connecter le WebSocket ici
-    pollingRef.current = setInterval(fetchLogs, POLLING_INTERVAL);
+    // Connexion Mercure — temps réel !
+    try {
+      const url = new URL("https://mercure.costincianu.fr/.well-known/mercure");
+      url.searchParams.append(
+        "topic",
+        "https://project-manager.costincianu.fr/activity",
+      );
 
-    // Nettoyage — arrête le polling quand on quitte la page
-    return () => {
-      if (pollingRef.current) {
-        clearInterval(pollingRef.current);
-      }
-    };
+      const es = new EventSource(url.toString());
+
+      es.onopen = () => {
+        // Arrête le polling si Mercure fonctionne
+        if (pollingRef.current) {
+          clearInterval(pollingRef.current);
+          pollingRef.current = null;
+        }
+      };
+
+      es.onmessage = (event) => {
+        try {
+          const newLog = JSON.parse(event.data);
+          setLogs((prev) => [newLog, ...prev].slice(0, 50));
+          setLastUpdate(new Date());
+        } catch (err) {
+          console.error("Erreur parsing activité Mercure :", err);
+        }
+      };
+
+      es.onerror = () => {
+        es.close();
+        // Fallback polling si Mercure échoue
+        if (!pollingRef.current) {
+          pollingRef.current = setInterval(fetchLogs, POLLING_INTERVAL);
+        }
+      };
+
+      pollingRef.current = null;
+
+      return () => {
+        es.close();
+        if (pollingRef.current) clearInterval(pollingRef.current);
+      };
+    } catch (err) {
+      // Fallback polling
+      pollingRef.current = setInterval(fetchLogs, POLLING_INTERVAL);
+      return () => {
+        if (pollingRef.current) clearInterval(pollingRef.current);
+      };
+    }
   }, []);
 
   // =====================
