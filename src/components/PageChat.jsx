@@ -1,56 +1,35 @@
 // =====================================================
 // PageChat.jsx — Chat d'équipe en temps réel
-// Polling toutes les 5 secondes pour les nouveaux messages
-//
-// MIGRATION WEBSOCKET FUTURE :
-// Remplacer le setInterval par EventSource (Mercure) :
-// const es = new EventSource(
-//   'https://api.costincianu.fr/.well-known/mercure?topic=chat'
-// );
-// es.onmessage = (e) => {
-//   const msg = JSON.parse(e.data);
-//   setMessages(prev => [...prev, msg]);
-// };
-// return () => es.close();
+// Utilise Mercure (SSE) pour les messages instantanés
+// Polling de secours si Mercure n'est pas disponible
 // =====================================================
 import { useState, useEffect, useRef } from "react";
 
-// Intervalle de polling en millisecondes (5 secondes)
-const POLLING_INTERVAL = 5000;
+const MERCURE_URL = "https://mercure.costincianu.fr/.well-known/mercure";
+const CHAT_TOPIC = "https://project-manager.costincianu.fr/chat";
 
 function PageChat({ userEmail }) {
   // =====================
   // ÉTATS
   // =====================
-
-  // Liste des messages
   const [messages, setMessages] = useState([]);
-
-  // Nouveau message en cours de saisie
   const [newMessage, setNewMessage] = useState("");
-
-  // État de chargement initial
   const [loading, setLoading] = useState(true);
-
-  // État d'envoi
   const [sending, setSending] = useState(false);
-
-  // Référence pour le scroll automatique en bas
+  const [connected, setConnected] = useState(false);
   const messagesEndRef = useRef(null);
-
-  // Référence pour le timer de polling
+  const eventSourceRef = useRef(null);
   const pollingRef = useRef(null);
 
   // =====================
-  // SCROLL AUTOMATIQUE EN BAS
+  // SCROLL AUTOMATIQUE
   // =====================
   function scrollToBottom() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }
 
   // =====================
-  // CHARGEMENT DES MESSAGES
-  // Polling toutes les 5 secondes
+  // CHARGEMENT INITIAL DES MESSAGES
   // =====================
   async function fetchMessages() {
     try {
@@ -71,20 +50,71 @@ function PageChat({ userEmail }) {
     }
   }
 
+  // =====================
+  // CONNEXION MERCURE (SSE)
+  // =====================
+  function connectMercure() {
+    try {
+      const url = new URL(MERCURE_URL);
+      url.searchParams.append("topic", CHAT_TOPIC);
+
+      const es = new EventSource(url.toString());
+      eventSourceRef.current = es;
+
+      es.onopen = () => {
+        setConnected(true);
+        // Arrête le polling si Mercure fonctionne
+        if (pollingRef.current) {
+          clearInterval(pollingRef.current);
+          pollingRef.current = null;
+        }
+      };
+
+      es.onmessage = (event) => {
+        try {
+          const msg = JSON.parse(event.data);
+          setMessages((prev) => {
+            // Évite les doublons
+            if (prev.find((m) => m.id === msg.id)) return prev;
+            return [...prev, msg];
+          });
+          scrollToBottom();
+        } catch (err) {
+          console.error("Erreur parsing message Mercure :", err);
+        }
+      };
+
+      es.onerror = () => {
+        setConnected(false);
+        es.close();
+        // Fallback polling si Mercure échoue
+        if (!pollingRef.current) {
+          pollingRef.current = setInterval(fetchMessages, 5000);
+        }
+        // Tentative de reconnexion après 5 secondes
+        setTimeout(connectMercure, 5000);
+      };
+    } catch (err) {
+      console.error("Erreur connexion Mercure :", err);
+      // Fallback polling
+      if (!pollingRef.current) {
+        pollingRef.current = setInterval(fetchMessages, 5000);
+      }
+    }
+  }
+
   useEffect(() => {
     // Chargement initial
     fetchMessages();
+    // Connexion Mercure
+    connectMercure();
 
-    // Polling toutes les 5 secondes
-    pollingRef.current = setInterval(fetchMessages, POLLING_INTERVAL);
-
-    // Nettoyage au démontage
     return () => {
+      if (eventSourceRef.current) eventSourceRef.current.close();
       if (pollingRef.current) clearInterval(pollingRef.current);
     };
   }, []);
 
-  // Scroll en bas quand les messages changent
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -94,7 +124,6 @@ function PageChat({ userEmail }) {
   // =====================
   async function handleSend() {
     if (!newMessage.trim()) return;
-
     setSending(true);
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/chat`, {
@@ -107,10 +136,11 @@ function PageChat({ userEmail }) {
       });
 
       const data = await res.json();
-
       if (res.ok) {
-        // On ajoute le message immédiatement sans attendre le polling
-        setMessages((prev) => [...prev, data]);
+        // Si pas connecté à Mercure on ajoute manuellement
+        if (!connected) {
+          setMessages((prev) => [...prev, data]);
+        }
         setNewMessage("");
         scrollToBottom();
       }
@@ -125,24 +155,17 @@ function PageChat({ userEmail }) {
   // FORMATAGE DATE
   // =====================
   function formatTime(dateStr) {
-    const date = new Date(dateStr);
-    return date.toLocaleTimeString("fr-FR", {
+    return new Date(dateStr).toLocaleTimeString("fr-FR", {
       hour: "2-digit",
       minute: "2-digit",
     });
   }
 
-  // =====================
-  // INITIALES DE L'EXPÉDITEUR
-  // =====================
   function getInitials(email, name) {
     if (name && name !== email) return name[0].toUpperCase();
     return email[0].toUpperCase();
   }
 
-  // =====================
-  // COULEUR AVATAR SELON EMAIL
-  // =====================
   function getAvatarColor(email) {
     const colors = [
       "#378ADD",
@@ -189,8 +212,10 @@ function PageChat({ userEmail }) {
           <div style={{ fontSize: "14px", fontWeight: "500" }}>
             Chat d'équipe
           </div>
-          <div style={{ fontSize: "11px", color: "#aaa" }}>
-            Mis à jour toutes les 5 secondes
+          <div
+            style={{ fontSize: "11px", color: connected ? "#639922" : "#aaa" }}
+          >
+            {connected ? "● Temps réel (Mercure)" : "● Polling 5s (secours)"}
           </div>
         </div>
       </div>
@@ -209,14 +234,12 @@ function PageChat({ userEmail }) {
           gap: "12px",
         }}
       >
-        {/* État de chargement */}
         {loading && (
           <div style={{ textAlign: "center", color: "#aaa", fontSize: "13px" }}>
             Chargement...
           </div>
         )}
 
-        {/* Aucun message */}
         {!loading && messages.length === 0 && (
           <div
             style={{
@@ -230,7 +253,6 @@ function PageChat({ userEmail }) {
           </div>
         )}
 
-        {/* Messages */}
         {messages.map((msg) => {
           const isMe = msg.senderEmail === userEmail;
           return (
@@ -243,7 +265,6 @@ function PageChat({ userEmail }) {
                 alignItems: "flex-end",
               }}
             >
-              {/* Avatar */}
               <div
                 style={{
                   width: "32px",
@@ -262,9 +283,7 @@ function PageChat({ userEmail }) {
                 {getInitials(msg.senderEmail, msg.senderName)}
               </div>
 
-              {/* Bulle de message */}
               <div style={{ maxWidth: "70%" }}>
-                {/* Nom expéditeur */}
                 {!isMe && (
                   <div
                     style={{
@@ -277,7 +296,6 @@ function PageChat({ userEmail }) {
                     {msg.senderName || msg.senderEmail}
                   </div>
                 )}
-
                 <div
                   style={{
                     padding: "10px 14px",
@@ -294,8 +312,6 @@ function PageChat({ userEmail }) {
                 >
                   {msg.content}
                 </div>
-
-                {/* Heure */}
                 <div
                   style={{
                     fontSize: "10px",
@@ -312,7 +328,6 @@ function PageChat({ userEmail }) {
           );
         })}
 
-        {/* Ancre pour le scroll automatique */}
         <div ref={messagesEndRef} />
       </div>
 
