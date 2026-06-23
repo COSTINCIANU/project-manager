@@ -347,16 +347,27 @@ function App() {
 
   // Fonction pour ajouter un projet
   async function handleAddProject(project) {
-    // On sauvegarde dans MySQL via Symfony
-    const saved = await createProjet({
+    await createProjet({
       name: project.name,
       status: project.status,
       color: project.color,
       progress: project.progress || 0,
     });
-    // On ajoute le projet retourné par MySQL avec son vrai id
-    setProjects([...projects, saved]);
+    // On recharge tous les projets depuis MySQL pour avoir les données fraîches
+    const freshProjects = await getProjets();
+    if (Array.isArray(freshProjects)) setProjects(freshProjects);
   }
+  // async function handleAddProject(project) {
+  //   // On sauvegarde dans MySQL via Symfony
+  //   const saved = await createProjet({
+  //     name: project.name,
+  //     status: project.status,
+  //     color: project.color,
+  //     progress: project.progress || 0,
+  //   });
+  //   // On ajoute le projet retourné par MySQL avec son vrai id
+  //   setProjects([...projects, saved]);
+  // }
 
   // Fonction pour supprimer une tâche
   async function handleDelete(id) {
