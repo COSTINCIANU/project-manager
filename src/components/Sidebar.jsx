@@ -39,6 +39,8 @@ function Sidebar({
     { id: "chat", label: "Chat", icon: "💬" },
     { id: "ia", label: "Assistant IA", icon: "🤖" },
     { id: "profil", label: "Mon profil", icon: "👤" },
+    { id: "automatisations", label: "Automatisations", icon: "🔁" },
+    { id: "recherche", label: "Recherche", icon: "🔍" },
   ];
 
   function handleNavigate(id) {

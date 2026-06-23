@@ -286,3 +286,33 @@ export async function uploadAttachment(taskId, file) {
 export async function deleteAttachment(id) {
   return callAPI("DELETE", `/tasks/attachments/${id}`);
 }
+
+// =====================================================
+// RÈGLES D'AUTOMATISATION — CRUD complet
+// Correspond aux routes /api/projects/{id}/regles
+// et /api/regles/{id} du backend Symfony
+// =====================================================
+
+// Récupère toutes les règles d'un projet
+// projetId = identifiant du projet
+export async function getRegles(projetId) {
+  return callAPI("GET", `/projects/${projetId}/regles`);
+}
+
+// Crée une nouvelle règle sur un projet
+// projetId = identifiant du projet
+// regle = { nom, declencheur, valeurDeclencheur, action, valeurAction }
+export async function creerRegle(projetId, regle) {
+  return callAPI("POST", `/projects/${projetId}/regles`, regle);
+}
+
+// Active ou désactive une règle
+// regleId = identifiant de la règle
+export async function toggleRegle(regleId) {
+  return callAPI("PATCH", `/regles/${regleId}/toggle`);
+}
+
+// Supprime une règle par son identifiant
+export async function supprimerRegle(regleId) {
+  return callAPI("DELETE", `/regles/${regleId}`);
+}

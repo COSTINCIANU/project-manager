@@ -49,6 +49,9 @@ import PageApiPublique from "./components/PageApiPublique";
 import PageStripe from "./components/PageStripe";
 import PageAdmin from "./components/PageAdmin";
 
+import PageRechercheAvancee from "./components/PageRechercheAvancee";
+import PageAutomatisations from "./components/PageAutomatisations";
+
 function App() {
   // =====================
   // ÉTATS DE L'APPLICATION
@@ -357,19 +360,31 @@ function App() {
     const freshProjects = await getProjets();
     if (Array.isArray(freshProjects)) setProjects(freshProjects);
   }
-  // async function handleAddProject(project) {
-  //   // On sauvegarde dans MySQL via Symfony
-  //   const saved = await createProjet({
-  //     name: project.name,
-  //     status: project.status,
-  //     color: project.color,
-  //     progress: project.progress || 0,
-  //   });
-  //   // On ajoute le projet retourné par MySQL avec son vrai id
-  //   setProjects([...projects, saved]);
-  // }
 
   // Fonction pour supprimer une tâche
+  async function handleAddProject(project) {
+    // On sauvegarde dans MySQL via Symfony
+    const saved = await createProjet({
+      name: project.name,
+      status: project.status,
+      color: project.color,
+      progress: project.progress || 0,
+    });
+    // On ajoute le projet retourné par MySQL avec son vrai id
+    setProjects([...projects, saved]);
+  }
+
+  // Fonction pour supprimer une tâche
+  // async function handleDeleteProject(id) {
+  //   // On supprime de l'affichage immédiatement
+  //   setProjects(projects.filter((p) => p.id !== id));
+  //   // On supprime dans MySQL via Symfony
+  //   await deleteProjet(id);
+  //   // On recharge tous les projets pour avoir la liste à jour
+  //   const freshProjects = await getProjets();
+  //   if (Array.isArray(freshProjects)) setProjects(freshProjects);
+  // }
+
   async function handleDelete(id) {
     // On supprime de l'affichage immédiatement
     setTasks(tasks.filter((t) => t.id !== id));
@@ -914,6 +929,16 @@ function App() {
 
             {/* ---- PAGE WIKI ---- */}
             {activePage === "wiki" && <PageWiki projects={projects} />}
+
+            {/* ---- PAGE AUTOMATISATIONS ---- */}
+            {activePage === "automatisations" && (
+              <PageAutomatisations projects={projects} />
+            )}
+
+            {/* ---- PAGE RECHERCHE AVANCÉE ---- */}
+            {activePage === "recherche" && (
+              <PageRechercheAvancee projects={projects} />
+            )}
 
             {/* ---- PAGE HISTORIQUE ---- */}
             {activePage === "historique" && <PageHistorique />}
