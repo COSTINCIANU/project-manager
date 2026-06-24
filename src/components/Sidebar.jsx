@@ -28,6 +28,7 @@ function Sidebar({
     { id: "timeline", label: "Timeline", icon: "📅" },
     { id: "stats", label: "Statistiques", icon: "▲" },
     { id: "rapport", label: "Rapport PDF", icon: "📄" },
+    { id: "rapports", label: "Rapports avancés", icon: "📈" },
     { id: "github", label: "GitHub", icon: "🐙" },
     { id: "calendar-sync", label: "Google Calendar", icon: "📅" },
     { id: "api-publique", label: "API Publique", icon: "🔌" },
@@ -41,7 +42,6 @@ function Sidebar({
     { id: "profil", label: "Mon profil", icon: "👤" },
     { id: "automatisations", label: "Automatisations", icon: "🔁" },
     { id: "recherche", label: "Recherche", icon: "🔍" },
-    { id: "rapports", label: "Rapports avancés", icon: "📈" },
   ];
 
   function handleNavigate(id) {
