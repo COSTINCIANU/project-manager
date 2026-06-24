@@ -50,7 +50,9 @@ function PageActivite() {
         },
       });
       const data = await res.json();
-      setLogs(data);
+      // Vérifie que data est bien un tableau avant de l'utiliser
+      if (Array.isArray(data)) setLogs(data);
+      // setLogs(data);
       setLastUpdate(new Date());
     } catch (err) {
       console.error("Erreur chargement activité :", err);

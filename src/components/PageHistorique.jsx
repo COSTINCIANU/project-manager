@@ -28,7 +28,9 @@ function PageHistorique() {
           },
         });
         const data = await res.json();
-        setLogs(data);
+        // Vérifie que data est bien un tableau avant de l'utiliser
+        if (Array.isArray(data)) setLogs(data);
+        // setLogs(data);
       } catch (err) {
         console.error("Erreur chargement historique :", err);
       } finally {

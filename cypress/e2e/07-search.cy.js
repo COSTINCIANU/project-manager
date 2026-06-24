@@ -3,15 +3,15 @@
 // Teste le panneau de filtres et les résultats
 // =====================================================
 
-describe("Recherche avancée", () => {
-  // Ignore les erreurs JS non critiques de l'app
-  Cypress.on("uncaught:exception", (err) => {
-    if (err.message.includes("map is not a function")) {
-      return false;
-    }
-    return true;
-  });
+// Ignore les erreurs JS non critiques de l'app — DOIT être hors du describe
+Cypress.on("uncaught:exception", (err) => {
+  if (err.message.includes("map is not a function")) {
+    return false;
+  }
+  return true;
+});
 
+describe("Recherche avancée", () => {
   // =====================
   // CONNEXION AVANT CHAQUE TEST
   // =====================
@@ -39,6 +39,12 @@ describe("Recherche avancée", () => {
 
     // Navigue vers la page Recherche
     cy.contains("🔍").click({ force: true });
+
+    // Attend que la page soit bien chargée
+    cy.wait(2000);
+
+    // Screenshot pour voir ce que Cypress voit
+    cy.screenshot("page-recherche-debug");
 
     // Attend que le panneau de filtres soit visible
     cy.contains("Filtres de recherche", { timeout: 8000 }).should("exist");
