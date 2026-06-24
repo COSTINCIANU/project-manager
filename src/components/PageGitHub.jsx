@@ -30,7 +30,8 @@ function PageGitHub({ tasks }) {
   useEffect(() => {
     async function load() {
       const data = await getCommits();
-      if (data) setCommits(data);
+      // if (data) setCommits(data);
+      if (Array.isArray(data)) setCommits(data);
       setLoading(false);
     }
     load();

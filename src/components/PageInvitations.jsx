@@ -36,7 +36,8 @@ function PageInvitations({ projects }) {
     async function loadInvitations() {
       if (!projectId) return;
       const data = await getInvitations(projectId);
-      if (data) setInvitations(data);
+      // if (data) setInvitations(data);
+      if (Array.isArray(data)) setInvitations(data);
     }
     loadInvitations();
   }, [projectId]);
@@ -70,7 +71,8 @@ function PageInvitations({ projects }) {
         setEmail("");
         // On recharge les invitations
         const data = await getInvitations(projectId);
-        if (data) setInvitations(data);
+        // if (data) setInvitations(data);
+        if (Array.isArray(data)) setInvitations(data);
       }
     } catch (err) {
       setError("Erreur lors de l'envoi de l'invitation");
