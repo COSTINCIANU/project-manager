@@ -41,6 +41,7 @@ function Sidebar({
     { id: "profil", label: "Mon profil", icon: "👤" },
     { id: "automatisations", label: "Automatisations", icon: "🔁" },
     { id: "recherche", label: "Recherche", icon: "🔍" },
+    { id: "rapports", label: "Rapports avancés", icon: "📈" },
   ];
 
   function handleNavigate(id) {

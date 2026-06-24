@@ -51,6 +51,7 @@ import PageAdmin from "./components/PageAdmin";
 
 import PageRechercheAvancee from "./components/PageRechercheAvancee";
 import PageAutomatisations from "./components/PageAutomatisations";
+import PageRapportsAvances from "./components/PageRapportsAvances";
 
 function App() {
   // =====================
@@ -906,6 +907,11 @@ function App() {
             {/* ---- PAGE RAPPORT PDF ---- */}
             {activePage === "rapport" && (
               <ExportPDF tasks={tasks} projects={projects} users={users} />
+            )}
+
+            {/* ---- PAGE RAPPORTS AVANCÉS ---- */}
+            {activePage === "rapports" && (
+              <PageRapportsAvances projects={projects} />
             )}
 
             {/* ---- PAGE GITHUB ---- */}
