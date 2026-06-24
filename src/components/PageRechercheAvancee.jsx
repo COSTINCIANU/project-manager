@@ -192,7 +192,7 @@ function PageRechercheAvancee({ projects = [] }) {
   // RENDU
   // =====================
   return (
-    <div style={{ maxWidth: "900px" }}>
+    <div style={{ maxWidth: "900px", width: "100%", alignSelf: "center" }}>
       {/* ---- PANNEAU DE FILTRES ---- */}
       <div
         style={{

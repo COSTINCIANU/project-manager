@@ -602,6 +602,9 @@ function App() {
               minWidth: 0,
               color: darkMode ? "#eee" : "#222",
               transition: "color 0.3s",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "stretch",
             }}
           >
             {/* Titre de la page */}
