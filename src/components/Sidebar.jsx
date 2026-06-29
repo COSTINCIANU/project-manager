@@ -26,6 +26,7 @@ function Sidebar({
     { id: "calendrier", label: "Calendrier", icon: "📅" },
     { id: "gantt", label: "Vue Gantt", icon: "📊" },
     { id: "timeline", label: "Timeline", icon: "📅" },
+    { id: "jalons", label: "Jalons", icon: "🏁" },
     { id: "stats", label: "Statistiques", icon: "▲" },
     { id: "rapport", label: "Rapport PDF", icon: "📄" },
     { id: "rapports", label: "Rapports avancés", icon: "📈" },

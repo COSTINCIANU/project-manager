@@ -44,6 +44,7 @@ import PageActivite from "./components/PageActivite";
 import PageChat from "./components/PageChat";
 import PageWiki from "./components/PageWiki";
 import PageVueTimeline from "./components/PageVueTimeline";
+import PageJalons from "./components/PageJalons";
 import PageGoogleCalendar from "./components/PageGoogleCalendar";
 import PageApiPublique from "./components/PageApiPublique";
 import PageStripe from "./components/PageStripe";
@@ -866,6 +867,9 @@ function App() {
 
             {/* ---- PAGE VUE TIMELINE ---- */}
             {activePage === "timeline" && <PageVueTimeline tasks={tasks} projects={projects} />}
+
+            {/* ---- PAGE JALONS ---- */}
+            {activePage === "jalons" && <PageJalons projects={projects} />}
 
             {/* ---- PAGE STATISTIQUES ---- */}
             {activePage === "stats" && (
