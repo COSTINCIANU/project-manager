@@ -153,17 +153,13 @@ function Sidebar({
                   position: "relative",
                 }}
                 onMouseEnter={(e) => {
-                  if (activePage !== item.id)
-                    e.currentTarget.style.background = "#222";
+                  if (activePage !== item.id) e.currentTarget.style.background = "#222";
                 }}
                 onMouseLeave={(e) => {
-                  if (activePage !== item.id)
-                    e.currentTarget.style.background = "transparent";
+                  if (activePage !== item.id) e.currentTarget.style.background = "transparent";
                 }}
               >
-                <span style={{ fontSize: "16px", flexShrink: 0 }}>
-                  {item.icon}
-                </span>
+                <span style={{ fontSize: "16px", flexShrink: 0 }}>{item.icon}</span>
                 <span className="sidebar-label" style={{ flex: 1 }}>
                   {item.label}
                 </span>
@@ -203,9 +199,7 @@ function Sidebar({
                 overflow: "hidden",
               }}
             >
-              <div
-                style={{ fontSize: "10px", color: "#666", marginBottom: "2px" }}
-              >
+              <div style={{ fontSize: "10px", color: "#666", marginBottom: "2px" }}>
                 Connecté en tant que
               </div>
               <div
@@ -239,16 +233,10 @@ function Sidebar({
               overflow: "hidden",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.background = "#222")}
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.background = "transparent")
-            }
+            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
           >
-            <span style={{ fontSize: "16px", flexShrink: 0 }}>
-              {darkMode ? "☀" : "☾"}
-            </span>
-            <span className="sidebar-label">
-              {darkMode ? "Mode clair" : "Mode sombre"}
-            </span>
+            <span style={{ fontSize: "16px", flexShrink: 0 }}>{darkMode ? "☀" : "☾"}</span>
+            <span className="sidebar-label">{darkMode ? "Mode clair" : "Mode sombre"}</span>
           </div>
 
           {/* Déconnexion */}
@@ -268,9 +256,7 @@ function Sidebar({
               overflow: "hidden",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.background = "#222")}
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.background = "transparent")
-            }
+            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
           >
             <span style={{ fontSize: "16px", flexShrink: 0 }}>⏻</span>
             <span className="sidebar-label">Déconnexion</span>

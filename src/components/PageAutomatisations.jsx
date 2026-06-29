@@ -53,7 +53,7 @@ function PageAutomatisations({ projects = [] }) {
 
   // Projet sélectionné pour voir ses règles
   const [projetSelectionne, setProjetSelectionne] = useState(
-    projects.length > 0 ? projects[0].id : null,
+    projects.length > 0 ? projects[0].id : null
   );
 
   // Liste des règles du projet sélectionné
@@ -253,11 +253,7 @@ function PageAutomatisations({ projects = [] }) {
           marginBottom: "1rem",
         }}
       >
-        <div
-          style={{ fontSize: "13px", fontWeight: "500", marginBottom: "8px" }}
-        >
-          Projet
-        </div>
+        <div style={{ fontSize: "13px", fontWeight: "500", marginBottom: "8px" }}>Projet</div>
         <select
           value={projetSelectionne || ""}
           onChange={(e) => setProjetSelectionne(parseInt(e.target.value))}
@@ -300,16 +296,12 @@ function PageAutomatisations({ projects = [] }) {
             type="text"
             placeholder="Ex : Passer en haute priorité quand tâche terminée"
             value={formulaire.nom}
-            onChange={(e) =>
-              setFormulaire({ ...formulaire, nom: e.target.value })
-            }
+            onChange={(e) => setFormulaire({ ...formulaire, nom: e.target.value })}
             style={styleInput}
           />
 
           {/* Déclencheur */}
-          <div style={{ fontSize: "11px", color: "#999", marginBottom: "4px" }}>
-            Quand...
-          </div>
+          <div style={{ fontSize: "11px", color: "#999", marginBottom: "4px" }}>Quand...</div>
           <select
             value={formulaire.declencheur}
             onChange={(e) =>
@@ -331,9 +323,7 @@ function PageAutomatisations({ projects = [] }) {
           {/* Valeur du déclencheur si applicable */}
           {VALEURS_DECLENCHEUR[formulaire.declencheur]?.length > 0 && (
             <>
-              <div
-                style={{ fontSize: "11px", color: "#999", marginBottom: "4px" }}
-              >
+              <div style={{ fontSize: "11px", color: "#999", marginBottom: "4px" }}>
                 Valeur du déclencheur
               </div>
               <select
@@ -357,9 +347,7 @@ function PageAutomatisations({ projects = [] }) {
           )}
 
           {/* Action */}
-          <div style={{ fontSize: "11px", color: "#999", marginBottom: "4px" }}>
-            Alors...
-          </div>
+          <div style={{ fontSize: "11px", color: "#999", marginBottom: "4px" }}>Alors...</div>
           <select
             value={formulaire.action}
             onChange={(e) =>
@@ -381,16 +369,12 @@ function PageAutomatisations({ projects = [] }) {
           {/* Valeur de l'action si applicable */}
           {VALEURS_ACTION[formulaire.action]?.length > 0 && (
             <>
-              <div
-                style={{ fontSize: "11px", color: "#999", marginBottom: "4px" }}
-              >
+              <div style={{ fontSize: "11px", color: "#999", marginBottom: "4px" }}>
                 Valeur de l'action
               </div>
               <select
                 value={formulaire.valeurAction}
-                onChange={(e) =>
-                  setFormulaire({ ...formulaire, valeurAction: e.target.value })
-                }
+                onChange={(e) => setFormulaire({ ...formulaire, valeurAction: e.target.value })}
                 style={styleSelect}
               >
                 <option value="">-- Choisir --</option>
@@ -432,9 +416,7 @@ function PageAutomatisations({ projects = [] }) {
           padding: "1rem 1.25rem",
         }}
       >
-        <div
-          style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}
-        >
+        <div style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}>
           Règles actives — {regles.length} règle{regles.length > 1 ? "s" : ""}
         </div>
 
@@ -497,10 +479,7 @@ function PageAutomatisations({ projects = [] }) {
                 </div>
                 <div style={{ fontSize: "12px", color: "#888" }}>
                   {/* Affiche le déclencheur en français */}
-                  {
-                    DECLENCHEURS.find((d) => d.valeur === regle.declencheur)
-                      ?.label
-                  }
+                  {DECLENCHEURS.find((d) => d.valeur === regle.declencheur)?.label}
                   {regle.valeurDeclencheur && ` → ${regle.valeurDeclencheur}`}
                   {" ⟶ "}
                   {/* Affiche l'action en français */}

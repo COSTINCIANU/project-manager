@@ -50,17 +50,14 @@ function PageAdmin() {
   // =====================
   async function handlePlanChange(userId, plan) {
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/admin/users/${userId}/plan`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
-          },
-          body: JSON.stringify({ plan }),
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/admin/users/${userId}/plan`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
         },
-      );
+        body: JSON.stringify({ plan }),
+      });
 
       if (res.ok) {
         setUsers(users.map((u) => (u.id === userId ? { ...u, plan } : u)));
@@ -78,15 +75,12 @@ function PageAdmin() {
   // =====================
   async function handleToggle(userId) {
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/admin/users/${userId}/toggle`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
-          },
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/admin/users/${userId}/toggle`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
         },
-      );
+      });
 
       if (res.ok) {
         loadData();
@@ -105,15 +99,12 @@ function PageAdmin() {
     if (!confirm(`Supprimer l'utilisateur ${email} ?`)) return;
 
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/admin/users/${userId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
-          },
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/admin/users/${userId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
         },
-      );
+      });
 
       if (res.ok) {
         setUsers(users.filter((u) => u.id !== userId));
@@ -141,11 +132,7 @@ function PageAdmin() {
   }
 
   if (loading) {
-    return (
-      <div style={{ textAlign: "center", padding: "3rem", color: "#aaa" }}>
-        Chargement...
-      </div>
-    );
+    return <div style={{ textAlign: "center", padding: "3rem", color: "#aaa" }}>Chargement...</div>;
   }
 
   // =====================
@@ -162,9 +149,7 @@ function PageAdmin() {
       }}
     >
       {/* ---- EN-TÊTE ---- */}
-      <div style={{ fontSize: "18px", fontWeight: "600", color: "#111" }}>
-        🛡️ Dashboard Admin
-      </div>
+      <div style={{ fontSize: "18px", fontWeight: "600", color: "#111" }}>🛡️ Dashboard Admin</div>
 
       {/* Message */}
       {message && (
@@ -226,9 +211,7 @@ function PageAdmin() {
                 textAlign: "center",
               }}
             >
-              <div style={{ fontSize: "24px", marginBottom: "4px" }}>
-                {stat.icon}
-              </div>
+              <div style={{ fontSize: "24px", marginBottom: "4px" }}>{stat.icon}</div>
               <div
                 style={{
                   fontSize: "22px",
@@ -238,9 +221,7 @@ function PageAdmin() {
               >
                 {stat.value}
               </div>
-              <div style={{ fontSize: "11px", color: "#aaa" }}>
-                {stat.label}
-              </div>
+              <div style={{ fontSize: "11px", color: "#aaa" }}>{stat.label}</div>
             </div>
           ))}
         </div>
@@ -255,9 +236,7 @@ function PageAdmin() {
           padding: "1.5rem",
         }}
       >
-        <div
-          style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}
-        >
+        <div style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}>
           👤 Utilisateurs ({users.length})
         </div>
 
@@ -325,9 +304,7 @@ function PageAdmin() {
                 </div>
 
                 {/* Actions */}
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
-                >
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                   {/* Sélecteur de plan */}
                   <select
                     value={user.plan}

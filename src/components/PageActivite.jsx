@@ -71,10 +71,7 @@ function PageActivite() {
     // Connexion Mercure — temps réel !
     try {
       const url = new URL("https://mercure.costincianu.fr/.well-known/mercure");
-      url.searchParams.append(
-        "topic",
-        "https://project-manager.costincianu.fr/activity",
-      );
+      url.searchParams.append("topic", "https://project-manager.costincianu.fr/activity");
 
       const es = new EventSource(url.toString());
 
@@ -229,9 +226,7 @@ function PageActivite() {
         </div>
 
         {activeUsers.length === 0 ? (
-          <div style={{ fontSize: "13px", color: "#aaa" }}>
-            Aucun membre actif en ce moment
-          </div>
+          <div style={{ fontSize: "13px", color: "#aaa" }}>Aucun membre actif en ce moment</div>
         ) : (
           <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
             {activeUsers.map((email) => (
@@ -282,9 +277,7 @@ function PageActivite() {
             marginBottom: "1rem",
           }}
         >
-          <div style={{ fontSize: "14px", fontWeight: "500" }}>
-            ⚡ Flux d'activité
-          </div>
+          <div style={{ fontSize: "14px", fontWeight: "500" }}>⚡ Flux d'activité</div>
           <div
             style={{
               display: "flex",
@@ -365,15 +358,11 @@ function PageActivite() {
                 }}
               >
                 {/* Icône */}
-                <div style={{ fontSize: "18px", flexShrink: 0 }}>
-                  {getActionIcon(log.action)}
-                </div>
+                <div style={{ fontSize: "18px", flexShrink: 0 }}>{getActionIcon(log.action)}</div>
 
                 {/* Infos */}
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: "13px", color: "#222" }}>
-                    {log.description}
-                  </div>
+                  <div style={{ fontSize: "13px", color: "#222" }}>{log.description}</div>
                   <div
                     style={{
                       fontSize: "11px",

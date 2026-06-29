@@ -5,16 +5,7 @@
 // et les boutons modifier/supprimer
 // =====================================================
 
-function TaskItem({
-  task,
-  projectName,
-  onToggle,
-  onDelete,
-  onEdit,
-  users,
-  userRole,
-  tasks,
-}) {
+function TaskItem({ task, projectName, onToggle, onDelete, onEdit, users, userRole, tasks }) {
   // =====================
   // CALCUL DE LA DATE D'ÉCHÉANCE
   // =====================
@@ -27,9 +18,7 @@ function TaskItem({
   const due = task.dueDate ? new Date(task.dueDate) : null;
 
   // Nombre de jours restants avant l'échéance
-  const daysLeft = due
-    ? Math.ceil((due - today) / (1000 * 60 * 60 * 24))
-    : null;
+  const daysLeft = due ? Math.ceil((due - today) / (1000 * 60 * 60 * 24)) : null;
 
   // Couleur selon l'urgence de la date d'échéance
   function getDueDateColor() {
@@ -59,8 +48,7 @@ function TaskItem({
   const subTasksTotal = subTasks.length;
 
   // Pourcentage de complétion des sous-tâches
-  const subTasksPercent =
-    subTasksTotal > 0 ? Math.round((subTasksDone / subTasksTotal) * 100) : 0;
+  const subTasksPercent = subTasksTotal > 0 ? Math.round((subTasksDone / subTasksTotal) * 100) : 0;
 
   // =====================
   // COULEUR DE LA PRIORITÉ
@@ -104,9 +92,7 @@ function TaskItem({
   // Si elle n'est pas terminée, la tâche est bloquée
   // =====================
   const dependsOnTask =
-    task.dependsOn && Array.isArray(tasks)
-      ? tasks.find((t) => t.id === task.dependsOn)
-      : null;
+    task.dependsOn && Array.isArray(tasks) ? tasks.find((t) => t.id === task.dependsOn) : null;
   const isBlocked = dependsOnTask && !dependsOnTask.done;
 
   // =====================
@@ -221,10 +207,7 @@ function TaskItem({
                 style={{
                   fontSize: "10px",
                   color: getDueDateColor(),
-                  fontWeight:
-                    daysLeft !== null && daysLeft <= 3 && !task.done
-                      ? "500"
-                      : "400",
+                  fontWeight: daysLeft !== null && daysLeft <= 3 && !task.done ? "500" : "400",
                 }}
               >
                 📅 {getDueDateText()}
@@ -251,8 +234,7 @@ function TaskItem({
             <div style={{ fontSize: "10px", color: "#aaa" }}>
               👤{" "}
               {Array.isArray(users)
-                ? users.find((u) => u.id === task.assignedTo)?.email ||
-                  "Inconnu"
+                ? users.find((u) => u.id === task.assignedTo)?.email || "Inconnu"
                 : "Inconnu"}
             </div>
           )}
@@ -288,9 +270,7 @@ function TaskItem({
                 />
               </div>
               {/* Pourcentage */}
-              <span style={{ fontSize: "10px", color: "#aaa" }}>
-                {subTasksPercent}%
-              </span>
+              <span style={{ fontSize: "10px", color: "#aaa" }}>{subTasksPercent}%</span>
             </div>
           )}
 

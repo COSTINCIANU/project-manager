@@ -33,9 +33,7 @@ function PageStats({ tasks, projects, users }) {
 
   // Taux de complétion global
   const tauxCompletion = safeTasks.length
-    ? Math.round(
-        (safeTasks.filter((t) => t.done).length / safeTasks.length) * 100,
-      )
+    ? Math.round((safeTasks.filter((t) => t.done).length / safeTasks.length) * 100)
     : 0;
 
   // Tâches en retard
@@ -47,20 +45,14 @@ function PageStats({ tasks, projects, users }) {
   }).length;
 
   // Temps total estimé en heures
-  const tempsEstimeTotalMin = safeTasks.reduce(
-    (acc, t) => acc + (t.estimatedTime || 0),
-    0,
-  );
+  const tempsEstimeTotalMin = safeTasks.reduce((acc, t) => acc + (t.estimatedTime || 0), 0);
   const tempsEstimeTotalH = Math.round((tempsEstimeTotalMin / 60) * 10) / 10;
 
   // Total sous-tâches
-  const totalSousTaches = safeTasks.reduce(
-    (acc, t) => acc + (t.subTasks?.length || 0),
-    0,
-  );
+  const totalSousTaches = safeTasks.reduce((acc, t) => acc + (t.subTasks?.length || 0), 0);
   const sousTachesTerminees = safeTasks.reduce(
     (acc, t) => acc + (t.subTasks?.filter((st) => st.done).length || 0),
-    0,
+    0
   );
 
   // =====================
@@ -132,8 +124,7 @@ function PageStats({ tasks, projects, users }) {
     .map((u) => ({
       name: u.email.split("@")[0],
       total: safeTasks.filter((t) => t.assignedTo === u.id).length,
-      terminees: safeTasks.filter((t) => t.assignedTo === u.id && t.done)
-        .length,
+      terminees: safeTasks.filter((t) => t.assignedTo === u.id && t.done).length,
     }))
     .filter((u) => u.total > 0);
 
@@ -233,9 +224,7 @@ function PageStats({ tasks, projects, users }) {
           <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
             Complétion globale
           </div>
-          <div
-            style={{ fontSize: "24px", fontWeight: "600", color: "#378ADD" }}
-          >
+          <div style={{ fontSize: "24px", fontWeight: "600", color: "#378ADD" }}>
             {tauxCompletion}%
           </div>
           <div
@@ -270,9 +259,7 @@ function PageStats({ tasks, projects, users }) {
           <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
             Tâches terminées
           </div>
-          <div
-            style={{ fontSize: "24px", fontWeight: "600", color: "#639922" }}
-          >
+          <div style={{ fontSize: "24px", fontWeight: "600", color: "#639922" }}>
             {safeTasks.filter((t) => t.done).length}
           </div>
           <div style={{ fontSize: "11px", color: "#bbb", marginTop: "4px" }}>
@@ -290,9 +277,7 @@ function PageStats({ tasks, projects, users }) {
             padding: "16px 18px",
           }}
         >
-          <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
-            En retard
-          </div>
+          <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>En retard</div>
           <div
             style={{
               fontSize: "24px",
@@ -319,9 +304,7 @@ function PageStats({ tasks, projects, users }) {
           <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
             Temps estimé total
           </div>
-          <div
-            style={{ fontSize: "24px", fontWeight: "600", color: "#BA7517" }}
-          >
+          <div style={{ fontSize: "24px", fontWeight: "600", color: "#BA7517" }}>
             {tempsEstimeTotalH}h
           </div>
           <div style={{ fontSize: "11px", color: "#bbb", marginTop: "4px" }}>
@@ -349,12 +332,8 @@ function PageStats({ tasks, projects, users }) {
             padding: "16px 18px",
           }}
         >
-          <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
-            Projets actifs
-          </div>
-          <div
-            style={{ fontSize: "24px", fontWeight: "600", color: "#9B59B6" }}
-          >
+          <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>Projets actifs</div>
+          <div style={{ fontSize: "24px", fontWeight: "600", color: "#9B59B6" }}>
             {safeProjects.filter((p) => p.status === "En cours").length}
           </div>
           <div style={{ fontSize: "11px", color: "#bbb", marginTop: "4px" }}>
@@ -371,17 +350,11 @@ function PageStats({ tasks, projects, users }) {
             padding: "16px 18px",
           }}
         >
-          <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
-            Sous-tâches
-          </div>
-          <div
-            style={{ fontSize: "24px", fontWeight: "600", color: "#00695C" }}
-          >
+          <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>Sous-tâches</div>
+          <div style={{ fontSize: "24px", fontWeight: "600", color: "#00695C" }}>
             {sousTachesTerminees}/{totalSousTaches}
           </div>
-          <div style={{ fontSize: "11px", color: "#bbb", marginTop: "4px" }}>
-            terminées
-          </div>
+          <div style={{ fontSize: "11px", color: "#bbb", marginTop: "4px" }}>terminées</div>
         </div>
 
         {/* Membres actifs */}
@@ -393,17 +366,11 @@ function PageStats({ tasks, projects, users }) {
             padding: "16px 18px",
           }}
         >
-          <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
-            Membres actifs
-          </div>
-          <div
-            style={{ fontSize: "24px", fontWeight: "600", color: "#1976D2" }}
-          >
+          <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>Membres actifs</div>
+          <div style={{ fontSize: "24px", fontWeight: "600", color: "#1976D2" }}>
             {safeUsers.length}
           </div>
-          <div style={{ fontSize: "11px", color: "#bbb", marginTop: "4px" }}>
-            utilisateurs
-          </div>
+          <div style={{ fontSize: "11px", color: "#bbb", marginTop: "4px" }}>utilisateurs</div>
         </div>
       </div>
 
@@ -445,10 +412,7 @@ function PageStats({ tasks, projects, users }) {
             }}
           >
             {dataPriorite.map((d) => {
-              const pct =
-                safeTasks.length > 0
-                  ? Math.round((d.value / safeTasks.length) * 100)
-                  : 0;
+              const pct = safeTasks.length > 0 ? Math.round((d.value / safeTasks.length) * 100) : 0;
               return (
                 <div key={d.name} style={{ textAlign: "center", width: "45%" }}>
                   <div
@@ -460,14 +424,7 @@ function PageStats({ tasks, projects, users }) {
                     }}
                   >
                     <svg width="70" height="70" viewBox="0 0 70 70">
-                      <circle
-                        cx="35"
-                        cy="35"
-                        r="28"
-                        fill="none"
-                        stroke="#f0f0f0"
-                        strokeWidth="8"
-                      />
+                      <circle cx="35" cy="35" r="28" fill="none" stroke="#f0f0f0" strokeWidth="8" />
                       <circle
                         cx="35"
                         cy="35"
@@ -494,9 +451,7 @@ function PageStats({ tasks, projects, users }) {
                       {d.value}
                     </div>
                   </div>
-                  <div style={{ fontSize: "11px", color: "#666" }}>
-                    {d.name}
-                  </div>
+                  <div style={{ fontSize: "11px", color: "#666" }}>{d.name}</div>
                 </div>
               );
             })}
@@ -531,10 +486,7 @@ function PageStats({ tasks, projects, users }) {
             }}
           >
             {dataStatut.map((d) => {
-              const pct =
-                safeTasks.length > 0
-                  ? Math.round((d.value / safeTasks.length) * 100)
-                  : 0;
+              const pct = safeTasks.length > 0 ? Math.round((d.value / safeTasks.length) * 100) : 0;
               return (
                 <div key={d.name} style={{ textAlign: "center", width: "45%" }}>
                   <div
@@ -546,14 +498,7 @@ function PageStats({ tasks, projects, users }) {
                     }}
                   >
                     <svg width="70" height="70" viewBox="0 0 70 70">
-                      <circle
-                        cx="35"
-                        cy="35"
-                        r="28"
-                        fill="none"
-                        stroke="#f0f0f0"
-                        strokeWidth="8"
-                      />
+                      <circle cx="35" cy="35" r="28" fill="none" stroke="#f0f0f0" strokeWidth="8" />
                       <circle
                         cx="35"
                         cy="35"
@@ -580,9 +525,7 @@ function PageStats({ tasks, projects, users }) {
                       {d.value}
                     </div>
                   </div>
-                  <div style={{ fontSize: "11px", color: "#666" }}>
-                    {d.name}
-                  </div>
+                  <div style={{ fontSize: "11px", color: "#666" }}>{d.name}</div>
                 </div>
               );
             })}
@@ -600,9 +543,7 @@ function PageStats({ tasks, projects, users }) {
           marginBottom: "14px",
         }}
       >
-        <div
-          style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}
-        >
+        <div style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}>
           Tâches par projet
         </div>
         {dataTachesParProjet.length === 0 ? (
@@ -627,9 +568,7 @@ function PageStats({ tasks, projects, users }) {
                   marginBottom: "4px",
                 }}
               >
-                <span style={{ color: "#333", fontWeight: "500" }}>
-                  {p.name}
-                </span>
+                <span style={{ color: "#333", fontWeight: "500" }}>{p.name}</span>
                 <span style={{ color: "#888" }}>
                   {p.terminees}/{p.total} terminées
                 </span>
@@ -698,9 +637,7 @@ function PageStats({ tasks, projects, users }) {
                   marginBottom: "4px",
                 }}
               >
-                <span style={{ color: "#333", fontWeight: "500" }}>
-                  👤 {u.name}
-                </span>
+                <span style={{ color: "#333", fontWeight: "500" }}>👤 {u.name}</span>
                 <span style={{ color: "#888" }}>
                   {u.terminees}/{u.total} terminées
                 </span>
@@ -794,16 +731,9 @@ function PageStats({ tasks, projects, users }) {
 
         {/* Graphique */}
         <ResponsiveContainer width="100%" height={250}>
-          <LineChart
-            data={burndownData}
-            margin={{ top: 5, right: 10, left: -20, bottom: 5 }}
-          >
+          <LineChart data={burndownData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis
-              dataKey="jour"
-              tick={{ fontSize: 10, fill: "#aaa" }}
-              interval={4}
-            />
+            <XAxis dataKey="jour" tick={{ fontSize: 10, fill: "#aaa" }} interval={4} />
             <YAxis tick={{ fontSize: 10, fill: "#aaa" }} />
             <Tooltip
               contentStyle={{

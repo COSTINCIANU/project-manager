@@ -100,9 +100,7 @@ function LandingPage({ onLogin }) {
   ];
 
   return (
-    <div
-      style={{ fontFamily: "sans-serif", color: "#222", overflowX: "hidden" }}
-    >
+    <div style={{ fontFamily: "sans-serif", color: "#222", overflowX: "hidden" }}>
       {/* ---- NAVBAR ---- */}
       <nav
         style={{
@@ -121,20 +119,12 @@ function LandingPage({ onLogin }) {
           zIndex: 100,
         }}
       >
-        <div style={{ fontSize: "16px", fontWeight: "700", color: "#111" }}>
-          📊 Project Manager
-        </div>
+        <div style={{ fontSize: "16px", fontWeight: "700", color: "#111" }}>📊 Project Manager</div>
         <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
-          <a
-            href="#features"
-            style={{ fontSize: "13px", color: "#666", textDecoration: "none" }}
-          >
+          <a href="#features" style={{ fontSize: "13px", color: "#666", textDecoration: "none" }}>
             Fonctionnalités
           </a>
-          <a
-            href="#pricing"
-            style={{ fontSize: "13px", color: "#666", textDecoration: "none" }}
-          >
+          <a href="#pricing" style={{ fontSize: "13px", color: "#666", textDecoration: "none" }}>
             Tarifs
           </a>
           <button
@@ -159,8 +149,7 @@ function LandingPage({ onLogin }) {
       <section
         style={{
           minHeight: "100vh",
-          background:
-            "linear-gradient(135deg, #111 0%, #333 50%, #1a1a2e 100%)",
+          background: "linear-gradient(135deg, #111 0%, #333 50%, #1a1a2e 100%)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -210,8 +199,8 @@ function LandingPage({ onLogin }) {
             marginBottom: "2.5rem",
           }}
         >
-          Project Manager est l'outil tout-en-un pour gérer vos projets, tâches
-          et équipes — avec l'aide de l'intelligence artificielle.
+          Project Manager est l'outil tout-en-un pour gérer vos projets, tâches et équipes — avec
+          l'aide de l'intelligence artificielle.
         </p>
 
         <div
@@ -271,16 +260,8 @@ function LandingPage({ onLogin }) {
             { value: "100%", label: "Gratuit pour commencer" },
           ].map((stat, i) => (
             <div key={i} style={{ textAlign: "center" }}>
-              <div
-                style={{ fontSize: "32px", fontWeight: "800", color: "#fff" }}
-              >
-                {stat.value}
-              </div>
-              <div
-                style={{ fontSize: "13px", color: "#888", marginTop: "4px" }}
-              >
-                {stat.label}
-              </div>
+              <div style={{ fontSize: "32px", fontWeight: "800", color: "#fff" }}>{stat.value}</div>
+              <div style={{ fontSize: "13px", color: "#888", marginTop: "4px" }}>{stat.label}</div>
             </div>
           ))}
         </div>
@@ -345,9 +326,7 @@ function LandingPage({ onLogin }) {
                 e.currentTarget.style.boxShadow = "none";
               }}
             >
-              <div style={{ fontSize: "32px", marginBottom: "12px" }}>
-                {feature.icon}
-              </div>
+              <div style={{ fontSize: "32px", marginBottom: "12px" }}>{feature.icon}</div>
               <div
                 style={{
                   fontSize: "15px",
@@ -358,9 +337,7 @@ function LandingPage({ onLogin }) {
               >
                 {feature.title}
               </div>
-              <div
-                style={{ fontSize: "13px", color: "#888", lineHeight: "1.6" }}
-              >
+              <div style={{ fontSize: "13px", color: "#888", lineHeight: "1.6" }}>
                 {feature.desc}
               </div>
             </div>
@@ -369,10 +346,7 @@ function LandingPage({ onLogin }) {
       </section>
 
       {/* ---- TARIFS ---- */}
-      <section
-        id="pricing"
-        style={{ padding: "6rem 2rem", background: "#f9f9f9" }}
-      >
+      <section id="pricing" style={{ padding: "6rem 2rem", background: "#f9f9f9" }}>
         <div style={{ textAlign: "center", marginBottom: "3rem" }}>
           <h2
             style={{
@@ -411,9 +385,7 @@ function LandingPage({ onLogin }) {
                 maxWidth: "280px",
                 border: plan.highlighted ? "none" : "1px solid #eee",
                 position: "relative",
-                boxShadow: plan.highlighted
-                  ? "0 20px 60px rgba(0,0,0,0.2)"
-                  : "none",
+                boxShadow: plan.highlighted ? "0 20px 60px rgba(0,0,0,0.2)" : "none",
               }}
             >
               {plan.highlighted && (

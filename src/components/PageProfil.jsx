@@ -147,20 +147,17 @@ function PageProfil({ userEmail }) {
   async function handleToggle2FA() {
     setTwoFactorLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/auth/2fa/toggle`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
-          },
-          body: JSON.stringify({
-            email: userEmail,
-            enabled: !twoFactorEnabled,
-          }),
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/2fa/toggle`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
         },
-      );
+        body: JSON.stringify({
+          email: userEmail,
+          enabled: !twoFactorEnabled,
+        }),
+      });
       const data = await res.json();
       if (res.ok) {
         setTwoFactorEnabled(!twoFactorEnabled);
@@ -244,10 +241,7 @@ function PageProfil({ userEmail }) {
             >
               {avatarPreview || profile?.avatar ? (
                 <img
-                  src={
-                    avatarPreview ||
-                    `https://api.costincianu.fr${profile.avatar}`
-                  }
+                  src={avatarPreview || `https://api.costincianu.fr${profile.avatar}`}
                   alt="avatar"
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
@@ -290,13 +284,9 @@ function PageProfil({ userEmail }) {
             <div style={{ fontSize: "16px", fontWeight: "600", color: "#111" }}>
               {name || userEmail}
             </div>
-            <div style={{ fontSize: "13px", color: "#aaa", marginTop: "2px" }}>
-              {userEmail}
-            </div>
+            <div style={{ fontSize: "13px", color: "#aaa", marginTop: "2px" }}>{userEmail}</div>
             <div style={{ fontSize: "11px", color: "#aaa", marginTop: "4px" }}>
-              {uploadingAvatar
-                ? "Upload en cours..."
-                : "Cliquez sur la photo pour changer"}
+              {uploadingAvatar ? "Upload en cours..." : "Cliquez sur la photo pour changer"}
             </div>
             <div
               style={{
@@ -348,9 +338,7 @@ function PageProfil({ userEmail }) {
 
         {/* Champ nom */}
         <div style={{ marginBottom: "12px" }}>
-          <div style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}>
-            Nom affiché
-          </div>
+          <div style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}>Nom affiché</div>
           <input
             type="text"
             value={name}
@@ -370,9 +358,7 @@ function PageProfil({ userEmail }) {
 
         {/* Champ rôle */}
         <div style={{ marginBottom: "12px" }}>
-          <div style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}>
-            Rôle
-          </div>
+          <div style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}>Rôle</div>
           <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
@@ -419,9 +405,7 @@ function PageProfil({ userEmail }) {
         {/* Confirmer mot de passe */}
         {password && (
           <div style={{ marginBottom: "12px" }}>
-            <div
-              style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}
-            >
+            <div style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}>
               Confirmer le mot de passe
             </div>
             <input
@@ -509,11 +493,7 @@ function PageProfil({ userEmail }) {
               color: twoFactorEnabled ? "#A32D2D" : "#3B6D11",
             }}
           >
-            {twoFactorLoading
-              ? "..."
-              : twoFactorEnabled
-                ? "Désactiver"
-                : "Activer"}
+            {twoFactorLoading ? "..." : twoFactorEnabled ? "Désactiver" : "Activer"}
           </button>
         </div>
       </div>
@@ -527,9 +507,7 @@ function PageProfil({ userEmail }) {
           padding: "1.5rem",
         }}
       >
-        <div
-          style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}
-        >
+        <div style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}>
           🔔 Notifications push
         </div>
         {!isSupported ? (
@@ -545,14 +523,10 @@ function PageProfil({ userEmail }) {
             }}
           >
             <div>
-              <div
-                style={{ fontSize: "13px", color: "#333", fontWeight: "500" }}
-              >
+              <div style={{ fontSize: "13px", color: "#333", fontWeight: "500" }}>
                 Notifications navigateur
               </div>
-              <div
-                style={{ fontSize: "12px", color: "#aaa", marginTop: "2px" }}
-              >
+              <div style={{ fontSize: "12px", color: "#aaa", marginTop: "2px" }}>
                 Recevez des alertes même quand l'app est fermée
               </div>
             </div>
@@ -615,9 +589,7 @@ function PageProfil({ userEmail }) {
             >
               <span style={{ color: "#aaa" }}>Membre depuis</span>
               <span style={{ color: "#333" }}>
-                {profile.createdAt
-                  ? new Date(profile.createdAt).toLocaleDateString("fr-FR")
-                  : "—"}
+                {profile.createdAt ? new Date(profile.createdAt).toLocaleDateString("fr-FR") : "—"}
               </span>
             </div>
             <div

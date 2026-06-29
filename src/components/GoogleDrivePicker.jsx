@@ -9,9 +9,7 @@
 import { useEffect, useState } from "react";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-const DISCOVERY_DOCS = [
-  "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
-];
+const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 const SCOPES = "https://www.googleapis.com/auth/drive.readonly";
 
 // Durée de validité du token en millisecondes (10 minutes)
@@ -53,9 +51,7 @@ function GoogleDrivePicker({ onFilePicked }) {
     gapiScript.src = "https://apis.google.com/js/api.js";
     gapiScript.onload = () => {
       window.gapi.load("client:picker", () => {
-        window.gapi.client
-          .init({ discoveryDocs: DISCOVERY_DOCS })
-          .then(() => setGapiLoaded(true));
+        window.gapi.client.init({ discoveryDocs: DISCOVERY_DOCS }).then(() => setGapiLoaded(true));
       });
     };
     document.body.appendChild(gapiScript);
@@ -159,8 +155,7 @@ function GoogleDrivePicker({ onFilePicked }) {
         background: loading || !gapiLoaded || !gisLoaded ? "#f0f0f0" : "#fff",
         border: "1px solid #ddd",
         borderRadius: "8px",
-        cursor:
-          loading || !gapiLoaded || !gisLoaded ? "not-allowed" : "pointer",
+        cursor: loading || !gapiLoaded || !gisLoaded ? "not-allowed" : "pointer",
         fontSize: "13px",
         color: "#444",
         fontWeight: "500",

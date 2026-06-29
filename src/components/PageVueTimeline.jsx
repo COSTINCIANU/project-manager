@@ -56,8 +56,7 @@ function PageVueTimeline({ tasks, projects }) {
   const filteredTasks = useMemo(() => {
     return safeTasks.filter((t) => {
       if (!t.dueDate) return false;
-      if (filterProject !== "tous" && t.projectId !== parseInt(filterProject))
-        return false;
+      if (filterProject !== "tous" && t.projectId !== parseInt(filterProject)) return false;
       return true;
     });
   }, [safeTasks, filterProject]);
@@ -155,9 +154,7 @@ function PageVueTimeline({ tasks, projects }) {
           flexWrap: "wrap",
         }}
       >
-        <span style={{ fontSize: "14px", fontWeight: "500" }}>
-          📅 Vue Timeline
-        </span>
+        <span style={{ fontSize: "14px", fontWeight: "500" }}>📅 Vue Timeline</span>
 
         {/* Filtre projet */}
         <select
@@ -301,8 +298,7 @@ function PageVueTimeline({ tasks, projects }) {
                 {(() => {
                   const today = new Date();
                   const totalMs = endDate.getTime() - startDate.getTime();
-                  const leftPct =
-                    ((today.getTime() - startDate.getTime()) / totalMs) * 100;
+                  const leftPct = ((today.getTime() - startDate.getTime()) / totalMs) * 100;
                   if (leftPct < 0 || leftPct > 100) return null;
                   return (
                     <div
@@ -349,12 +345,8 @@ function PageVueTimeline({ tasks, projects }) {
                       minHeight: "44px",
                       alignItems: "center",
                     }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.background = "#fafafa")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.background = "transparent")
-                    }
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "#fafafa")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                   >
                     {/* Nom de la tâche */}
                     <div
@@ -389,9 +381,7 @@ function PageVueTimeline({ tasks, projects }) {
                     </div>
 
                     {/* Barre timeline */}
-                    <div
-                      style={{ flex: 1, position: "relative", height: "44px" }}
-                    >
+                    <div style={{ flex: 1, position: "relative", height: "44px" }}>
                       {/* Fond alterné */}
                       <div
                         style={{
@@ -430,9 +420,7 @@ function PageVueTimeline({ tasks, projects }) {
                       {(() => {
                         const today = new Date();
                         const totalMs = endDate.getTime() - startDate.getTime();
-                        const leftPct =
-                          ((today.getTime() - startDate.getTime()) / totalMs) *
-                          100;
+                        const leftPct = ((today.getTime() - startDate.getTime()) / totalMs) * 100;
                         if (leftPct < 0 || leftPct > 100) return null;
                         return (
                           <div

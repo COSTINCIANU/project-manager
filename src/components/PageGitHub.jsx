@@ -44,9 +44,7 @@ function PageGitHub({ tasks }) {
   // Trouve le nom de la tâche liée
   function getTaskName(taskId) {
     if (!taskId) return null;
-    const task = Array.isArray(tasks)
-      ? tasks.find((t) => t.id === taskId)
-      : null;
+    const task = Array.isArray(tasks) ? tasks.find((t) => t.id === taskId) : null;
     return task ? task.name : `Tâche #${taskId}`;
   }
 
@@ -81,8 +79,7 @@ function PageGitHub({ tasks }) {
               fontWeight: activeTab === tab.id ? "500" : "400",
               background: activeTab === tab.id ? "#fff" : "transparent",
               color: activeTab === tab.id ? "#111" : "#888",
-              boxShadow:
-                activeTab === tab.id ? "0 1px 4px rgba(0,0,0,0.08)" : "none",
+              boxShadow: activeTab === tab.id ? "0 1px 4px rgba(0,0,0,0.08)" : "none",
             }}
           >
             {tab.label}
@@ -111,11 +108,7 @@ function PageGitHub({ tasks }) {
           </div>
 
           {loading ? (
-            <div
-              style={{ textAlign: "center", color: "#aaa", padding: "2rem" }}
-            >
-              Chargement...
-            </div>
+            <div style={{ textAlign: "center", color: "#aaa", padding: "2rem" }}>Chargement...</div>
           ) : commits.length === 0 ? (
             <div
               style={{
@@ -125,8 +118,7 @@ function PageGitHub({ tasks }) {
                 fontSize: "13px",
               }}
             >
-              Aucun commit pour l'instant — configurez le webhook GitHub pour
-              commencer !
+              Aucun commit pour l'instant — configurez le webhook GitHub pour commencer !
             </div>
           ) : (
             commits.map((commit) => (
@@ -171,12 +163,8 @@ function PageGitHub({ tasks }) {
                       target="_blank"
                       rel="noreferrer"
                       style={{ color: "#222", textDecoration: "none" }}
-                      onMouseEnter={(e) =>
-                        (e.currentTarget.style.color = "#378ADD")
-                      }
-                      onMouseLeave={(e) =>
-                        (e.currentTarget.style.color = "#222")
-                      }
+                      onMouseEnter={(e) => (e.currentTarget.style.color = "#378ADD")}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = "#222")}
                     >
                       {commit.message}
                     </a>
@@ -194,10 +182,7 @@ function PageGitHub({ tasks }) {
                   >
                     <span>👤 {commit.author}</span>
                     <span>📁 {commit.repository}</span>
-                    <span>
-                      📅{" "}
-                      {new Date(commit.committedAt).toLocaleDateString("fr-FR")}
-                    </span>
+                    <span>📅 {new Date(commit.committedAt).toLocaleDateString("fr-FR")}</span>
 
                     {/* Tâche liée */}
                     {commit.taskId && (
@@ -312,9 +297,7 @@ function PageGitHub({ tasks }) {
                   >
                     {item.title}
                   </div>
-                  <div style={{ fontSize: "12px", color: "#666" }}>
-                    {item.desc}
-                  </div>
+                  <div style={{ fontSize: "12px", color: "#666" }}>{item.desc}</div>
                   {item.code && (
                     <div
                       style={{
@@ -355,9 +338,7 @@ function PageGitHub({ tasks }) {
             >
               💡 Convention des messages de commit
             </div>
-            <div
-              style={{ fontSize: "13px", color: "#1565C0", lineHeight: "1.6" }}
-            >
+            <div style={{ fontSize: "13px", color: "#1565C0", lineHeight: "1.6" }}>
               Pour lier un commit à une tâche, ajoute #ID dans ton message :
             </div>
             <div

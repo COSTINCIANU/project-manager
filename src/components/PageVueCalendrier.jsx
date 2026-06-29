@@ -106,9 +106,7 @@ function PageVueCalendrier({ tasks, projects, onEdit }) {
     // Vérifie si une tâche est en retard
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const hasOverdue = dayTasks.some(
-      (t) => !t.done && new Date(t.dueDate) < today,
-    );
+    const hasOverdue = dayTasks.some((t) => !t.done && new Date(t.dueDate) < today);
     if (hasOverdue) return "has-overdue-tasks";
     return "has-tasks";
   }
@@ -324,8 +322,7 @@ function PageVueCalendrier({ tasks, projects, onEdit }) {
                   transition: "box-shadow 0.15s",
                 }}
                 onMouseEnter={(e) =>
-                  (e.currentTarget.style.boxShadow =
-                    "0 2px 8px rgba(0,0,0,0.08)")
+                  (e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.08)")
                 }
                 onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
                 onClick={() => onEdit(task)}
@@ -374,9 +371,7 @@ function PageVueCalendrier({ tasks, projects, onEdit }) {
                   </div>
                 )}
 
-                <div
-                  style={{ fontSize: "11px", color: "#aaa", marginTop: "4px" }}
-                >
+                <div style={{ fontSize: "11px", color: "#aaa", marginTop: "4px" }}>
                   📁 {getProjectName(task.projectId)}
                 </div>
 

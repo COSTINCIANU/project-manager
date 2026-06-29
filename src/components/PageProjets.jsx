@@ -20,14 +20,7 @@ function PageProjets({ projects = [], onAdd, onDelete }) {
   // =====================
 
   // Liste des couleurs disponibles pour les projets
-  const colors = [
-    "#378ADD",
-    "#BA7517",
-    "#639922",
-    "#888780",
-    "#D85A30",
-    "#D4537E",
-  ];
+  const colors = ["#378ADD", "#BA7517", "#639922", "#888780", "#D85A30", "#D4537E"];
 
   // Couleur sélectionnée par défaut
   const [selectedColor, setSelectedColor] = useState(colors[0]);
@@ -150,11 +143,7 @@ function PageProjets({ projects = [], onAdd, onDelete }) {
           />
 
           {/* Sélection du statut */}
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            style={selectStyle}
-          >
+          <select value={status} onChange={(e) => setStatus(e.target.value)} style={selectStyle}>
             <option value="En cours">En cours</option>
             <option value="En attente">En attente</option>
             <option value="Terminé">Terminé</option>
@@ -162,11 +151,7 @@ function PageProjets({ projects = [], onAdd, onDelete }) {
 
           {/* Sélection de la couleur */}
           <div style={{ marginBottom: "14px" }}>
-            <div
-              style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}
-            >
-              Couleur
-            </div>
+            <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>Couleur</div>
             <div style={{ display: "flex", gap: "8px" }}>
               {colors.map((color) => (
                 <div
@@ -179,10 +164,7 @@ function PageProjets({ projects = [], onAdd, onDelete }) {
                     background: color,
                     cursor: "pointer",
                     // Bordure blanche si couleur sélectionnée
-                    border:
-                      selectedColor === color
-                        ? "3px solid #111"
-                        : "3px solid transparent",
+                    border: selectedColor === color ? "3px solid #111" : "3px solid transparent",
                     transition: "border 0.15s",
                   }}
                 />
@@ -247,9 +229,7 @@ function PageProjets({ projects = [], onAdd, onDelete }) {
                   marginBottom: "12px",
                 }}
               >
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "10px" }}
-                >
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   {/* Point coloré */}
                   <div
                     style={{
@@ -260,9 +240,7 @@ function PageProjets({ projects = [], onAdd, onDelete }) {
                     }}
                   />
                   {/* Nom du projet */}
-                  <div style={{ fontSize: "14px", fontWeight: "500" }}>
-                    {project.name}
-                  </div>
+                  <div style={{ fontSize: "14px", fontWeight: "500" }}>{project.name}</div>
                 </div>
 
                 {/* Bouton supprimer */}
@@ -311,9 +289,7 @@ function PageProjets({ projects = [], onAdd, onDelete }) {
                   alignItems: "center",
                 }}
               >
-                <div style={{ fontSize: "12px", color: "#aaa" }}>
-                  {project.progress}% complété
-                </div>
+                <div style={{ fontSize: "12px", color: "#aaa" }}>{project.progress}% complété</div>
 
                 {/* Badge statut */}
                 <div

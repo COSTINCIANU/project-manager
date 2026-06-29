@@ -136,8 +136,8 @@ function PageApiPublique() {
         <span style={{ fontSize: "18px" }}>ℹ️</span>
         <div>
           Si le bouton "Créer" ne répond pas, votre session a peut-être expiré.
-          <strong> Déconnectez-vous et reconnectez-vous</strong> pour rafraîchir
-          votre token JWT (validité : 1 heure).
+          <strong> Déconnectez-vous et reconnectez-vous</strong> pour rafraîchir votre token JWT
+          (validité : 1 heure).
         </div>
       </div>
 
@@ -150,15 +150,13 @@ function PageApiPublique() {
           padding: "1.5rem",
         }}
       >
-        <div
-          style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}
-        >
+        <div style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}>
           🔌 API Publique — Documentation
         </div>
 
         <div style={{ fontSize: "13px", color: "#555", marginBottom: "1rem" }}>
-          Accédez aux données de Project Manager via notre API REST. Ajoutez
-          votre clé API dans le header{" "}
+          Accédez aux données de Project Manager via notre API REST. Ajoutez votre clé API dans le
+          header{" "}
           <code
             style={{
               background: "#f0f0f0",
@@ -217,12 +215,8 @@ function PageApiPublique() {
             >
               {endpoint.method}
             </span>
-            <code style={{ fontSize: "12px", color: "#378ADD", flex: 1 }}>
-              {endpoint.path}
-            </code>
-            <span style={{ fontSize: "12px", color: "#aaa" }}>
-              {endpoint.desc}
-            </span>
+            <code style={{ fontSize: "12px", color: "#378ADD", flex: 1 }}>{endpoint.path}</code>
+            <span style={{ fontSize: "12px", color: "#aaa" }}>{endpoint.desc}</span>
           </div>
         ))}
 
@@ -246,9 +240,7 @@ function PageApiPublique() {
             {" -H "}
             <span style={{ color: "#e67e22" }}>"X-API-Key: votre_cle"</span>
             {" \\\n  "}
-            <span style={{ color: "#378ADD" }}>
-              https://api.costincianu.fr/api/public/projects
-            </span>
+            <span style={{ color: "#378ADD" }}>https://api.costincianu.fr/api/public/projects</span>
           </div>
         </div>
       </div>
@@ -273,9 +265,7 @@ function PageApiPublique() {
           >
             ✅ Clé API créée — copiez-la maintenant !
           </div>
-          <div
-            style={{ fontSize: "12px", color: "#555", marginBottom: "1rem" }}
-          >
+          <div style={{ fontSize: "12px", color: "#555", marginBottom: "1rem" }}>
             Cette clé ne sera plus affichée en entier après fermeture.
           </div>
           <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
@@ -349,9 +339,7 @@ function PageApiPublique() {
           padding: "1.5rem",
         }}
       >
-        <div
-          style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}
-        >
+        <div style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}>
           ➕ Créer une clé API
         </div>
         <div style={{ display: "flex", gap: "8px" }}>
@@ -399,9 +387,7 @@ function PageApiPublique() {
           padding: "1.5rem",
         }}
       >
-        <div
-          style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}
-        >
+        <div style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}>
           🔑 Mes clés API ({keys.filter((k) => k.isActive).length} active
           {keys.filter((k) => k.isActive).length > 1 ? "s" : ""})
         </div>
@@ -431,9 +417,7 @@ function PageApiPublique() {
               }}
             >
               <div>
-                <div
-                  style={{ fontSize: "13px", color: "#222", fontWeight: "500" }}
-                >
+                <div style={{ fontSize: "13px", color: "#222", fontWeight: "500" }}>
                   {key.name}
                   {!key.isActive && (
                     <span
@@ -447,12 +431,9 @@ function PageApiPublique() {
                     </span>
                   )}
                 </div>
-                <div
-                  style={{ fontSize: "11px", color: "#aaa", marginTop: "2px" }}
-                >
+                <div style={{ fontSize: "11px", color: "#aaa", marginTop: "2px" }}>
                   <code>{key.apiKey}</code>
-                  {key.lastUsedAt &&
-                    ` — Dernière utilisation : ${key.lastUsedAt}`}
+                  {key.lastUsedAt && ` — Dernière utilisation : ${key.lastUsedAt}`}
                 </div>
               </div>
 

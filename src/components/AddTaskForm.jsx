@@ -163,11 +163,7 @@ function AddTaskForm({ onAdd, userRole }) {
         >
           {/* Champ description */}
           <div>
-            <div
-              style={{ fontSize: "11px", color: "#999", marginBottom: "4px" }}
-            >
-              Description
-            </div>
+            <div style={{ fontSize: "11px", color: "#999", marginBottom: "4px" }}>Description</div>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -189,9 +185,7 @@ function AddTaskForm({ onAdd, userRole }) {
 
           {/* Champ date d'échéance */}
           <div>
-            <div
-              style={{ fontSize: "11px", color: "#999", marginBottom: "4px" }}
-            >
+            <div style={{ fontSize: "11px", color: "#999", marginBottom: "4px" }}>
               Date d'échéance
             </div>
             <input

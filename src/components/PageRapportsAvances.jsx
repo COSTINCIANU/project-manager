@@ -39,9 +39,7 @@ function PageRapportsAvances({ projects = [] }) {
   // =====================
 
   // Projet sélectionné
-  const [projetId, setProjetId] = useState(
-    projects.length > 0 ? projects[0].id : null,
-  );
+  const [projetId, setProjetId] = useState(projects.length > 0 ? projects[0].id : null);
 
   // Onglet actif — velocite | temps | multi | export
   const [ongletActif, setOngletActif] = useState("velocite");
@@ -80,15 +78,11 @@ function PageRapportsAvances({ projects = [] }) {
         setDonneesVelocite(données);
       }
       if (ongletActif === "temps" && !donneesTemps) {
-        const données = await appelAPI(
-          `/reports/project/${projetId}/time-spent`,
-        );
+        const données = await appelAPI(`/reports/project/${projetId}/time-spent`);
         setDonneesTemps(données);
       }
       if (ongletActif === "multi" && !donneesMulti) {
-        const données = await appelAPI(
-          `/reports/project/${projetId}/multi-sprint`,
-        );
+        const données = await appelAPI(`/reports/project/${projetId}/multi-sprint`);
         setDonneesMulti(données);
       }
     } catch (err) {
@@ -112,14 +106,11 @@ function PageRapportsAvances({ projects = [] }) {
   // Télécharge le fichier CSV directement
   // =====================
   async function telechargerCsv() {
-    const reponse = await fetch(
-      `${API_URL}/reports/project/${projetId}/export-csv`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
-        },
+    const reponse = await fetch(`${API_URL}/reports/project/${projetId}/export-csv`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
       },
-    );
+    });
     const blob = await reponse.blob();
     const url = window.URL.createObjectURL(blob);
     const lien = document.createElement("a");
@@ -289,9 +280,7 @@ function PageRapportsAvances({ projects = [] }) {
               >
                 {donneesVelocite.velociteMoyenne}
               </div>
-              <div
-                style={{ fontSize: "12px", color: "#999", marginTop: "4px" }}
-              >
+              <div style={{ fontSize: "12px", color: "#999", marginTop: "4px" }}>
                 Vélocité moyenne
               </div>
             </div>
@@ -305,11 +294,7 @@ function PageRapportsAvances({ projects = [] }) {
               >
                 {donneesVelocite.totalSprints}
               </div>
-              <div
-                style={{ fontSize: "12px", color: "#999", marginTop: "4px" }}
-              >
-                Total sprints
-              </div>
+              <div style={{ fontSize: "12px", color: "#999", marginTop: "4px" }}>Total sprints</div>
             </div>
             <div style={{ ...styleCarte, textAlign: "center" }}>
               <div
@@ -319,14 +304,9 @@ function PageRapportsAvances({ projects = [] }) {
                   color: "#D85A30",
                 }}
               >
-                {donneesVelocite.sprints.reduce(
-                  (acc, s) => acc + s.tachesTerminees,
-                  0,
-                )}
+                {donneesVelocite.sprints.reduce((acc, s) => acc + s.tachesTerminees, 0)}
               </div>
-              <div
-                style={{ fontSize: "12px", color: "#999", marginTop: "4px" }}
-              >
+              <div style={{ fontSize: "12px", color: "#999", marginTop: "4px" }}>
                 Total tâches terminées
               </div>
             </div>
@@ -407,16 +387,12 @@ function PageRapportsAvances({ projects = [] }) {
                 }}
               >
                 <div>
-                  <div style={{ fontSize: "13px", fontWeight: "500" }}>
-                    {sprint.sprintNom}
-                  </div>
+                  <div style={{ fontSize: "13px", fontWeight: "500" }}>{sprint.sprintNom}</div>
                   <div style={{ fontSize: "11px", color: "#aaa" }}>
                     {sprint.dateDebut} → {sprint.dateFin}
                   </div>
                 </div>
-                <div
-                  style={{ display: "flex", gap: "12px", alignItems: "center" }}
-                >
+                <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
                   <div style={{ textAlign: "center" }}>
                     <div
                       style={{
@@ -427,9 +403,7 @@ function PageRapportsAvances({ projects = [] }) {
                     >
                       {sprint.tachesTerminees}
                     </div>
-                    <div style={{ fontSize: "10px", color: "#aaa" }}>
-                      terminées
-                    </div>
+                    <div style={{ fontSize: "10px", color: "#aaa" }}>terminées</div>
                   </div>
                   <div style={{ textAlign: "center" }}>
                     <div
@@ -441,9 +415,7 @@ function PageRapportsAvances({ projects = [] }) {
                     >
                       {sprint.tauxCompletion}%
                     </div>
-                    <div style={{ fontSize: "10px", color: "#aaa" }}>
-                      complétion
-                    </div>
+                    <div style={{ fontSize: "10px", color: "#aaa" }}>complétion</div>
                   </div>
                   {/* Badge statut */}
                   <div
@@ -451,10 +423,8 @@ function PageRapportsAvances({ projects = [] }) {
                       fontSize: "11px",
                       padding: "3px 8px",
                       borderRadius: "20px",
-                      background:
-                        sprint.statut === "completed" ? "#EAF3DE" : "#E6F1FB",
-                      color:
-                        sprint.statut === "completed" ? "#3B6D11" : "#185FA5",
+                      background: sprint.statut === "completed" ? "#EAF3DE" : "#E6F1FB",
+                      color: sprint.statut === "completed" ? "#3B6D11" : "#185FA5",
                     }}
                   >
                     {sprint.statut}
@@ -472,12 +442,8 @@ function PageRapportsAvances({ projects = [] }) {
       {ongletActif === "temps" && donneesTemps && !chargement && (
         <div>
           {/* Carte résumé total heures */}
-          <div
-            style={{ ...styleCarte, textAlign: "center", marginBottom: "1rem" }}
-          >
-            <div
-              style={{ fontSize: "32px", fontWeight: "700", color: "#378ADD" }}
-            >
+          <div style={{ ...styleCarte, textAlign: "center", marginBottom: "1rem" }}>
+            <div style={{ fontSize: "32px", fontWeight: "700", color: "#378ADD" }}>
               {donneesTemps.totalHeures}h
             </div>
             <div style={{ fontSize: "13px", color: "#999", marginTop: "4px" }}>
@@ -509,18 +475,10 @@ function PageRapportsAvances({ projects = [] }) {
               </div>
             ) : (
               <ResponsiveContainer width="100%" height={250}>
-                <BarChart
-                  data={donneesTemps.parTache.slice(0, 10)}
-                  layout="vertical"
-                >
+                <BarChart data={donneesTemps.parTache.slice(0, 10)} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                   <XAxis type="number" tick={{ fontSize: 11 }} unit="h" />
-                  <YAxis
-                    type="category"
-                    dataKey="tacheNom"
-                    tick={{ fontSize: 10 }}
-                    width={120}
-                  />
+                  <YAxis type="category" dataKey="tacheNom" tick={{ fontSize: 10 }} width={120} />
                   <Tooltip formatter={(v) => [`${v}h`, "Temps estimé"]} />
                   <Bar
                     dataKey="heuresEstimees"
@@ -556,9 +514,7 @@ function PageRapportsAvances({ projects = [] }) {
                 }}
               >
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: "13px", fontWeight: "500" }}>
-                    {tache.tacheNom}
-                  </div>
+                  <div style={{ fontSize: "13px", fontWeight: "500" }}>{tache.tacheNom}</div>
                   <div style={{ fontSize: "11px", color: "#aaa" }}>
                     {tache.priorite} · {tache.statut}
                   </div>
@@ -762,16 +718,9 @@ function PageRapportsAvances({ projects = [] }) {
               </thead>
               <tbody>
                 {donneesMulti.sprints.map((sprint) => (
-                  <tr
-                    key={sprint.sprintId}
-                    style={{ borderBottom: "1px solid #f5f5f5" }}
-                  >
-                    <td style={{ padding: "8px", fontWeight: "500" }}>
-                      {sprint.sprintNom}
-                    </td>
-                    <td style={{ padding: "8px", textAlign: "center" }}>
-                      {sprint.totalTaches}
-                    </td>
+                  <tr key={sprint.sprintId} style={{ borderBottom: "1px solid #f5f5f5" }}>
+                    <td style={{ padding: "8px", fontWeight: "500" }}>{sprint.sprintNom}</td>
+                    <td style={{ padding: "8px", textAlign: "center" }}>{sprint.totalTaches}</td>
                     <td
                       style={{
                         padding: "8px",

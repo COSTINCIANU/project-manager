@@ -13,9 +13,7 @@ function PageWiki({ projects }) {
   // =====================
 
   // Projet sélectionné
-  const [selectedProject, setSelectedProject] = useState(
-    projects?.[0]?.id || null,
-  );
+  const [selectedProject, setSelectedProject] = useState(projects?.[0]?.id || null);
 
   // Liste des pages Wiki du projet
   const [pages, setPages] = useState([]);
@@ -48,14 +46,11 @@ function PageWiki({ projects }) {
   async function loadPages(projectId) {
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/wiki/project/${projectId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
-          },
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/wiki/project/${projectId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
         },
-      );
+      });
       const data = await res.json();
       setPages(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -105,17 +100,14 @@ function PageWiki({ projects }) {
     if (!title.trim() || !selectedPage) return;
 
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/wiki/${selectedPage.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
-          },
-          body: JSON.stringify({ title, content }),
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/wiki/${selectedPage.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
         },
-      );
+        body: JSON.stringify({ title, content }),
+      });
 
       const data = await res.json();
       if (res.ok) {
@@ -267,14 +259,10 @@ function PageWiki({ projects }) {
             PAGES
           </div>
 
-          {loading && (
-            <div style={{ fontSize: "12px", color: "#aaa" }}>Chargement...</div>
-          )}
+          {loading && <div style={{ fontSize: "12px", color: "#aaa" }}>Chargement...</div>}
 
           {!loading && pages.length === 0 && (
-            <div style={{ fontSize: "12px", color: "#aaa" }}>
-              Aucune page — créez la première !
-            </div>
+            <div style={{ fontSize: "12px", color: "#aaa" }}>Aucune page — créez la première !</div>
           )}
 
           {pages.map((page) => (
@@ -289,15 +277,12 @@ function PageWiki({ projects }) {
                 borderRadius: "8px",
                 cursor: "pointer",
                 fontSize: "13px",
-                background:
-                  selectedPage?.id === page.id ? "#f0f0f0" : "transparent",
+                background: selectedPage?.id === page.id ? "#f0f0f0" : "transparent",
                 color: selectedPage?.id === page.id ? "#111" : "#555",
                 fontWeight: selectedPage?.id === page.id ? "500" : "400",
                 marginBottom: "2px",
               }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.background = "#f5f5f5")
-              }
+              onMouseEnter={(e) => (e.currentTarget.style.background = "#f5f5f5")}
               onMouseLeave={(e) =>
                 (e.currentTarget.style.background =
                   selectedPage?.id === page.id ? "#f0f0f0" : "transparent")
@@ -480,11 +465,7 @@ function PageWiki({ projects }) {
               >
                 Contenu (Markdown)
               </div>
-              <MarkdownEditor
-                value={content}
-                onChange={setContent}
-                minHeight="300px"
-              />
+              <MarkdownEditor value={content} onChange={setContent} minHeight="300px" />
 
               <div style={{ display: "flex", gap: "8px" }}>
                 <button
@@ -600,9 +581,7 @@ function PageWiki({ projects }) {
                 <span>👤 {selectedPage.authorEmail}</span>
                 <span>📅 Créé le {formatDate(selectedPage.createdAt)}</span>
                 {selectedPage.updatedAt && (
-                  <span>
-                    ✏️ Modifié le {formatDate(selectedPage.updatedAt)}
-                  </span>
+                  <span>✏️ Modifié le {formatDate(selectedPage.updatedAt)}</span>
                 )}
               </div>
 

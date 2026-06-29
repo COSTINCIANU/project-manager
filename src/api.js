@@ -62,9 +62,7 @@ async function syncPendingActions() {
         body: action.body ? JSON.stringify(action.body) : null,
       });
       // Supprime l'action de la liste une fois envoyée avec succès
-      pendingActions = pendingActions.filter(
-        (a) => a.timestamp !== action.timestamp,
-      );
+      pendingActions = pendingActions.filter((a) => a.timestamp !== action.timestamp);
       localStorage.setItem("pendingActions", JSON.stringify(pendingActions));
     } catch (err) {
       console.error("❌ Echec sync action:", err);

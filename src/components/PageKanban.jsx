@@ -1,17 +1,7 @@
 // Importation des outils drag & drop de dnd-kit
-import {
-  DndContext,
-  closestCenter,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-  useSortable,
-} from "@dnd-kit/sortable";
+import { SortableContext, verticalListSortingStrategy, useSortable } from "@dnd-kit/sortable";
 
 import { CSS } from "@dnd-kit/utilities";
 
@@ -21,14 +11,9 @@ import { CSS } from "@dnd-kit/utilities";
 
 function KanbanCard({ task, projectName }) {
   // useSortable donne accès aux props de drag & drop pour cet élément
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: task.id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: task.id,
+  });
 
   // Style de transformation pendant le drag
   const style = {
@@ -180,11 +165,7 @@ function KanbanColonne({ title, tasks, projects, color, count }) {
           </div>
         ) : (
           tasks.map((task) => (
-            <KanbanCard
-              key={task.id}
-              task={task}
-              projectName={getProjectName(task.projectId)}
-            />
+            <KanbanCard key={task.id} task={task} projectName={getProjectName(task.projectId)} />
           ))
         )}
       </SortableContext>
@@ -201,7 +182,7 @@ function PageKanban({ tasks, projects, onTaskMove }) {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 8 },
-    }),
+    })
   );
 
   // On répartit les tâches dans les 3 colonnes selon leur statut
@@ -237,11 +218,7 @@ function PageKanban({ tasks, projects, onTaskMove }) {
   return (
     <div>
       {/* ---- BOARD KANBAN ---- */}
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <div
           className="kanban-board"
           style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}

@@ -2,8 +2,7 @@
 // Accessible via /reset-password?token=XXX
 import { useState } from "react";
 
-const API_URL =
-  import.meta.env.VITE_API_URL || "https://api.costincianu.fr/api";
+const API_URL = import.meta.env.VITE_API_URL || "https://api.costincianu.fr/api";
 
 function PageResetPassword({ token, onDone }) {
   // Nouveau mot de passe saisi par l'utilisateur
@@ -77,9 +76,7 @@ function PageResetPassword({ token, onDone }) {
         {/* Logo / Titre */}
         <div style={{ textAlign: "center", marginBottom: "2rem" }}>
           <div style={{ fontSize: "32px", marginBottom: "0.5rem" }}>🔐</div>
-          <h2 style={{ fontSize: "20px", fontWeight: "600", margin: 0 }}>
-            Nouveau mot de passe
-          </h2>
+          <h2 style={{ fontSize: "20px", fontWeight: "600", margin: 0 }}>Nouveau mot de passe</h2>
           <p style={{ fontSize: "13px", color: "#888", marginTop: "0.5rem" }}>
             Choisis un nouveau mot de passe pour ton compte.
           </p>

@@ -159,15 +159,11 @@ function PageHistorique() {
                 }}
               >
                 {/* Icône action */}
-                <div style={{ fontSize: "18px", flexShrink: 0 }}>
-                  {getActionIcon(log.action)}
-                </div>
+                <div style={{ fontSize: "18px", flexShrink: 0 }}>{getActionIcon(log.action)}</div>
 
                 {/* Infos */}
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: "13px", color: "#222" }}>
-                    {log.description}
-                  </div>
+                  <div style={{ fontSize: "13px", color: "#222" }}>{log.description}</div>
                   <div
                     style={{
                       fontSize: "11px",

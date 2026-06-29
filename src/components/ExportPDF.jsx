@@ -24,12 +24,8 @@ function ExportPDF({ tasks, projects, users }) {
   // =====================
   const totalTasks = safeTasks.length;
   const doneTasks = safeTasks.filter((t) => t.done).length;
-  const tauxCompletion = totalTasks
-    ? Math.round((doneTasks / totalTasks) * 100)
-    : 0;
-  const activeProjects = safeProjects.filter(
-    (p) => p.status === "En cours",
-  ).length;
+  const tauxCompletion = totalTasks ? Math.round((doneTasks / totalTasks) * 100) : 0;
+  const activeProjects = safeProjects.filter((p) => p.status === "En cours").length;
 
   // Tâches en retard
   const today = new Date();
@@ -40,20 +36,14 @@ function ExportPDF({ tasks, projects, users }) {
   }).length;
 
   // Temps estimé total
-  const tempsEstimeTotal = safeTasks.reduce(
-    (acc, t) => acc + (t.estimatedTime || 0),
-    0,
-  );
+  const tempsEstimeTotal = safeTasks.reduce((acc, t) => acc + (t.estimatedTime || 0), 0);
   const tempsEstimeTotalH = Math.round((tempsEstimeTotal / 60) * 10) / 10;
 
   // Sous-tâches
-  const totalSousTaches = safeTasks.reduce(
-    (acc, t) => acc + (t.subTasks?.length || 0),
-    0,
-  );
+  const totalSousTaches = safeTasks.reduce((acc, t) => acc + (t.subTasks?.length || 0), 0);
   const sousTachesTerminees = safeTasks.reduce(
     (acc, t) => acc + (t.subTasks?.filter((st) => st.done).length || 0),
-    0,
+    0
   );
 
   // =====================
@@ -149,9 +139,7 @@ function ExportPDF({ tasks, projects, users }) {
 
       // Génère le CSV
       const csvContent = [headers, ...rows]
-        .map((row) =>
-          row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","),
-        )
+        .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
         .join("\n");
 
       // Télécharge le fichier
@@ -398,9 +386,7 @@ function ExportPDF({ tasks, projects, users }) {
                   flexShrink: 0,
                 }}
               />
-              <div style={{ flex: 1, fontSize: "13px", fontWeight: "500" }}>
-                {project.name}
-              </div>
+              <div style={{ flex: 1, fontSize: "13px", fontWeight: "500" }}>{project.name}</div>
               <div
                 style={{
                   width: "120px",
@@ -479,9 +465,7 @@ function ExportPDF({ tasks, projects, users }) {
                 }}
               >
                 {/* Ligne principale */}
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "10px" }}
-                >
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <div
                     style={{
                       width: "14px",

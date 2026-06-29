@@ -187,9 +187,7 @@ function PageInvitations({ projects }) {
         />
 
         {/* Sélecteur de projet */}
-        <div style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}>
-          Projet
-        </div>
+        <div style={{ fontSize: "12px", color: "#999", marginBottom: "6px" }}>Projet</div>
         <select
           value={projectId}
           onChange={(e) => setProjectId(e.target.value)}

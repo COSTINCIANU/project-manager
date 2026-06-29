@@ -95,10 +95,7 @@ function MarkdownEditor({ value, onChange, placeholder, minHeight = "150px" }) {
         <textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder={
-            placeholder ||
-            "Écrivez en Markdown... **gras**, _italique_, # titre"
-          }
+          placeholder={placeholder || "Écrivez en Markdown... **gras**, _italique_, # titre"}
           style={{
             width: "100%",
             minHeight: minHeight,
@@ -126,9 +123,7 @@ function MarkdownEditor({ value, onChange, placeholder, minHeight = "150px" }) {
             color: "#222",
           }}
           dangerouslySetInnerHTML={{
-            __html: value
-              ? marked(value)
-              : '<span style="color:#aaa">Aucun contenu</span>',
+            __html: value ? marked(value) : '<span style="color:#aaa">Aucun contenu</span>',
           }}
         />
       )}

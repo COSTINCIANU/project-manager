@@ -7,8 +7,7 @@ import { useState, useEffect } from "react";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const SCOPES = "https://www.googleapis.com/auth/calendar.events";
-const DISCOVERY_DOC =
-  "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
+const DISCOVERY_DOC = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
 
 function PageGoogleCalendar({ tasks, projects }) {
   // =====================
@@ -173,9 +172,7 @@ function PageGoogleCalendar({ tasks, projects }) {
     setLoading(true);
     setMessage("");
 
-    const tasksWithDate = (Array.isArray(tasks) ? tasks : []).filter(
-      (t) => t.dueDate && !t.done,
-    );
+    const tasksWithDate = (Array.isArray(tasks) ? tasks : []).filter((t) => t.dueDate && !t.done);
 
     let count = 0;
     for (const task of tasksWithDate) {
@@ -192,15 +189,11 @@ function PageGoogleCalendar({ tasks, projects }) {
   // NOM DU PROJET
   // =====================
   function getProjectName(projectId) {
-    const p = Array.isArray(projects)
-      ? projects.find((p) => p.id === projectId)
-      : null;
+    const p = Array.isArray(projects) ? projects.find((p) => p.id === projectId) : null;
     return p ? p.name : "—";
   }
 
-  const tasksWithDate = (Array.isArray(tasks) ? tasks : []).filter(
-    (t) => t.dueDate && !t.done,
-  );
+  const tasksWithDate = (Array.isArray(tasks) ? tasks : []).filter((t) => t.dueDate && !t.done);
 
   // =====================
   // RENDU
@@ -250,10 +243,7 @@ function PageGoogleCalendar({ tasks, projects }) {
               color: isConnected ? "#A32D2D" : "#fff",
               border: "none",
               borderRadius: "8px",
-              cursor:
-                loading || !gapiLoaded || !gisLoaded
-                  ? "not-allowed"
-                  : "pointer",
+              cursor: loading || !gapiLoaded || !gisLoaded ? "not-allowed" : "pointer",
               fontSize: "13px",
               fontWeight: "500",
             }}
@@ -305,15 +295,11 @@ function PageGoogleCalendar({ tasks, projects }) {
               disabled={loading || tasksWithDate.length === 0}
               style={{
                 padding: "8px 16px",
-                background:
-                  loading || tasksWithDate.length === 0 ? "#aaa" : "#378ADD",
+                background: loading || tasksWithDate.length === 0 ? "#aaa" : "#378ADD",
                 color: "#fff",
                 border: "none",
                 borderRadius: "8px",
-                cursor:
-                  loading || tasksWithDate.length === 0
-                    ? "not-allowed"
-                    : "pointer",
+                cursor: loading || tasksWithDate.length === 0 ? "not-allowed" : "pointer",
                 fontSize: "13px",
                 fontWeight: "500",
               }}
@@ -347,9 +333,7 @@ function PageGoogleCalendar({ tasks, projects }) {
                 }}
               >
                 <div>
-                  <div style={{ fontSize: "13px", color: "#222" }}>
-                    {task.name}
-                  </div>
+                  <div style={{ fontSize: "13px", color: "#222" }}>{task.name}</div>
                   <div
                     style={{
                       fontSize: "11px",
@@ -361,13 +345,9 @@ function PageGoogleCalendar({ tasks, projects }) {
                   </div>
                 </div>
 
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
-                >
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                   {synced.includes(task.id) && (
-                    <span style={{ fontSize: "11px", color: "#3B6D11" }}>
-                      ✅ Synchronisé
-                    </span>
+                    <span style={{ fontSize: "11px", color: "#3B6D11" }}>✅ Synchronisé</span>
                   )}
                   <button
                     onClick={() => syncTask(task)}
@@ -378,9 +358,7 @@ function PageGoogleCalendar({ tasks, projects }) {
                       color: synced.includes(task.id) ? "#aaa" : "#378ADD",
                       border: "1px solid #ddd",
                       borderRadius: "8px",
-                      cursor: synced.includes(task.id)
-                        ? "not-allowed"
-                        : "pointer",
+                      cursor: synced.includes(task.id) ? "not-allowed" : "pointer",
                       fontSize: "12px",
                     }}
                   >

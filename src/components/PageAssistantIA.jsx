@@ -69,10 +69,7 @@ function PageAssistantIA({ tasks, projects }) {
         ${safeTasks
           .filter((t) => !t.done)
           .slice(0, 10)
-          .map(
-            (t) =>
-              `- ${t.name} (${t.priority}) ${t.dueDate ? `— échéance: ${t.dueDate}` : ""}`,
-          )
+          .map((t) => `- ${t.name} (${t.priority}) ${t.dueDate ? `— échéance: ${t.dueDate}` : ""}`)
           .join("\n")}
 
         Réponds en français, de façon concise et pratique.`;
@@ -145,19 +142,16 @@ function PageAssistantIA({ tasks, projects }) {
     setGeneratedTasks([]);
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/ai/generate-tasks`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
-          },
-          body: JSON.stringify({
-            description: projectDescription,
-          }),
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/ai/generate-tasks`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
         },
-      );
+        body: JSON.stringify({
+          description: projectDescription,
+        }),
+      });
 
       const data = await response.json();
       if (data.tasks) setGeneratedTasks(data.tasks);
@@ -297,12 +291,8 @@ function PageAssistantIA({ tasks, projects }) {
           🤖
         </div>
         <div>
-          <div style={{ fontSize: "14px", fontWeight: "500" }}>
-            Assistant IA
-          </div>
-          <div style={{ fontSize: "11px", color: "#aaa" }}>
-            Propulsé par Claude (Anthropic)
-          </div>
+          <div style={{ fontSize: "14px", fontWeight: "500" }}>Assistant IA</div>
+          <div style={{ fontSize: "11px", color: "#aaa" }}>Propulsé par Claude (Anthropic)</div>
         </div>
         <div
           style={{
@@ -389,9 +379,7 @@ function PageAssistantIA({ tasks, projects }) {
             background: "#fafafa",
           }}
         >
-          <div
-            style={{ fontSize: "13px", fontWeight: "500", marginBottom: "8px" }}
-          >
+          <div style={{ fontSize: "13px", fontWeight: "500", marginBottom: "8px" }}>
             ✨ Générer des tâches automatiquement
           </div>
           <div style={{ fontSize: "12px", color: "#aaa", marginBottom: "8px" }}>
@@ -425,8 +413,7 @@ function PageAssistantIA({ tasks, projects }) {
                   padding: "5px 10px",
                   borderRadius: "20px",
                   border: `1px solid ${projectDescription === cat.label ? "#111" : "#ddd"}`,
-                  background:
-                    projectDescription === cat.label ? "#111" : "#fff",
+                  background: projectDescription === cat.label ? "#111" : "#fff",
                   color: projectDescription === cat.label ? "#fff" : "#444",
                   fontSize: "12px",
                   cursor: "pointer",
@@ -460,17 +447,11 @@ function PageAssistantIA({ tasks, projects }) {
               disabled={loadingGeneration || !projectDescription.trim()}
               style={{
                 padding: "8px 16px",
-                background:
-                  loadingGeneration || !projectDescription.trim()
-                    ? "#ccc"
-                    : "#111",
+                background: loadingGeneration || !projectDescription.trim() ? "#ccc" : "#111",
                 color: "#fff",
                 border: "none",
                 borderRadius: "8px",
-                cursor:
-                  loadingGeneration || !projectDescription.trim()
-                    ? "not-allowed"
-                    : "pointer",
+                cursor: loadingGeneration || !projectDescription.trim() ? "not-allowed" : "pointer",
                 fontSize: "13px",
                 fontWeight: "500",
               }}
@@ -534,9 +515,7 @@ function PageAssistantIA({ tasks, projects }) {
                   </span>
                   <span style={{ flex: 1, color: "#222" }}>{task.name}</span>
                   {task.description && (
-                    <span style={{ color: "#aaa", fontSize: "11px" }}>
-                      {task.description}
-                    </span>
+                    <span style={{ color: "#aaa", fontSize: "11px" }}>{task.description}</span>
                   )}
                 </div>
               ))}
@@ -544,9 +523,7 @@ function PageAssistantIA({ tasks, projects }) {
               {/* Bouton copier dans le presse-papier */}
               <button
                 onClick={() => {
-                  const text = generatedTasks
-                    .map((t) => `- ${t.name} (${t.priority})`)
-                    .join("\n");
+                  const text = generatedTasks.map((t) => `- ${t.name} (${t.priority})`).join("\n");
                   navigator.clipboard.writeText(text);
                   alert("Tâches copiées dans le presse-papier !");
                 }}
@@ -591,10 +568,7 @@ function PageAssistantIA({ tasks, projects }) {
               style={{
                 maxWidth: "75%",
                 padding: "10px 14px",
-                borderRadius:
-                  msg.role === "user"
-                    ? "12px 12px 2px 12px"
-                    : "12px 12px 12px 2px",
+                borderRadius: msg.role === "user" ? "12px 12px 2px 12px" : "12px 12px 12px 2px",
                 background: msg.role === "user" ? "#111" : "#f5f5f5",
                 color: msg.role === "user" ? "#fff" : "#222",
                 fontSize: "13px",

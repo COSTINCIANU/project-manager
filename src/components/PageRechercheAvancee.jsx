@@ -276,11 +276,7 @@ function PageRechercheAvancee({ projects = [] }) {
           </div>
           <div>
             <label style={styleLabelFiltre}>Statut</label>
-            <select
-              value={statut}
-              onChange={(e) => setStatut(e.target.value)}
-              style={styleSelect}
-            >
+            <select value={statut} onChange={(e) => setStatut(e.target.value)} style={styleSelect}>
               {OPTIONS_STATUT.map((o) => (
                 <option key={o.valeur} value={o.valeur}>
                   {o.label}
@@ -290,11 +286,7 @@ function PageRechercheAvancee({ projects = [] }) {
           </div>
           <div>
             <label style={styleLabelFiltre}>Type de ticket</label>
-            <select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              style={styleSelect}
-            >
+            <select value={type} onChange={(e) => setType(e.target.value)} style={styleSelect}>
               {OPTIONS_TYPE.map((o) => (
                 <option key={o.valeur} value={o.valeur}>
                   {o.label}
@@ -443,9 +435,7 @@ function PageRechercheAvancee({ projects = [] }) {
                     }}
                   />
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: "13px", fontWeight: "500" }}>
-                      {projet.name}
-                    </div>
+                    <div style={{ fontSize: "13px", fontWeight: "500" }}>{projet.name}</div>
                   </div>
                   {/* Badge statut */}
                   <div
@@ -453,18 +443,14 @@ function PageRechercheAvancee({ projects = [] }) {
                       fontSize: "11px",
                       padding: "3px 8px",
                       borderRadius: "20px",
-                      background:
-                        projet.status === "Terminé" ? "#EAF3DE" : "#E6F1FB",
-                      color:
-                        projet.status === "Terminé" ? "#3B6D11" : "#185FA5",
+                      background: projet.status === "Terminé" ? "#EAF3DE" : "#E6F1FB",
+                      color: projet.status === "Terminé" ? "#3B6D11" : "#185FA5",
                     }}
                   >
                     {projet.status}
                   </div>
                   {/* Barre de progression */}
-                  <div style={{ fontSize: "12px", color: "#aaa" }}>
-                    {projet.progress}%
-                  </div>
+                  <div style={{ fontSize: "12px", color: "#aaa" }}>{projet.progress}%</div>
                 </div>
               ))}
             </div>
@@ -551,23 +537,11 @@ function PageRechercheAvancee({ projects = [] }) {
                       fontSize: "11px",
                       padding: "3px 8px",
                       borderRadius: "20px",
-                      background: tache.done
-                        ? "#EAF3DE"
-                        : tache.inProgress
-                          ? "#E6F1FB"
-                          : "#f5f5f5",
-                      color: tache.done
-                        ? "#3B6D11"
-                        : tache.inProgress
-                          ? "#185FA5"
-                          : "#888",
+                      background: tache.done ? "#EAF3DE" : tache.inProgress ? "#E6F1FB" : "#f5f5f5",
+                      color: tache.done ? "#3B6D11" : tache.inProgress ? "#185FA5" : "#888",
                     }}
                   >
-                    {tache.done
-                      ? "Terminé"
-                      : tache.inProgress
-                        ? "En cours"
-                        : "À faire"}
+                    {tache.done ? "Terminé" : tache.inProgress ? "En cours" : "À faire"}
                   </div>
                 </div>
               ))}

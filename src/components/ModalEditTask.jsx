@@ -252,8 +252,7 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
     if (mimeType.startsWith("image/")) return "🖼️";
     if (mimeType === "application/pdf") return "📕";
     if (mimeType.includes("word")) return "📝";
-    if (mimeType.includes("excel") || mimeType.includes("spreadsheet"))
-      return "📊";
+    if (mimeType.includes("excel") || mimeType.includes("spreadsheet")) return "📊";
     return "📄";
   }
 
@@ -347,13 +346,8 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
             marginBottom: "1.25rem",
           }}
         >
-          <div style={{ fontSize: "15px", fontWeight: "500" }}>
-            Modifier la tâche
-          </div>
-          <div
-            onClick={onClose}
-            style={{ cursor: "pointer", color: "#aaa", fontSize: "18px" }}
-          >
+          <div style={{ fontSize: "15px", fontWeight: "500" }}>Modifier la tâche</div>
+          <div onClick={onClose} style={{ cursor: "pointer", color: "#aaa", fontSize: "18px" }}>
             ✕
           </div>
         </div>
@@ -380,11 +374,7 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
 
         {/* ---- PRIORITÉ ---- */}
         <div style={labelStyle}>Priorité</div>
-        <select
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-          style={inputStyle}
-        >
+        <select value={priority} onChange={(e) => setPriority(e.target.value)} style={inputStyle}>
           <option value="critique">🔴 Critique</option>
           <option value="haute">🟠 Haute</option>
           <option value="normale">🟡 Normale</option>
@@ -393,11 +383,7 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
 
         {/* ---- PROJET ---- */}
         <div style={labelStyle}>Projet</div>
-        <select
-          value={projectId}
-          onChange={(e) => setProjectId(e.target.value)}
-          style={inputStyle}
-        >
+        <select value={projectId} onChange={(e) => setProjectId(e.target.value)} style={inputStyle}>
           {projects.map((p) => (
             <option key={p.id} value={p.id}>
               {p.name}
@@ -442,11 +428,7 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
 
         {/* ---- DÉPENDANCE ---- */}
         <div style={labelStyle}>Dépend de (bloquée par)</div>
-        <select
-          value={dependsOn}
-          onChange={(e) => setDependsOn(e.target.value)}
-          style={inputStyle}
-        >
+        <select value={dependsOn} onChange={(e) => setDependsOn(e.target.value)} style={inputStyle}>
           <option value="">— Aucune dépendance —</option>
           {Array.isArray(tasks) &&
             tasks
@@ -706,15 +688,11 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
                 fontSize: "12px",
               }}
             >
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "8px" }}
-              >
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <span>{getFileIcon(attachment.mimeType)}</span>
                 <span style={{ color: "#333" }}>{attachment.filename}</span>
               </div>
-              <div
-                style={{ display: "flex", gap: "8px", alignItems: "center" }}
-              >
+              <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
                 {/* Bouton télécharger */}
 
                 <a
@@ -733,9 +711,7 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
                 <span
                   onClick={() => handleDeleteAttachment(attachment.id)}
                   style={{ cursor: "pointer", color: "#ddd", fontSize: "14px" }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.color = "#e74c3c")
-                  }
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#e74c3c")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#ddd")}
                 >
                   ×
@@ -774,9 +750,7 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
 
         {/* Liste des commentaires */}
         {loadingComments ? (
-          <div style={{ fontSize: "12px", color: "#aaa", marginBottom: "8px" }}>
-            Chargement...
-          </div>
+          <div style={{ fontSize: "12px", color: "#aaa", marginBottom: "8px" }}>Chargement...</div>
         ) : comments.length === 0 ? (
           <div style={{ fontSize: "12px", color: "#aaa", marginBottom: "8px" }}>
             Aucun commentaire pour l'instant
@@ -802,12 +776,8 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
                   marginBottom: "4px",
                 }}
               >
-                <span style={{ fontWeight: "500", color: "#555" }}>
-                  {comment.userEmail}
-                </span>
-                <div
-                  style={{ display: "flex", gap: "8px", alignItems: "center" }}
-                >
+                <span style={{ fontWeight: "500", color: "#555" }}>{comment.userEmail}</span>
+                <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
                   <span style={{ color: "#aaa", fontSize: "11px" }}>
                     {new Date(comment.createdAt).toLocaleDateString("fr-FR")}
                   </span>
@@ -819,9 +789,7 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
                       color: "#ddd",
                       fontSize: "14px",
                     }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.color = "#e74c3c")
-                    }
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#e74c3c")}
                     onMouseLeave={(e) => (e.currentTarget.style.color = "#ddd")}
                   >
                     ×
@@ -829,9 +797,7 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
                 </div>
               </div>
               {/* Contenu du commentaire */}
-              <div style={{ color: "#333", lineHeight: "1.4" }}>
-                {comment.content}
-              </div>
+              <div style={{ color: "#333", lineHeight: "1.4" }}>{comment.content}</div>
             </div>
           ))
         )}
@@ -856,9 +822,7 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
                 const atIndex = val.lastIndexOf("@");
                 if (atIndex !== -1) {
                   const search = val.slice(atIndex + 1).toLowerCase();
-                  const suggestions = users.filter((u) =>
-                    u.email.toLowerCase().includes(search),
-                  );
+                  const suggestions = users.filter((u) => u.email.toLowerCase().includes(search));
                   setMentionSuggestions(suggestions);
                   setShowSuggestions(suggestions.length > 0);
                 } else {
@@ -898,9 +862,7 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
                     onClick={() => {
                       // Remplace le @recherche par @email complet
                       const atIndex = newComment.lastIndexOf("@");
-                      setNewComment(
-                        newComment.slice(0, atIndex) + "@" + u.email + " ",
-                      );
+                      setNewComment(newComment.slice(0, atIndex) + "@" + u.email + " ");
                       setShowSuggestions(false);
                     }}
                     style={{
@@ -909,12 +871,8 @@ function ModalEditTask({ task, projects, onSave, onClose, tasks }) {
                       fontSize: "13px",
                       color: "#333",
                     }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.background = "#f5f5f5")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.background = "transparent")
-                    }
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "#f5f5f5")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                   >
                     👤 {u.email}
                   </div>

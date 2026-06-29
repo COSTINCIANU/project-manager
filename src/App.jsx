@@ -63,9 +63,7 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem("jwt_token") || null);
 
   // Email de l'utilisateur connecté
-  const [userEmail, setUserEmail] = useState(
-    localStorage.getItem("user_email") || "",
-  );
+  const [userEmail, setUserEmail] = useState(localStorage.getItem("user_email") || "");
 
   // Liste des tâches — initialisée vide, chargée depuis MySQL
   const [tasks, setTasks] = useState([]);
@@ -98,9 +96,7 @@ function App() {
   const [showAuth, setShowAuth] = useState(false);
 
   // Rôle métier de l'utilisateur connecté
-  const [userRole, setUserRole] = useState(
-    localStorage.getItem("user_role") || "dev",
-  );
+  const [userRole, setUserRole] = useState(localStorage.getItem("user_role") || "dev");
 
   // Nombre de mentions non lues
   const [unreadMentions, setUnreadMentions] = useState(0);
@@ -273,15 +269,9 @@ function App() {
   const filteredTasks = Array.isArray(tasks)
     ? tasks
         // Filtre par priorité — si "toutes" on garde tout, sinon on filtre
-        .filter((t) =>
-          filterPriority === "toutes" ? true : t.priority === filterPriority,
-        )
+        .filter((t) => (filterPriority === "toutes" ? true : t.priority === filterPriority))
         // Filtre par projet — si "tous" on garde tout, sinon on compare les ids
-        .filter((t) =>
-          filterProject === "tous"
-            ? true
-            : t.projectId === parseInt(filterProject),
-        )
+        .filter((t) => (filterProject === "tous" ? true : t.projectId === parseInt(filterProject)))
     : [];
 
   // =====================
@@ -292,9 +282,7 @@ function App() {
   const totalTasks = Array.isArray(tasks) ? tasks.length : 0;
 
   // Nombre de tâches cochées comme terminées
-  const doneTasks = Array.isArray(tasks)
-    ? tasks.filter((t) => t.done).length
-    : 0;
+  const doneTasks = Array.isArray(tasks) ? tasks.filter((t) => t.done).length : 0;
 
   // Nombre de tâches non terminées avec priorité haute
   const highPriority = Array.isArray(tasks)
@@ -343,9 +331,7 @@ function App() {
 
   // Fonction pour retrouver le nom d'un projet
   function getProjectName(projectId) {
-    const project = Array.isArray(projects)
-      ? projects.find((p) => p.id === projectId)
-      : null;
+    const project = Array.isArray(projects) ? projects.find((p) => p.id === projectId) : null;
     return project ? project.name : "Inconnu";
   }
 
@@ -646,11 +632,7 @@ function App() {
                     value={`${totalTasks ? Math.round((doneTasks / totalTasks) * 100) : 0}%`}
                     sub="taux global"
                   />
-                  <StatCard
-                    label="Urgentes"
-                    value={highPriority}
-                    sub="priorité haute"
-                  />
+                  <StatCard label="Urgentes" value={highPriority} sub="priorité haute" />
                 </div>
 
                 <div style={{ marginBottom: "14px" }}>
@@ -683,9 +665,7 @@ function App() {
                       Projets
                     </div>
                     {Array.isArray(projects) &&
-                      projects.map((project) => (
-                        <ProjectCard key={project.id} project={project} />
-                      ))}
+                      projects.map((project) => <ProjectCard key={project.id} project={project} />)}
                   </div>
 
                   <div
@@ -704,9 +684,7 @@ function App() {
                         marginBottom: "1rem",
                       }}
                     >
-                      <div style={{ fontSize: "14px", fontWeight: "500" }}>
-                        Tâches
-                      </div>
+                      <div style={{ fontSize: "14px", fontWeight: "500" }}>Tâches</div>
                       <div style={{ display: "flex", gap: "6px" }}>
                         <select
                           style={selectStyle}
@@ -793,13 +771,8 @@ function App() {
                     marginBottom: "1rem",
                   }}
                 >
-                  <div style={{ fontSize: "14px", fontWeight: "500" }}>
-                    Toutes les tâches
-                  </div>
-                  <div
-                    className="task-filters"
-                    style={{ display: "flex", gap: "6px" }}
-                  >
+                  <div style={{ fontSize: "14px", fontWeight: "500" }}>Toutes les tâches</div>
+                  <div className="task-filters" style={{ display: "flex", gap: "6px" }}>
                     <select
                       style={selectStyle}
                       value={filterPriority}
@@ -885,22 +858,14 @@ function App() {
 
             {/* ---- PAGE VUE CALENDRIER ---- */}
             {activePage === "calendrier" && (
-              <PageVueCalendrier
-                tasks={tasks}
-                projects={projects}
-                onEdit={setTaskToEdit}
-              />
+              <PageVueCalendrier tasks={tasks} projects={projects} onEdit={setTaskToEdit} />
             )}
 
             {/* ---- PAGE VUE GANTT ---- */}
-            {activePage === "gantt" && (
-              <PageVueGantt tasks={tasks} projects={projects} />
-            )}
+            {activePage === "gantt" && <PageVueGantt tasks={tasks} projects={projects} />}
 
             {/* ---- PAGE VUE TIMELINE ---- */}
-            {activePage === "timeline" && (
-              <PageVueTimeline tasks={tasks} projects={projects} />
-            )}
+            {activePage === "timeline" && <PageVueTimeline tasks={tasks} projects={projects} />}
 
             {/* ---- PAGE STATISTIQUES ---- */}
             {activePage === "stats" && (
@@ -913,14 +878,10 @@ function App() {
             )}
 
             {/* ---- PAGE RAPPORTS AVANCÉS ---- */}
-            {activePage === "rapports" && (
-              <PageRapportsAvances projects={projects} />
-            )}
+            {activePage === "rapports" && <PageRapportsAvances projects={projects} />}
 
             {/* ---- PAGE GITHUB ---- */}
-            {activePage === "github" && (
-              <PageGitHub tasks={tasks} projects={projects} />
-            )}
+            {activePage === "github" && <PageGitHub tasks={tasks} projects={projects} />}
 
             {/* ---- PAGE GOOGLE CALENDAR ---- */}
             {activePage === "calendar-sync" && (
@@ -940,14 +901,10 @@ function App() {
             {activePage === "wiki" && <PageWiki projects={projects} />}
 
             {/* ---- PAGE AUTOMATISATIONS ---- */}
-            {activePage === "automatisations" && (
-              <PageAutomatisations projects={projects} />
-            )}
+            {activePage === "automatisations" && <PageAutomatisations projects={projects} />}
 
             {/* ---- PAGE RECHERCHE AVANCÉE ---- */}
-            {activePage === "recherche" && (
-              <PageRechercheAvancee projects={projects} />
-            )}
+            {activePage === "recherche" && <PageRechercheAvancee projects={projects} />}
 
             {/* ---- PAGE HISTORIQUE ---- */}
             {activePage === "historique" && <PageHistorique />}
@@ -962,9 +919,7 @@ function App() {
             {activePage === "profil" && <PageProfil userEmail={userEmail} />}
 
             {/* ---- PAGE ASSISTANT IA ---- */}
-            {activePage === "ia" && (
-              <PageAssistantIA tasks={tasks} projects={projects} />
-            )}
+            {activePage === "ia" && <PageAssistantIA tasks={tasks} projects={projects} />}
           </div>
         </div>
       )}

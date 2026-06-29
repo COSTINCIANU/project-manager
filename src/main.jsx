@@ -17,10 +17,7 @@ Sentry.init({
   // Environnement
   environment: import.meta.env.MODE,
   // Intégrations
-  integrations: [
-    Sentry.browserTracingIntegration(),
-    Sentry.replayIntegration(),
-  ],
+  integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
   // Ignore les erreurs non pertinentes
   ignoreErrors: ["JWT Token not found", "401", "Cross-Origin-Opener-Policy"],
 });

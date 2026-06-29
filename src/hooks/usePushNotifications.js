@@ -6,8 +6,7 @@
 
 import { useState, useEffect } from "react";
 
-const API_URL =
-  import.meta.env.VITE_API_URL || "https://api.costincianu.fr/api";
+const API_URL = import.meta.env.VITE_API_URL || "https://api.costincianu.fr/api";
 
 export function usePushNotifications() {
   // =====================
@@ -29,9 +28,7 @@ export function usePushNotifications() {
   useEffect(() => {
     // On vérifie que le navigateur supporte les notifications push
     const supported =
-      "serviceWorker" in navigator &&
-      "PushManager" in window &&
-      "Notification" in window;
+      "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
 
     setIsSupported(supported);
 
@@ -59,9 +56,7 @@ export function usePushNotifications() {
   // =====================
   function urlBase64ToUint8Array(base64String) {
     const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-    const base64 = (base64String + padding)
-      .replace(/-/g, "+")
-      .replace(/_/g, "/");
+    const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
     const rawData = window.atob(base64);
     const outputArray = new Uint8Array(rawData.length);
     for (let i = 0; i < rawData.length; ++i) {

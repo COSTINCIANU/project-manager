@@ -167,14 +167,7 @@ function PageChat({ userEmail }) {
   }
 
   function getAvatarColor(email) {
-    const colors = [
-      "#378ADD",
-      "#639922",
-      "#e67e22",
-      "#9B59B6",
-      "#e74c3c",
-      "#00695C",
-    ];
+    const colors = ["#378ADD", "#639922", "#e67e22", "#9B59B6", "#e74c3c", "#00695C"];
     let hash = 0;
     for (let i = 0; i < email.length; i++) {
       hash = email.charCodeAt(i) + ((hash << 5) - hash);
@@ -209,12 +202,8 @@ function PageChat({ userEmail }) {
       >
         <span style={{ fontSize: "20px" }}>💬</span>
         <div>
-          <div style={{ fontSize: "14px", fontWeight: "500" }}>
-            Chat d'équipe
-          </div>
-          <div
-            style={{ fontSize: "11px", color: connected ? "#639922" : "#aaa" }}
-          >
+          <div style={{ fontSize: "14px", fontWeight: "500" }}>Chat d'équipe</div>
+          <div style={{ fontSize: "11px", color: connected ? "#639922" : "#aaa" }}>
             {connected ? "● Temps réel (Mercure)" : "● Polling 5s (secours)"}
           </div>
         </div>
@@ -235,9 +224,7 @@ function PageChat({ userEmail }) {
         }}
       >
         {loading && (
-          <div style={{ textAlign: "center", color: "#aaa", fontSize: "13px" }}>
-            Chargement...
-          </div>
+          <div style={{ textAlign: "center", color: "#aaa", fontSize: "13px" }}>Chargement...</div>
         )}
 
         {!loading && messages.length === 0 && (
@@ -299,9 +286,7 @@ function PageChat({ userEmail }) {
                 <div
                   style={{
                     padding: "10px 14px",
-                    borderRadius: isMe
-                      ? "16px 16px 4px 16px"
-                      : "16px 16px 16px 4px",
+                    borderRadius: isMe ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
                     background: isMe ? "#111" : "#fff",
                     color: isMe ? "#fff" : "#222",
                     fontSize: "13px",

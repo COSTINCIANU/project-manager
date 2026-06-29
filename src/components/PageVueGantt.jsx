@@ -111,11 +111,7 @@ function PageVueGantt({ tasks, projects }) {
   // Tâches avec date d'échéance dans ce mois
   const filteredTasks = Array.isArray(tasks)
     ? tasks
-        .filter((t) =>
-          filterProject === "tous"
-            ? true
-            : t.projectId === parseInt(filterProject),
-        )
+        .filter((t) => (filterProject === "tous" ? true : t.projectId === parseInt(filterProject)))
         .filter((t) => {
           if (!t.dueDate) return false;
           const d = new Date(t.dueDate);
@@ -211,17 +207,14 @@ function PageVueGantt({ tasks, projects }) {
 
         {/* Compteur */}
         <div style={{ fontSize: "12px", color: "#aaa" }}>
-          {filteredTasks.length} tâche{filteredTasks.length !== 1 ? "s" : ""} ce
-          mois
+          {filteredTasks.length} tâche{filteredTasks.length !== 1 ? "s" : ""} ce mois
         </div>
       </div>
 
       {/* ---- GRILLE GANTT ---- */}
       <div style={{ minWidth: "400px" }}>
         {/* En-tête des jours */}
-        <div
-          style={{ display: "flex", marginBottom: "4px", paddingLeft: "200px" }}
-        >
+        <div style={{ display: "flex", marginBottom: "4px", paddingLeft: "200px" }}>
           {days.map((day) => {
             const isToday =
               new Date().getDate() === day &&
@@ -250,29 +243,28 @@ function PageVueGantt({ tasks, projects }) {
         </div>
 
         {/* Ligne aujourd'hui */}
-        {new Date().getMonth() === month &&
-          new Date().getFullYear() === year && (
+        {new Date().getMonth() === month && new Date().getFullYear() === year && (
+          <div
+            style={{
+              position: "relative",
+              height: "0",
+              marginLeft: "200px",
+            }}
+          >
             <div
               style={{
-                position: "relative",
-                height: "0",
-                marginLeft: "200px",
+                position: "absolute",
+                left: `${((new Date().getDate() - 1) / daysInMonth) * 100}%`,
+                top: 0,
+                bottom: 0,
+                width: "1px",
+                background: "#378ADD",
+                opacity: 0.5,
+                zIndex: 1,
               }}
-            >
-              <div
-                style={{
-                  position: "absolute",
-                  left: `${((new Date().getDate() - 1) / daysInMonth) * 100}%`,
-                  top: 0,
-                  bottom: 0,
-                  width: "1px",
-                  background: "#378ADD",
-                  opacity: 0.5,
-                  zIndex: 1,
-                }}
-              />
-            </div>
-          )}
+            />
+          </div>
+        )}
 
         {/* Tâches */}
         {filteredTasks.length === 0 ? (
@@ -351,9 +343,7 @@ function PageVueGantt({ tasks, projects }) {
                           left: `${((day - 1) / daysInMonth) * 100}%`,
                           width: `${(1 / daysInMonth) * 100}%`,
                           height: "100%",
-                          background: isWeekend
-                            ? "rgba(0,0,0,0.06)"
-                            : "transparent",
+                          background: isWeekend ? "rgba(0,0,0,0.06)" : "transparent",
                           borderLeft: "1px solid #f5f5f5",
                         }}
                       />

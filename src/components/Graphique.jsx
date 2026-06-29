@@ -66,9 +66,7 @@ function Graphique({ projects }) {
       }}
     >
       {/* Titre du graphique */}
-      <div
-        style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1.5rem" }}
-      >
+      <div style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1.5rem" }}>
         Progression des projets
       </div>
 
@@ -76,11 +74,7 @@ function Graphique({ projects }) {
       <ResponsiveContainer width="100%" height={220}>
         <BarChart data={data} barSize={36}>
           {/* Grille de fond discrète */}
-          <CartesianGrid
-            strokeDasharray="3 3"
-            stroke="#f0f0f0"
-            vertical={false}
-          />
+          <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
 
           {/* Axe horizontal — noms des projets */}
           <XAxis

@@ -5,14 +5,7 @@
 // =====================================================
 import { useState } from "react";
 
-function PageVueListe({
-  tasks,
-  projects,
-  onToggle,
-  onDelete,
-  onEdit,
-  loading,
-}) {
+function PageVueListe({ tasks, projects, onToggle, onDelete, onEdit, loading }) {
   // =====================
   // ÉTATS
   // =====================
@@ -117,11 +110,7 @@ function PageVueListe({
   // Filtre par recherche
   const filteredAndSorted = Array.isArray(tasks)
     ? tasks
-        .filter(
-          (t) =>
-            search === "" ||
-            t.name.toLowerCase().includes(search.toLowerCase()),
-        )
+        .filter((t) => search === "" || t.name.toLowerCase().includes(search.toLowerCase()))
         .filter((t) => {
           if (filterStatus === "toutes") return true;
           if (filterStatus === "done") return t.done;
@@ -129,14 +118,8 @@ function PageVueListe({
           if (filterStatus === "todo") return !t.done && !t.inProgress;
           return true;
         })
-        .filter((t) =>
-          filterPriority === "toutes" ? true : t.priority === filterPriority,
-        )
-        .filter((t) =>
-          filterProject === "tous"
-            ? true
-            : t.projectId === parseInt(filterProject),
-        )
+        .filter((t) => (filterPriority === "toutes" ? true : t.priority === filterPriority))
+        .filter((t) => (filterProject === "tous" ? true : t.projectId === parseInt(filterProject)))
         .sort((a, b) => {
           let valA, valB;
           if (sortBy === "name") {
@@ -339,19 +322,14 @@ function PageVueListe({
               filteredAndSorted.map((task) => {
                 const pStyle = getPriorityStyle(task.priority);
                 const subTotal = task.subTasks?.length || 0;
-                const subDone =
-                  task.subTasks?.filter((st) => st.done).length || 0;
+                const subDone = task.subTasks?.filter((st) => st.done).length || 0;
 
                 return (
                   <tr
                     key={task.id}
                     style={{ transition: "background 0.15s" }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.background = "#fafafa")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.background = "transparent")
-                    }
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "#fafafa")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                   >
                     {/* Checkbox */}
                     <td style={tdStyle}>
@@ -491,9 +469,7 @@ function PageVueListe({
                           </div>
                         </div>
                       ) : (
-                        <span style={{ color: "#ddd", fontSize: "11px" }}>
-                          —
-                        </span>
+                        <span style={{ color: "#ddd", fontSize: "11px" }}>—</span>
                       )}
                     </td>
 
@@ -514,12 +490,8 @@ function PageVueListe({
                             color: "#ddd",
                             fontSize: "14px",
                           }}
-                          onMouseEnter={(e) =>
-                            (e.currentTarget.style.color = "#378ADD")
-                          }
-                          onMouseLeave={(e) =>
-                            (e.currentTarget.style.color = "#ddd")
-                          }
+                          onMouseEnter={(e) => (e.currentTarget.style.color = "#378ADD")}
+                          onMouseLeave={(e) => (e.currentTarget.style.color = "#ddd")}
                           title="Modifier"
                         >
                           ✎
@@ -532,12 +504,8 @@ function PageVueListe({
                             color: "#ddd",
                             fontSize: "14px",
                           }}
-                          onMouseEnter={(e) =>
-                            (e.currentTarget.style.color = "#e74c3c")
-                          }
-                          onMouseLeave={(e) =>
-                            (e.currentTarget.style.color = "#ddd")
-                          }
+                          onMouseEnter={(e) => (e.currentTarget.style.color = "#e74c3c")}
+                          onMouseLeave={(e) => (e.currentTarget.style.color = "#ddd")}
                           title="Supprimer"
                         >
                           ✕

@@ -29,9 +29,7 @@ function PageStripe() {
     const plan = params.get("plan");
 
     if (payment === "success") {
-      setMessage(
-        `✅ Paiement réussi ! Votre plan ${plan} est maintenant actif.`,
-      );
+      setMessage(`✅ Paiement réussi ! Votre plan ${plan} est maintenant actif.`);
       // Nettoyer l'URL
       window.history.replaceState({}, "", window.location.pathname);
     } else if (payment === "cancelled") {
@@ -47,17 +45,14 @@ function PageStripe() {
     setLoading(plan);
 
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/stripe/checkout`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
-          },
-          body: JSON.stringify({ plan }),
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/stripe/checkout`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
         },
-      );
+        body: JSON.stringify({ plan }),
+      });
 
       const data = await res.json();
 
@@ -157,8 +152,7 @@ function PageStripe() {
           Choisissez votre plan
         </h1>
         <p style={{ fontSize: "14px", color: "#aaa", margin: 0 }}>
-          Commencez gratuitement, passez au niveau supérieur quand vous êtes
-          prêt
+          Commencez gratuitement, passez au niveau supérieur quand vous êtes prêt
         </p>
       </div>
 
@@ -191,9 +185,7 @@ function PageStripe() {
             key={plan.id}
             style={{
               background: "#fff",
-              border: plan.popular
-                ? `2px solid ${plan.color}`
-                : "1px solid #eee",
+              border: plan.popular ? `2px solid ${plan.color}` : "1px solid #eee",
               borderRadius: "12px",
               padding: "1.5rem",
               position: "relative",
@@ -235,22 +227,16 @@ function PageStripe() {
             </div>
 
             {/* Description */}
-            <div
-              style={{ fontSize: "12px", color: "#aaa", marginBottom: "1rem" }}
-            >
+            <div style={{ fontSize: "12px", color: "#aaa", marginBottom: "1rem" }}>
               {plan.description}
             </div>
 
             {/* Prix */}
             <div style={{ marginBottom: "1.5rem" }}>
-              <span
-                style={{ fontSize: "32px", fontWeight: "700", color: "#111" }}
-              >
+              <span style={{ fontSize: "32px", fontWeight: "700", color: "#111" }}>
                 {plan.price}
               </span>
-              <span style={{ fontSize: "13px", color: "#aaa" }}>
-                {plan.period}
-              </span>
+              <span style={{ fontSize: "13px", color: "#aaa" }}>{plan.period}</span>
             </div>
 
             {/* Fonctionnalités */}
@@ -289,9 +275,7 @@ function PageStripe() {
                 fontWeight: "500",
               }}
             >
-              {loading === plan.ctaAction && plan.ctaAction
-                ? "⏳ Chargement..."
-                : plan.cta}
+              {loading === plan.ctaAction && plan.ctaAction ? "⏳ Chargement..." : plan.cta}
             </button>
           </div>
         ))}
@@ -309,8 +293,7 @@ function PageStripe() {
           textAlign: "center",
         }}
       >
-        🔒 Paiement sécurisé par Stripe · Annulation possible à tout moment ·
-        Pas d'engagement
+        🔒 Paiement sécurisé par Stripe · Annulation possible à tout moment · Pas d'engagement
       </div>
     </div>
   );
