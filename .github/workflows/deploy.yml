@@ -30,7 +30,7 @@ jobs:
         with:
           # node-version: "20"
           node-version: "22"
-          cache: "npm"
+          # cache: "npm"
 
       # # Installation des dépendances
       # - name: Install dependencies
