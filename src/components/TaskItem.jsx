@@ -185,6 +185,27 @@ function TaskItem({ task, projectName, onToggle, onDelete, onEdit, users, userRo
             {/* Nom du projet */}
             <div style={{ fontSize: "11px", color: "#aaa" }}>{projectName}</div>
 
+            {/* Badge récurrence */}
+            {task.recurrence && (
+              <div
+                style={{
+                  fontSize: "10px",
+                  padding: "1px 7px",
+                  borderRadius: "20px",
+                  background: "#F0E6FF",
+                  color: "#7B2FBE",
+                  fontWeight: "500",
+                }}
+              >
+                🔄{" "}
+                {task.recurrence === "daily"
+                  ? "Quotidien"
+                  : task.recurrence === "weekly"
+                    ? "Hebdo"
+                    : "Mensuel"}
+              </div>
+            )}
+
             {/* Badge bloquée par dépendance */}
             {isBlocked && (
               <div
