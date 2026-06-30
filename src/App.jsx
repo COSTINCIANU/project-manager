@@ -102,9 +102,6 @@ function App() {
   // Nombre de mentions non lues
   const [unreadMentions, setUnreadMentions] = useState(0);
 
-  // Nombre de mentions non lues
-  const [unreadMentions, setUnreadMentions] = useState(0);
-
   // Message d'alerte rate limiting (429)
   const [rateLimitMessage, setRateLimitMessage] = useState(null);
 
