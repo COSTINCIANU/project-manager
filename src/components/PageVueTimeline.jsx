@@ -2,20 +2,56 @@
 // PageVueTimeline.jsx — Vue Timeline des tâches
 // Affiche les tâches sur un axe temporel horizontal
 // avec barres colorées selon la priorité
+// Affiche aussi les jalons (drapeaux 🏁) du projet
 // Responsive : scroll horizontal sur mobile
 // =====================================================
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 function PageVueTimeline({ tasks, projects }) {
   // =====================
   // ÉTATS
   // =====================
-
   // Filtre par projet
   const [filterProject, setFilterProject] = useState("tous");
-
   // Nombre de jours affichés
   const [daysRange, setDaysRange] = useState(30);
+  // Jalons chargés depuis l'API
+  const [jalons, setJalons] = useState([]);
+
+  // =====================
+  // CHARGEMENT DES JALONS
+  // Charge les jalons de tous les projets affichés
+  // =====================
+  useEffect(() => {
+    async function chargerJalons() {
+      const safeProjects = Array.isArray(projects) ? projects : [];
+      const projetsAffiches =
+        filterProject === "tous"
+          ? safeProjects
+          : safeProjects.filter((p) => p.id === parseInt(filterProject));
+
+      const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
+      const tousLesJalons = [];
+
+      for (const projet of projetsAffiches) {
+        try {
+          const reponse = await fetch(`${API_URL}/projets/${projet.id}/jalons`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem("jwt_token")}` },
+          });
+          const données = await reponse.json();
+          if (Array.isArray(données)) {
+            tousLesJalons.push(...données.map((j) => ({ ...j, projectId: projet.id })));
+          }
+        } catch (err) {
+          console.error("Erreur chargement jalons :", err);
+        }
+      }
+
+      setJalons(tousLesJalons);
+    }
+
+    chargerJalons();
+  }, [projects, filterProject]);
 
   // =====================
   // DONNÉES
@@ -87,6 +123,18 @@ function PageVueTimeline({ tasks, projects }) {
       left: Math.max(0, left),
       width: Math.max(0.5, width),
     };
+  }
+
+  // =====================
+  // POSITION D'UN JALON SUR L'AXE (en %)
+  // Retourne null si le jalon est hors de la fenêtre affichée
+  // =====================
+  function getJalonPosition(jalon) {
+    const dateJalon = new Date(jalon.date);
+    const totalMs = endDate.getTime() - startDate.getTime();
+    const leftPct = ((dateJalon.getTime() - startDate.getTime()) / totalMs) * 100;
+    if (leftPct < 0 || leftPct > 100) return null;
+    return leftPct;
   }
 
   // =====================
@@ -196,7 +244,7 @@ function PageVueTimeline({ tasks, projects }) {
           <option value={90}>3 mois</option>
         </select>
 
-        {/* Légende priorités */}
+        {/* Légende priorités + jalons */}
         <div
           style={{
             display: "flex",
@@ -231,6 +279,18 @@ function PageVueTimeline({ tasks, projects }) {
               <span style={{ color: "#666" }}>{p.label}</span>
             </div>
           ))}
+          {/* Légende jalon */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              fontSize: "11px",
+            }}
+          >
+            <span>🏁</span>
+            <span style={{ color: "#666" }}>Jalon</span>
+          </div>
         </div>
       </div>
 
@@ -314,6 +374,28 @@ function PageVueTimeline({ tasks, projects }) {
                     />
                   );
                 })()}
+
+                {/* ---- MARQUEURS JALONS sur l'axe d'en-tête ---- */}
+                {jalons.map((jalon) => {
+                  const leftPct = getJalonPosition(jalon);
+                  if (leftPct === null) return null;
+                  return (
+                    <div
+                      key={`jalon-marker-${jalon.id}`}
+                      style={{
+                        position: "absolute",
+                        left: `${leftPct}%`,
+                        top: "2px",
+                        transform: "translateX(-50%)",
+                        fontSize: "12px",
+                        cursor: "default",
+                      }}
+                      title={`🏁 ${jalon.nom} — ${jalon.date}`}
+                    >
+                      🏁
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -436,6 +518,26 @@ function PageVueTimeline({ tasks, projects }) {
                           />
                         );
                       })()}
+
+                      {/* Lignes verticales pointillées des jalons */}
+                      {jalons.map((jalon) => {
+                        const leftPct = getJalonPosition(jalon);
+                        if (leftPct === null) return null;
+                        return (
+                          <div
+                            key={`jalon-line-${jalon.id}-${task.id}`}
+                            style={{
+                              position: "absolute",
+                              left: `${leftPct}%`,
+                              top: 0,
+                              bottom: 0,
+                              width: "1px",
+                              borderLeft: `1px dashed ${jalon.couleur || "#9B7FD4"}`,
+                              opacity: 0.4,
+                            }}
+                          />
+                        );
+                      })}
                     </div>
                   </div>
                 );
