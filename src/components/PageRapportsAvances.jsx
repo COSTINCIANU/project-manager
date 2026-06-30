@@ -156,7 +156,7 @@ function PageRapportsAvances({ projects = [] }) {
   // RENDU
   // =====================
   return (
-    <div style={{ maxWidth: "900px" }}>
+    <div style={{ width: "100%" }}>
       {/* ---- EN-TÊTE — sélecteur de projet ---- */}
       <div
         style={{
