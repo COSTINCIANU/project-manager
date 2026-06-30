@@ -38,7 +38,9 @@ jobs:
 
       # Installation des dépendances
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: |
+          npm install --legacy-peer-deps
+          npm install @rolldown/binding-linux-x64-gnu --save-optional --legacy-peer-deps || true
 
       # Build de production
       - name: Build
