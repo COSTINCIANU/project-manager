@@ -142,7 +142,7 @@ function PageAdmin() {
     <div
       style={{
         // maxWidth: "900px",
-        margin: "0 auto",
+        // margin: "0 auto",
         display: "flex",
         flexDirection: "column",
         gap: "14px",
