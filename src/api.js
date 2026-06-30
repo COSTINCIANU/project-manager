@@ -88,6 +88,33 @@ window.addEventListener("offline", () => {
 // Tous les appels passent par ici pour gérer
 // automatiquement le mode hors ligne
 // =====================================================
+// async function callAPI(method, endpoint, body = null) {
+//   const url = `${API_URL}${endpoint}`;
+
+//   // Si pas de connexion → on stocke l'action pour plus tard
+//   if (!navigator.onLine) {
+//     savePendingAction(method, url, body);
+//     return null; // Les composants React doivent gérer le cas null
+//   }
+
+//   // Si connexion OK → on envoie la requête normalement
+//   const res = await fetch(url, {
+//     method,
+//     headers: authHeaders(),
+//     body: body ? JSON.stringify(body) : null,
+//   });
+
+//   // Les requêtes DELETE ne retournent pas de données
+//   if (method === "DELETE") return null;
+
+//   return res.json();
+// }
+
+// =====================================================
+// callAPI — Fonction centrale pour tous les appels API
+// Tous les appels passent par ici pour gérer
+// automatiquement le mode hors ligne
+// =====================================================
 async function callAPI(method, endpoint, body = null) {
   const url = `${API_URL}${endpoint}`;
 
@@ -104,6 +131,16 @@ async function callAPI(method, endpoint, body = null) {
     body: body ? JSON.stringify(body) : null,
   });
 
+  // ---- Gestion du rate limiting (429) ----
+  if (res.status === 429) {
+    const données = await res.json().catch(() => ({}));
+    const message = données.error || "Trop de requêtes — veuillez patienter quelques instants.";
+    // Émet un événement global pour afficher le toast dans App.jsx
+    window.dispatchEvent(new CustomEvent("rate-limit-error", { detail: { message } }));
+    const erreur = new Error(message);
+    erreur.status = 429;
+    throw erreur;
+  }
   // Les requêtes DELETE ne retournent pas de données
   if (method === "DELETE") return null;
 

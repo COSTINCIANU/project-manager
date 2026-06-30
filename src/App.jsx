@@ -102,6 +102,12 @@ function App() {
   // Nombre de mentions non lues
   const [unreadMentions, setUnreadMentions] = useState(0);
 
+  // Nombre de mentions non lues
+  const [unreadMentions, setUnreadMentions] = useState(0);
+
+  // Message d'alerte rate limiting (429)
+  const [rateLimitMessage, setRateLimitMessage] = useState(null);
+
   // / *****************Les Effet Fin ********************/
 
   // Détection du token OAuth dans l'URL après redirection Google/GitHub
@@ -261,6 +267,18 @@ function App() {
     const interval = setInterval(loadMentions, 60000);
     return () => clearInterval(interval);
   }, [token]);
+
+  // =====================
+  // ÉCOUTE GLOBALE DES ERREURS 429 (rate limiting)
+  // =====================
+  useEffect(() => {
+    function handleRateLimitError(event) {
+      setRateLimitMessage(event.detail.message);
+      setTimeout(() => setRateLimitMessage(null), 6000);
+    }
+    window.addEventListener("rate-limit-error", handleRateLimitError);
+    return () => window.removeEventListener("rate-limit-error", handleRateLimitError);
+  }, []);
 
   // =====================
   // FILTRAGE DES TÂCHES
@@ -467,6 +485,28 @@ function App() {
         }
         return null;
       })()}
+
+      {/* ---- TOAST RATE LIMITING ---- */}
+      {rateLimitMessage && (
+        <div
+          style={{
+            position: "fixed",
+            top: "20px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "#A32D2D",
+            color: "#fff",
+            padding: "12px 24px",
+            borderRadius: "10px",
+            fontSize: "13px",
+            fontWeight: "500",
+            zIndex: 99999,
+            boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
+          }}
+        >
+          ⚠️ {rateLimitMessage}
+        </div>
+      )}
 
       {/* ---- LANDING PAGE — affichée si pas connecté ---- */}
       {!token && <LandingPage onLogin={() => setShowAuth(true)} />}
