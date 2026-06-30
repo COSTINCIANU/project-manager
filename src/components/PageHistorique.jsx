@@ -172,6 +172,9 @@ function PageHistorique() {
                     }}
                   >
                     👤 {log.userEmail} — 📅 {formatDate(log.createdAt)}
+                    {log.ipAddress && (
+                      <span style={{ marginLeft: "6px", color: "#ccc" }}>— 🌐 {log.ipAddress}</span>
+                    )}
                   </div>
                 </div>
 
