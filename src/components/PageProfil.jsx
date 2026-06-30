@@ -616,6 +616,117 @@ function PageProfil({ userEmail }) {
           </div>
         </div>
       )}
+
+      {/* ---- RGPD — EXPORT ET SUPPRESSION DE COMPTE ---- */}
+      <div
+        style={{
+          background: "#fff",
+          border: "1px solid #FCEBEB",
+          borderRadius: "12px",
+          padding: "1.5rem",
+        }}
+      >
+        <div style={{ fontSize: "14px", fontWeight: "500", marginBottom: "1rem" }}>
+          🔒 Confidentialité et données personnelles (RGPD)
+        </div>
+
+        {/* Export des données */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingBottom: "1rem",
+            marginBottom: "1rem",
+            borderBottom: "1px solid #f0f0f0",
+          }}
+        >
+          <div>
+            <div style={{ fontSize: "13px", color: "#333", fontWeight: "500" }}>
+              Exporter mes données
+            </div>
+            <div style={{ fontSize: "12px", color: "#aaa", marginTop: "2px" }}>
+              Téléchargez toutes vos données personnelles au format JSON
+            </div>
+          </div>
+          <button
+            onClick={async () => {
+              const res = await fetch(`${import.meta.env.VITE_API_URL}/user/export`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("jwt_token")}` },
+              });
+              const blob = await res.blob();
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = `mes-donnees-${new Date().toISOString().split("T")[0]}.json`;
+              a.click();
+              window.URL.revokeObjectURL(url);
+            }}
+            style={{
+              padding: "8px 16px",
+              borderRadius: "8px",
+              border: "1px solid #ddd",
+              cursor: "pointer",
+              fontSize: "13px",
+              fontWeight: "500",
+              background: "#fff",
+              color: "#333",
+            }}
+          >
+            📥 Exporter (JSON)
+          </button>
+        </div>
+
+        {/* Suppression du compte */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>
+            <div style={{ fontSize: "13px", color: "#A32D2D", fontWeight: "500" }}>
+              Supprimer mon compte
+            </div>
+            <div style={{ fontSize: "12px", color: "#aaa", marginTop: "2px" }}>
+              Action définitive et irréversible — toutes vos données seront supprimées
+            </div>
+          </div>
+          <button
+            onClick={async () => {
+              const confirmation = window.prompt(
+                'Cette action est irréversible. Tapez "SUPPRIMER" pour confirmer la suppression de votre compte.'
+              );
+              if (confirmation !== "SUPPRIMER") return;
+
+              const res = await fetch(`${import.meta.env.VITE_API_URL}/user/me`, {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${localStorage.getItem("jwt_token")}` },
+              });
+
+              if (res.ok) {
+                localStorage.removeItem("jwt_token");
+                localStorage.removeItem("user_email");
+                localStorage.removeItem("user_role");
+                window.location.href = "/";
+              }
+            }}
+            style={{
+              padding: "8px 16px",
+              borderRadius: "8px",
+              border: "none",
+              cursor: "pointer",
+              fontSize: "13px",
+              fontWeight: "500",
+              background: "#FCEBEB",
+              color: "#A32D2D",
+            }}
+          >
+            🗑️ Supprimer mon compte
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
