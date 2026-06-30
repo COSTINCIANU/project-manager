@@ -199,7 +199,8 @@ function PageGoogleCalendar({ tasks, projects }) {
   // RENDU
   // =====================
   return (
-    <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+    // <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+    <div style={{ width: "100%" }}>
       {/* ---- CARTE CONNEXION ---- */}
       <div
         style={{

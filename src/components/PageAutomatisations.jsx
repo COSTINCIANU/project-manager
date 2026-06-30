@@ -195,7 +195,8 @@ function PageAutomatisations({ projects = [] }) {
   // RENDU DE LA PAGE
   // =====================
   return (
-    <div style={{ maxWidth: "860px" }}>
+    // <div style={{ maxWidth: "860px" }}>
+    <div style={{ width: "100%" }}>
       {/* ---- EN-TÊTE ---- */}
       <div
         style={{

@@ -159,7 +159,8 @@ function PageWiki({ projects }) {
   // RENDU
   // =====================
   return (
-    <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+    // <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+    <div style={{ width: "100%" }}>
       {/* ---- SÉLECTEUR DE PROJET ---- */}
       <div
         style={{
