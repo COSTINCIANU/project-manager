@@ -203,7 +203,8 @@ function PageHistorique() {
                       {log.action.replace("_", " ")}
                     </div>
                   </div>
-                  <div
+
+                  {/* <div
                     style={{
                       fontSize: "11px",
                       color: "#aaa",
@@ -216,6 +217,33 @@ function PageHistorique() {
                     👤 {log.userEmail} — 📅 {formatDate(log.createdAt)}
                     {log.ipAddress && (
                       <span style={{ marginLeft: "6px", color: "#ccc" }}>— 🌐 {log.ipAddress}</span>
+                    )}
+                  </div> */}
+
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      color: "#aaa",
+                      marginTop: "4px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    <span>👤</span>
+                    <span>{log.userEmail}</span>
+                    <span>—</span>
+                    <span>📅</span>
+                    <span>{formatDate(log.createdAt)}</span>
+                    {log.ipAddress && (
+                      <>
+                        <span>—</span>
+                        <span>🌐</span>
+                        <span style={{ color: "#ccc" }}>{log.ipAddress}</span>
+                      </>
                     )}
                   </div>
                 </div>
