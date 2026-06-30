@@ -2,6 +2,7 @@
 // PageHistorique.jsx — Historique des actions
 // Affiche les 50 dernières actions effectuées
 // dans l'application avec l'utilisateur et la date
+// Grille responsive : 2 colonnes sur desktop, 1 sur tablette/mobile
 // =====================================================
 import { useState, useEffect } from "react";
 
@@ -30,7 +31,6 @@ function PageHistorique() {
         const data = await res.json();
         // Vérifie que data est bien un tableau avant de l'utiliser
         if (Array.isArray(data)) setLogs(data);
-        // setLogs(data);
       } catch (err) {
         console.error("Erreur chargement historique :", err);
       } finally {
@@ -91,79 +91,130 @@ function PageHistorique() {
   // =====================
   return (
     <div style={{ width: "100%" }}>
-      {/* ---- CARTE PRINCIPALE ---- */}
+      {/* ---- EN-TÊTE ---- */}
       <div
         style={{
           background: "#fff",
           border: "1px solid #eee",
           borderRadius: "12px",
-          padding: "1.5rem",
+          padding: "1.25rem 1.5rem",
+          marginBottom: "14px",
+          fontSize: "14px",
+          fontWeight: "500",
         }}
       >
+        📋 Historique des actions
+      </div>
+
+      {/* ---- ÉTAT DE CHARGEMENT ---- */}
+      {loading && (
         <div
           style={{
-            fontSize: "14px",
-            fontWeight: "500",
-            marginBottom: "1.5rem",
+            textAlign: "center",
+            color: "#aaa",
+            fontSize: "13px",
+            padding: "3rem 0",
+            background: "#fff",
+            border: "1px solid #eee",
+            borderRadius: "12px",
           }}
         >
-          📋 Historique des actions
+          Chargement...
         </div>
+      )}
 
-        {/* ---- ÉTAT DE CHARGEMENT ---- */}
-        {loading && (
-          <div
-            style={{
-              textAlign: "center",
-              color: "#aaa",
-              fontSize: "13px",
-              padding: "2rem 0",
-            }}
-          >
-            Chargement...
-          </div>
-        )}
+      {/* ---- LISTE VIDE ---- */}
+      {!loading && logs.length === 0 && (
+        <div
+          style={{
+            textAlign: "center",
+            color: "#aaa",
+            fontSize: "13px",
+            padding: "3rem 0",
+            background: "#fff",
+            border: "1px solid #eee",
+            borderRadius: "12px",
+          }}
+        >
+          Aucune action enregistrée
+        </div>
+      )}
 
-        {/* ---- LISTE VIDE ---- */}
-        {!loading && logs.length === 0 && (
-          <div
-            style={{
-              textAlign: "center",
-              color: "#aaa",
-              fontSize: "13px",
-              padding: "2rem 0",
-            }}
-          >
-            Aucune action enregistrée
-          </div>
-        )}
-
-        {/* ---- LISTE DES ACTIONS ---- */}
-        {!loading &&
-          logs.map((log) => {
+      {/* ---- GRILLE 2 COLONNES RESPONSIVE ---- */}
+      {!loading && logs.length > 0 && (
+        <div
+          className="historique-grid"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gap: "10px",
+          }}
+        >
+          {logs.map((log) => {
             const style = getActionColor(log.action);
             return (
               <div
                 key={log.id}
                 style={{
                   display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                  padding: "12px 0",
-                  borderBottom: "1px solid #f0f0f0",
+                  alignItems: "flex-start",
+                  gap: "10px",
+                  background: "#fff",
+                  border: "1px solid #eee",
+                  borderRadius: "10px",
+                  padding: "12px 14px",
                 }}
               >
                 {/* Icône action */}
-                <div style={{ fontSize: "18px", flexShrink: 0 }}>{getActionIcon(log.action)}</div>
+                <div style={{ fontSize: "18px", flexShrink: 0, marginTop: "1px" }}>
+                  {getActionIcon(log.action)}
+                </div>
 
                 {/* Infos */}
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: "13px", color: "#222" }}>{log.description}</div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      justifyContent: "space-between",
+                      gap: "8px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: "13px",
+                        color: "#222",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {log.description}
+                    </div>
+                    {/* Badge action */}
+                    <div
+                      style={{
+                        fontSize: "10px",
+                        padding: "2px 8px",
+                        borderRadius: "20px",
+                        background: style.bg,
+                        color: style.color,
+                        fontWeight: "500",
+                        flexShrink: 0,
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {log.action.replace("_", " ")}
+                    </div>
+                  </div>
                   <div
                     style={{
                       fontSize: "11px",
                       color: "#aaa",
-                      marginTop: "2px",
+                      marginTop: "4px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
                     }}
                   >
                     👤 {log.userEmail} — 📅 {formatDate(log.createdAt)}
@@ -172,25 +223,20 @@ function PageHistorique() {
                     )}
                   </div>
                 </div>
-
-                {/* Badge action */}
-                <div
-                  style={{
-                    fontSize: "10px",
-                    padding: "2px 8px",
-                    borderRadius: "20px",
-                    background: style.bg,
-                    color: style.color,
-                    fontWeight: "500",
-                    flexShrink: 0,
-                  }}
-                >
-                  {log.action.replace("_", " ")}
-                </div>
               </div>
             );
           })}
-      </div>
+        </div>
+      )}
+
+      {/* ---- RESPONSIVE — 1 colonne sur tablette/mobile ---- */}
+      <style>{`
+        @media (max-width: 900px) {
+          .historique-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
