@@ -175,18 +175,14 @@ function PageHistorique() {
                   <div
                     style={{
                       display: "flex",
-                      alignItems: "flex-start",
-                      justifyContent: "space-between",
-                      gap: "8px",
+                      alignItems: "center",
+                      gap: "10px",
                     }}
                   >
                     <div
                       style={{
                         fontSize: "13px",
                         color: "#222",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
                       }}
                     >
                       {log.description}
