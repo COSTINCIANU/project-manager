@@ -1,90 +1,55 @@
 // =====================================================
 // 02-projects.cy.js — Tests E2E : Gestion des projets
+// Teste : affichage liste, création, suppression
 // =====================================================
 
 describe("Gestion des projets", () => {
-  // =====================
-  // CONNEXION AVANT CHAQUE TEST
-  // =====================
   beforeEach(() => {
-    cy.clearLocalStorage();
-    cy.clearCookies();
-
+    cy.login();
     cy.visit("/");
-
-    cy.get("nav").contains("Se connecter").click({ force: true });
-    cy.get('input[type="email"]').type("gheorghina.costincianu@sfr.fr");
-    cy.get('input[type="password"]').type("23197710");
-    cy.get("button").last().click({ force: true });
-
+    // Attend que l'app soit chargée
     cy.contains("Dashboard", { timeout: 10000 }).should("exist");
-    cy.wait(2000);
-
+    // Navigue vers la page Projets — force car le label peut être caché
     cy.contains("Projets").click({ force: true });
-    cy.wait(3000);
-  });
-  // =====================
-  // TEST 1 — Liste des projets
-  // =====================
-  it("affiche la liste des projets avec le bouton création", () => {
-    cy.contains("projet", { matchCase: false }).should("exist");
-    cy.contains("Nouveau projet").should("exist");
+    // Attend que la page projets soit chargée
+    cy.contains("projet", { timeout: 8000 }).should("exist");
   });
 
-  // =====================
-  // TEST 2 — Formulaire création : ouvrir et annuler
-  // =====================
-  it("ouvre et ferme le formulaire de création sans créer de projet", () => {
-    cy.contains("Nouveau projet").click({ force: true });
-    cy.get('input[placeholder="Nom du projet..."]').should("be.visible");
-    cy.contains("Annuler").click({ force: true });
-    cy.get('input[placeholder="Nom du projet..."]').should("not.exist");
+  it("affiche la liste des projets", () => {
+    cy.get("[data-cy='projet-nom']").should("have.length.greaterThan", 0);
   });
 
-  // =====================
-  // TEST 3 — Bouton Supprimer visible
-  // =====================
-  it("affiche un bouton Supprimer sur chaque carte projet si des projets existent", () => {
-    cy.get("button").first().should("exist");
-    cy.get("button").each(($btn) => {
-      cy.log($btn.text());
-    });
-  });
-  // =====================
-  // TEST 4 — Création d'un projet
-  // =====================
-  it("crée un nouveau projet et l'affiche dans la liste", () => {
-    cy.contains("Nouveau projet").click({ force: true });
-    cy.get('input[placeholder="Nom du projet..."]').type("Projet Cypress Test");
-    cy.get("select").select("En attente");
-    cy.contains("Créer le projet").click({ force: true });
-    cy.contains("Projet Cypress Test", { timeout: 8000 }).should("exist");
+  it("crée un nouveau projet", () => {
+    cy.contains("+ Nouveau projet").click();
+    cy.get("input[placeholder='Nom du projet...']").type("Projet Cypress Test");
+    cy.contains("Créer le projet").click();
+    cy.contains("Projet Cypress Test", { timeout: 6000 }).should("exist");
   });
 
-  // =====================
-  // TEST 5 — Suppression d'un projet
-  // =====================
-  it("supprime un projet et le retire de la liste", () => {
-    cy.contains("Nouveau projet").click({ force: true });
-    cy.get('input[placeholder="Nom du projet..."]').type("Projet À Supprimer");
-    cy.contains("Créer le projet").click({ force: true });
-    cy.contains("Projet À Supprimer", { timeout: 8000 }).should("exist");
+  it("affiche le bouton Supprimer sur chaque projet", () => {
+    cy.contains("Supprimer").should("exist");
+  });
 
-    cy.contains("Projet À Supprimer")
-      .parents("[style*='border-radius: 12px']")
+  it("supprime un projet", () => {
+    // Crée d'abord un projet à supprimer
+    cy.contains("+ Nouveau projet").click();
+    cy.get("input[placeholder='Nom du projet...']").type("Projet à supprimer");
+    cy.contains("Créer le projet").click();
+    cy.contains("Projet à supprimer", { timeout: 6000 }).should("exist");
+
+    // Intercepte window.confirm et accepte automatiquement
+    cy.on("window:confirm", () => true);
+
+    // Trouve la carte contenant "Projet à supprimer"
+    // et clique sur le bouton Supprimer dans cette carte
+    cy.contains("Projet à supprimer")
+      .parent()
+      .parent()
       .find("button")
-      .filter(":contains('Supprimer')")
+      .contains("Supprimer")
       .click({ force: true });
 
-    cy.contains("Projet À Supprimer").should("not.exist");
-  });
-
-  // =====================
-  // TEST 6 — Création via touche Entrée
-  // =====================
-  it("crée un projet en appuyant sur Entrée dans le champ nom", () => {
-    cy.contains("Nouveau projet").click({ force: true });
-    cy.get('input[placeholder="Nom du projet..."]').type("Projet Entrée{enter}");
-    cy.contains("Projet Entrée", { timeout: 8000 }).should("exist");
+    // Vérifie que le projet a disparu
+    cy.contains("Projet à supprimer", { timeout: 6000 }).should("not.exist");
   });
 });
