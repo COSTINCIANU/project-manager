@@ -100,7 +100,19 @@ function TaskItem({ task, projectName, onToggle, onDelete, onEdit, users, userRo
   // =====================
 
   return (
+    // <div
+    //   style={{
+    //     padding: "10px 0",
+    //     borderBottom: "1px solid #f0f0f0",
+    //     transition: "background 0.15s",
+    //   }}
+    //   onMouseEnter={(e) => (e.currentTarget.style.background = "#fafafa")}
+    //   onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+    // >
+
+    // Div racine — ajoute data-cy
     <div
+      data-cy="task-item"
       style={{
         padding: "10px 0",
         borderBottom: "1px solid #f0f0f0",
@@ -113,6 +125,7 @@ function TaskItem({ task, projectName, onToggle, onDelete, onEdit, users, userRo
       <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
         {/* Case à cocher */}
         <div
+          data-cy="toggle-task"
           onClick={() => onToggle(task.id)}
           style={{
             width: "16px",
