@@ -600,43 +600,36 @@ function PageProjetDetail({ project, allTasks, onBack, onDelete, onUpdateTask, u
                             flexShrink: 0,
                           }}
                         />
-                        {/* Infos */}
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div
-                            style={{
-                              fontSize: "13px",
-                              fontWeight: "500",
-                              color: tache.done ? "#aaa" : "#111",
-                              textDecoration: tache.done ? "line-through" : "none",
-                            }}
-                          >
-                            {tache.name}
-                          </div>
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: "8px",
-                              marginTop: "2px",
-                              flexWrap: "wrap",
-                            }}
-                          >
-                            <span style={{ fontSize: "10px", color: couleur, fontWeight: "600" }}>
-                              {tache.priority}
-                            </span>
-                            {tache.dueDate && (
-                              <span style={{ fontSize: "10px", color: "#aaa" }}>
-                                📅 {new Date(tache.dueDate).toLocaleDateString("fr-FR")}
-                              </span>
-                            )}
-                            {tache.assignedTo && (
-                              <span style={{ fontSize: "10px", color: "#888" }}>
-                                👤{" "}
-                                {users?.find((u) => u.id === tache.assignedTo)?.name ??
-                                  tache.assignedTo}
-                              </span>
-                            )}
-                          </div>
-                        </div>
+                        {/* Assignation — sélecteur inline */}
+                        <select
+                          value={tache.assignedTo ?? ""}
+                          onChange={async (e) => {
+                            const val = e.target.value;
+                            await updateTache(tache.id, {
+                              ...tache,
+                              assignedTo: val ? parseInt(val) : null,
+                            });
+                            if (onUpdateTask) onUpdateTask();
+                          }}
+                          style={{
+                            fontSize: "11px",
+                            padding: "3px 8px",
+                            border: "1px solid #ddd",
+                            borderRadius: "6px",
+                            background: "#fff",
+                            color: "#555",
+                            cursor: "pointer",
+                            flexShrink: 0,
+                          }}
+                        >
+                          <option value="">👤 Non assigné</option>
+                          {Array.isArray(users) &&
+                            users.map((u) => (
+                              <option key={u.id} value={u.id}>
+                                {u.name ?? u.email}
+                              </option>
+                            ))}
+                        </select>
                         {/* Badge statut */}
                         <span
                           style={{
