@@ -53,6 +53,7 @@ import PageAdmin from "./components/PageAdmin";
 import PageRechercheAvancee from "./components/PageRechercheAvancee";
 import PageAutomatisations from "./components/PageAutomatisations";
 import PageRapportsAvances from "./components/PageRapportsAvances";
+import PageProjetDetail from "./components/PageProjetDetail";
 
 function App() {
   // =====================
@@ -104,6 +105,9 @@ function App() {
 
   // Message d'alerte rate limiting (429)
   const [rateLimitMessage, setRateLimitMessage] = useState(null);
+
+  // Page de l'état du projet sélectionné
+  const [projetSelectionne, setProjetSelectionne] = useState(null);
 
   // / *****************Les Effet Fin ********************/
 
@@ -782,16 +786,34 @@ function App() {
             )}
 
             {/* ---- PAGE PROJETS ---- */}
-            {activePage === "projets" && (
+            {activePage === "projets" && !projetSelectionne && (
               <PageProjets
                 projects={projects}
                 onAdd={handleAddProject}
                 onDelete={handleDeleteProject}
                 onSelect={(projectId) => {
-                  setFilterProject(String(projectId));
-                  setActivePage("taches");
+                  const projet = projects.find((p) => p.id === projectId);
+                  setProjetSelectionne(projet);
                 }}
                 userRole={userRole}
+              />
+            )}
+
+            {/* ---- PAGE DÉTAIL PROJET ---- */}
+            {activePage === "projets" && projetSelectionne && (
+              <PageProjetDetail
+                project={projetSelectionne}
+                allTasks={tasks}
+                users={users}
+                onBack={() => setProjetSelectionne(null)}
+                onDelete={(id) => {
+                  handleDeleteProject(id);
+                  setProjetSelectionne(null);
+                }}
+                onUpdateTask={async () => {
+                  const freshTasks = await getTaches();
+                  if (freshTasks) setTasks(freshTasks);
+                }}
               />
             )}
 
