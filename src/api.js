@@ -351,3 +351,15 @@ export async function toggleRegle(regleId) {
 export async function supprimerRegle(regleId) {
   return callAPI("DELETE", `/regles/${regleId}`);
 }
+
+// =====================================================
+// WORKLOAD — Jauge de charge par membre
+// Récupère la charge de travail de chaque membre
+// assigné dans un projet
+// =====================================================
+
+// Récupère la jauge de charge d'un projet
+// projectId = identifiant du projet
+export async function getWorkload(projectId) {
+  return callAPI("GET", `/projects/${projectId}/workload`);
+}
