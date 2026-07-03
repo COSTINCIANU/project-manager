@@ -1,7 +1,7 @@
 // Importation de useState pour gérer le formulaire d'ajout
 import { useState } from "react";
 
-function PageProjets({ projects = [], onAdd, onDelete }) {
+function PageProjets({ projects = [], onAdd, onDelete, onSelect }) {
   // =====================
   // ÉTATS DU FORMULAIRE
   // =====================
@@ -204,12 +204,14 @@ function PageProjets({ projects = [], onAdd, onDelete }) {
           projects.map((project) => (
             <div
               key={project.id}
+              onClick={() => onSelect && onSelect(project.id)}
               style={{
                 background: "#fff",
                 border: "1px solid #eee",
                 borderRadius: "12px",
                 padding: "1.25rem",
                 transition: "box-shadow 0.2s, transform 0.2s",
+                cursor: "pointer",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.07)";
@@ -240,7 +242,6 @@ function PageProjets({ projects = [], onAdd, onDelete }) {
                     }}
                   />
                   {/* Nom du projet */}
-                  // Après
                   <div data-cy="projet-nom" style={{ fontSize: "14px", fontWeight: "500" }}>
                     {project.name}
                   </div>
@@ -249,7 +250,10 @@ function PageProjets({ projects = [], onAdd, onDelete }) {
 
                 {/* Bouton supprimer */}
                 <button
-                  onClick={() => onDelete(project.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(project.id);
+                  }}
                   style={{
                     fontSize: "12px",
                     padding: "4px 10px",

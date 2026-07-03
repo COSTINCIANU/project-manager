@@ -787,6 +787,10 @@ function App() {
                 projects={projects}
                 onAdd={handleAddProject}
                 onDelete={handleDeleteProject}
+                onSelect={(projectId) => {
+                  setFilterProject(String(projectId));
+                  setActivePage("taches");
+                }}
                 userRole={userRole}
               />
             )}
