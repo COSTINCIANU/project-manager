@@ -55,6 +55,8 @@ import PageAutomatisations from "./components/PageAutomatisations";
 import PageRapportsAvances from "./components/PageRapportsAvances";
 import PageProjetDetail from "./components/PageProjetDetail";
 
+import PageSprint from "./components/PageSprint";
+
 function App() {
   // =====================
   // ÉTATS DE L'APPLICATION
@@ -960,6 +962,9 @@ function App() {
 
             {/* ---- PAGE STRIPE ---- */}
             {activePage === "stripe" && <PageStripe />}
+
+            {/* ---- PAGE SPRINT ---- */}
+            {activePage === "sprint" && <PageSprint projects={projects} />}
 
             {/* ---- PAGE ADMIN ---- */}
             {activePage === "admin" && <PageAdmin />}

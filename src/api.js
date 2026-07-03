@@ -363,3 +363,42 @@ export async function supprimerRegle(regleId) {
 export async function getWorkload(projectId) {
   return callAPI("GET", `/projects/${projectId}/workload`);
 }
+
+// =====================================================
+// SPRINTS — Gestion des sprints par projet
+// =====================================================
+
+// Récupère tous les sprints d'un projet
+export async function getSprints(projectId) {
+  return callAPI("GET", `/sprints/project/${projectId}`);
+}
+
+// Récupère les tâches du backlog (sans sprint assigné)
+export async function getBacklog(projectId) {
+  return callAPI("GET", `/sprints/project/${projectId}/backlog`);
+}
+
+// Crée un nouveau sprint
+export async function creerSprint(sprint) {
+  return callAPI("POST", "/sprints", sprint);
+}
+
+// Modifie un sprint (démarrer, clôturer, renommer)
+export async function modifierSprint(id, data) {
+  return callAPI("PUT", `/sprints/${id}`, data);
+}
+
+// Assigne une tâche à un sprint
+export async function assignerTacheASprint(sprintId, taskId) {
+  return callAPI("POST", `/sprints/${sprintId}/assign-task`, { taskId });
+}
+
+// Retire une tâche d'un sprint
+export async function retirerTacheDeSprint(sprintId, taskId) {
+  return callAPI("POST", `/sprints/${sprintId}/remove-task`, { taskId });
+}
+
+// Supprime un sprint
+export async function supprimerSprint(id) {
+  return callAPI("DELETE", `/sprints/${id}`);
+}
