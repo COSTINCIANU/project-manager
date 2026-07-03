@@ -240,7 +240,11 @@ function PageProjets({ projects = [], onAdd, onDelete }) {
                     }}
                   />
                   {/* Nom du projet */}
-                  <div style={{ fontSize: "14px", fontWeight: "500" }}>{project.name}</div>
+                  // Après
+                  <div data-cy="projet-nom" style={{ fontSize: "14px", fontWeight: "500" }}>
+                    {project.name}
+                  </div>
+                  {/* <div style={{ fontSize: "14px", fontWeight: "500" }}>{project.name}</div> */}
                 </div>
 
                 {/* Bouton supprimer */}
